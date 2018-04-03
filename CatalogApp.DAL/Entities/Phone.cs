@@ -11,6 +11,7 @@ namespace CatalogApp.DAL.Entities
     {
         public int Id { get; set; }
         public string Model { get; set; }
+        public string Slug { get; set; }
         public string Description { get; set; }
         public int Storage { get; set; }
         public decimal Price { get; set; }

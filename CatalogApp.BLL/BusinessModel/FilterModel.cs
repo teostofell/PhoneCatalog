@@ -9,28 +9,13 @@ namespace CatalogApp.BLL.BusinessModel
 {
     public class FilterModel
     {
-        public IEnumerable<Phone> Phones { get; set; }
-
         // Filter fields
-        public Dictionary<string, bool> Brand { get; set; }
+        public List<string> Brand { get; set; }
+        public List<string> OS { get; set; }
         public Dictionary<string, int> Storage { get; set; }
         public Dictionary<string, decimal> Price { get; set; }
-        public Dictionary<string, bool> OS { get; set; }
 
-        private FilterModel brandFilter()
-        {            
-            List<string> selectedValues = Brand.Where(kv => kv.Value).Select(kv => kv.Key).ToList();
-
-            this.Phones = Phones.Where(p => selectedValues.Contains(p.Brand.Name));
-           
-            return this;
-        }
-
-        public IEnumerable<Phone> Filter(IEnumerable<Phone> phones)
-        {
-            brandFilter();
-            return Phones;
-        }
-
+        public int Page { get; set; }
+        public int ItemsOnPage { get; set; }
     }
 }

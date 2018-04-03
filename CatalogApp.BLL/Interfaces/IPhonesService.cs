@@ -1,5 +1,6 @@
 ﻿using CatalogApp.BLL.BusinessModel;
 using CatalogApp.BLL.DTO;
+using CatalogApp.DAL.Entities;
 using CatalogApp.DAL.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -11,6 +12,7 @@ namespace CatalogApp.BLL.Interfaces
 {
     public interface IPhonesService
     {
-        IEnumerable<PhoneDTO> GetPhones(FilterModel filter);
+        int TotalPages { get; set; }
+        IEnumerable<PhoneDTO> GetPhones(FilterModel filter = null, int itemsOnPage = 0, int page = 1);
     }
 }

@@ -6,7 +6,9 @@ using CatalogApp.DAL.Entities;
 using CatalogApp.DAL.Interfaces;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
+using System.Data.Entity;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -16,6 +18,8 @@ namespace CatalogApp.BLL.Services
     {
         private IUnitOfWork Db { get; set; }
         private IMapper mapper;
+
+        public int TotalPages { get; set; }
 
         public PhonesService(IUnitOfWork db)
         {
@@ -27,10 +31,40 @@ namespace CatalogApp.BLL.Services
             }).CreateMapper();
         }
 
-        public IEnumerable<PhoneDTO> GetPhones(FilterModel filter)
+        public IEnumerable<PhoneDTO> GetPhones(FilterModel filter, int itemsOnPage, int page)
         {
-            filter.Filter(Db.Phones.GetAll());
-            return mapper.Map<List<PhoneDTO>>(Db.Phones.GetAll().ToList());
+            var phones = Filter(filter);
+            phones = Paginate(phones, itemsOnPage, page);
+
+            return mapper.Map<List<PhoneDTO>>(phones);
+        }
+
+        private IEnumerable<Phone> Filter(FilterModel filter)
+        {
+            if (filter == null)
+                return Db.Phones.GetAll();
+
+            decimal fromPrice = filter.Price["From"], toPrice = filter.Price["To"];
+            var phones = Db.Phones.GetAll().Include(p => p.Brand)
+                .Include(p => p.OS)
+                .Where(p => filter.Brand.Contains(p.Brand.Slug))
+                .Where(p => filter.OS.Contains(p.OS.Slug))
+                .Where(p => (p.Price >= fromPrice && p.Price <= toPrice));
+
+
+            return phones.ToList();
+        }
+
+        private IEnumerable<Phone> Paginate(IEnumerable<Phone> phones, int itemsOnPage, int page)
+        {
+            if (itemsOnPage == 0)
+            {
+                TotalPages = 1;
+                return phones;
+            }
+
+            TotalPages = Convert.ToInt32(Math.Ceiling((double)(phones.Count() / itemsOnPage)));
+            return phones.Skip((page - 1) * itemsOnPage).Take(itemsOnPage);
         }
     }
 }

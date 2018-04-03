@@ -55,6 +55,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BusinessModel\FilterModel.cs" />
+    <Compile Include="BusinessModel\PageModel.cs" />
     <Compile Include="DTO\PhoneDTO.cs" />
     <Compile Include="DTO\BrandDTO.cs" />
     <Compile Include="Interfaces\IPhonesService.cs" />
