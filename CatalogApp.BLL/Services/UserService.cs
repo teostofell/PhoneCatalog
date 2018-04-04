@@ -50,6 +50,25 @@ namespace CatalogApp.BLL.Services
             return new OperationDetails(false, "The emails already exist.");
         }
 
+        public async Task<UserDTO> FindUser(string userName, string password)
+        {
+            ApplicationUser user = await Db.UserManager.FindAsync(userName, password);
+            var userDTO = mapper.Map<UserDTO>(user.UserProfile);
+            userDTO.Email = user.Email;
+
+            return userDTO;
+        }
+
+        public async Task<UserDTO> FindUser(string email)
+        {
+            ApplicationUser user = await Db.UserManager.FindByEmailAsync(email);
+
+            var userDTO = mapper.Map<UserDTO>(user.UserProfile);
+            userDTO.Email = user.Email;
+
+            return userDTO;
+        }
+
         public void Dispose()
         {
             Db.Dispose();

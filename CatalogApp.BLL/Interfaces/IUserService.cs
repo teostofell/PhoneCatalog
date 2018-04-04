@@ -11,5 +11,7 @@ namespace CatalogApp.BLL.Interfaces
     public interface IUserService : IDisposable
     {
         Task<OperationDetails> Register(UserDTO user);
+        Task<UserDTO> FindUser(string userName, string password);
+        Task<UserDTO> FindUser(string email);
     }
 }
