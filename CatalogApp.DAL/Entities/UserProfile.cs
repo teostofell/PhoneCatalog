@@ -1,11 +1,15 @@
 ﻿using CatalogApp.DAL.Interfaces;
 using System;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CatalogApp.DAL.Entities
 {
-    public class UserProfile : IIdentifiable
+    public class UserProfile
     {
-        public int Id { get; set; }
+        [Key]
+        [ForeignKey("ApplicationUser")]
+        public string Id { get; set; }
         public string Name { get; set; }
         public string Email { get; set; }
         public string Password { get; set; }
@@ -15,6 +19,6 @@ namespace CatalogApp.DAL.Entities
         public int CityId { get; set; }
         public City City { get; set; }
 
-        // TODO: 1 to 1 relation
+        public ApplicationUser ApplicationUser { get; set; }
     }
 }

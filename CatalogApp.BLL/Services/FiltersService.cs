@@ -15,8 +15,6 @@ namespace CatalogApp.BLL.Services
         private IUnitOfWork Db { get; set; }
         private IMapper mapper;
 
-        public int TotalPages { get; set; }
-
         public FiltersService(IUnitOfWork db)
         {
             Db = db;

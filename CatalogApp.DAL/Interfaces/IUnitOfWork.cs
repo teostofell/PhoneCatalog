@@ -1,4 +1,5 @@
 ﻿using CatalogApp.DAL.Entities;
+using CatalogApp.DAL.Repositories.MSSQL;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,6 +18,9 @@ namespace CatalogApp.DAL.Interfaces
         IRepository<City> Cities { get; }
         IRepository<Photo> Photos { get; }
         IRepository<OrderItem> OrderItems { get; }
+        ApplicationUserManager UserManager { get; }
+        IProfileManager ProfileManager { get; }
+        ApplicationRoleManager RoleManager { get; }
 
         Task SaveAsync();
     }

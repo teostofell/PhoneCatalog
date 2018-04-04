@@ -19,6 +19,7 @@ namespace CatalogApp.DAL.Contexts
         public DbSet<City> Cities { get; set; }
         public DbSet<Order> Orders { get; set; }
         public DbSet<OrderItem> OrderItems { get; set; }
+        public DbSet<UserProfile> UserProfiles { get; set; }
 
         /// <summary>
         /// Bind the initializer, that will initialize the database every time application is started

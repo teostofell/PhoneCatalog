@@ -42,9 +42,10 @@ namespace CatalogApp.API
         {
             kernel.Bind<IPhonesService>().To<PhonesService>();
             kernel.Bind<IFiltersService>().To<FiltersService>();
+            kernel.Bind<IUserService>().To<UserService>();
 
 
-            BusinessModule businessModule = new BusinessModule("Data Source=localhost;Initial Catalog=Phones;Integrated Security=True");
+            BusinessModule businessModule = new BusinessModule("Data Source=localhost;Initial Catalog=Catalog;Integrated Security=True");
             businessModule.Initialize(kernel);
         }
     }

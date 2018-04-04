@@ -1,6 +1,7 @@
 ﻿using CatalogApp.DAL.Contexts;
 using CatalogApp.DAL.Entities;
 using CatalogApp.DAL.Interfaces;
+using Microsoft.AspNet.Identity.EntityFramework;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,6 +22,9 @@ namespace CatalogApp.DAL.Repositories.MSSQL
         private IRepository<Order> orderRepository;
         private IRepository<City> cityRepository;
         private IRepository<OrderItem> orderItemRepository;
+        private ApplicationUserManager userManager;
+        private ApplicationRoleManager roleManager;
+        private IProfileManager profileManager;
 
         public UnitOfWork(string connectionString)
         {
@@ -43,6 +47,12 @@ namespace CatalogApp.DAL.Repositories.MSSQL
         public IRepository<Photo> Photos => photoRepository ?? (photoRepository = new Repository<Photo>(db));
 
         public IRepository<OrderItem> OrderItems => orderItemRepository ?? (orderItemRepository = new Repository<OrderItem>(db));
+
+        public ApplicationUserManager UserManager => userManager ?? (userManager = new ApplicationUserManager(new UserStore<ApplicationUser>(db)));
+
+        public IProfileManager ProfileManager => profileManager ?? (profileManager = new ProfileManager(db));
+
+        public ApplicationRoleManager RoleManager => roleManager ?? (roleManager = new ApplicationRoleManager(new RoleStore<ApplicationRole>(db)));
 
         public void Dispose()
         {

@@ -8,7 +8,13 @@ namespace CatalogApp.DAL.Contexts
     public class DbInitializer : DropCreateDatabaseAlways<CatalogContext>
     {
         protected override void Seed(CatalogContext context)
-        {           
+        {
+            City c1 = new City() { Name = "Minsk", Slug = "minsk" };
+            City c2 = new City() { Name = "Pinsk", Slug = "pinsk" };
+            City c3 = new City() { Name = "Brest", Slug = "brest" };
+
+            context.Cities.AddRange(new List<City>() { c1, c2, c3 });
+
             Brand b1 = new Brand() { Name = "Samsung", Slug = "samsung" };
             Brand b2 = new Brand() { Name = "Apple", Slug = "apple" };
             Brand b3 = new Brand() { Name = "LG", Slug = "lg" };
