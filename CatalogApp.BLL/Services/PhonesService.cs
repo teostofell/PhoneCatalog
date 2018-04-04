@@ -53,9 +53,13 @@ namespace CatalogApp.BLL.Services
             //    .Where(p => (p.Price >= fromPrice && p.Price <= toPrice));
 
             var phones = Db.Phones.GetAll().Include(p => p.Brand)
-                .Include(p => p.OS)
-                .Where(p => filter.Brand.Contains(p.Brand.Slug))
-                .Where(p => filter.OS.Contains(p.OS.Slug));
+                .Include(p => p.OS);
+
+            if (filter.Brand.Count > 0)
+                phones = phones.Where(p => filter.Brand.Contains(p.Brand.Slug));
+
+            if(filter.OS.Count > 0)
+                phones = phones.Where(p => filter.OS.Contains(p.OS.Slug));
 
             return phones.ToList();
         }
@@ -72,6 +76,11 @@ namespace CatalogApp.BLL.Services
             TotalPages = Convert.ToInt32(Math.Ceiling(((double)phones.Count() / itemsOnPage)));
 
             return phones.Skip((page - 1) * itemsOnPage).Take(itemsOnPage);
+        }
+
+        public void Dispose()
+        {
+            Db.Dispose();
         }
     }
 }

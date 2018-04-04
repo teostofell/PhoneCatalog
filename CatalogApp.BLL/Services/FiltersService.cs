@@ -34,5 +34,10 @@ namespace CatalogApp.BLL.Services
 
             return filter;
         }
+
+        public void Dispose()
+        {
+            Db.Dispose();
+        }
     }
 }

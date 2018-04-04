@@ -37,11 +37,22 @@ namespace CatalogApp.API.Controllers
         }
 
         // POST: api/Users
-        public async Task<IHttpActionResult> Post([FromBody]UserDTO user)
+        public async Task<HttpResponseMessage> Post([FromBody]UserDTO user)
         {
-            await db.Register(user);
+            var result = await db.Register(user);
+            HttpResponseMessage response;
 
-            return Ok();
+            if(!result.isSucceed)
+            {
+                HttpError err = new HttpError(result.Message);
+                response = Request.CreateResponse(HttpStatusCode.BadRequest, err);
+            }
+            else
+            {
+                response = Request.CreateResponse(HttpStatusCode.OK, result.Message);
+            }
+
+            return response;
         }
 
         // PUT: api/Users/5

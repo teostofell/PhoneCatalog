@@ -1,4 +1,5 @@
-﻿using CatalogApp.BLL.DTO;
+﻿using CatalogApp.BLL.BusinessModel;
+using CatalogApp.BLL.DTO;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,8 +8,8 @@ using System.Threading.Tasks;
 
 namespace CatalogApp.BLL.Interfaces
 {
-    public interface IUserService
+    public interface IUserService : IDisposable
     {
-        Task Register(UserDTO user);
+        Task<OperationDetails> Register(UserDTO user);
     }
 }

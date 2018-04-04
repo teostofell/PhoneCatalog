@@ -61,6 +61,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BusinessModel\FilterModel.cs" />
+    <Compile Include="BusinessModel\OperationDetails.cs" />
     <Compile Include="BusinessModel\PageModel.cs" />
     <Compile Include="DTO\PhoneDTO.cs" />
     <Compile Include="DTO\BrandDTO.cs" />

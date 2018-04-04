@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace CatalogApp.BLL.Interfaces
 {
-    public interface IFiltersService
+    public interface IFiltersService : IDisposable
     {
         FilterModel GetFilterValues();
     }

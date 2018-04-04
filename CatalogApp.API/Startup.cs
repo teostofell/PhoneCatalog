@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Threading.Tasks;
+using CatalogApp.API.Providers;
 using Microsoft.Owin;
+using Microsoft.Owin.Security.OAuth;
 using Owin;
 
 [assembly: OwinStartup(typeof(CatalogApp.API.Startup))]
@@ -11,7 +13,23 @@ namespace CatalogApp.API
     {
         public void Configuration(IAppBuilder app)
         {
-            // Дополнительные сведения о настройке приложения см. на странице https://go.microsoft.com/fwlink/?LinkID=316888
+            ConfigureOAuth(app);
+        }
+
+        public void ConfigureOAuth(IAppBuilder app)
+        {
+            OAuthAuthorizationServerOptions OAuthServerOptions = new OAuthAuthorizationServerOptions()
+            {
+                AllowInsecureHttp = true,
+                TokenEndpointPath = new PathString("/token"),
+                AccessTokenExpireTimeSpan = TimeSpan.FromDays(1),
+                Provider = new SimpleAuthorizationServerProvider(),
+            };
+
+            // Token Generation
+            app.UseOAuthAuthorizationServer(OAuthServerOptions);
+            app.UseOAuthBearerAuthentication(new OAuthBearerAuthenticationOptions());
+
         }
     }
 }
