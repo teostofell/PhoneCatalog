@@ -13,6 +13,7 @@ namespace CatalogApp.BLL.Interfaces
     public interface IPhonesService
     {
         int TotalPages { get; set; }
+        int TotalItems { get; set; }
         IEnumerable<PhoneDTO> GetPhones(FilterModel filter = null, int itemsOnPage = 0, int page = 1);
     }
 }

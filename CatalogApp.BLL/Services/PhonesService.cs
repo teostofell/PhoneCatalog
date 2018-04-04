@@ -20,6 +20,7 @@ namespace CatalogApp.BLL.Services
         private IMapper mapper;
 
         public int TotalPages { get; set; }
+        public int TotalItems { get; set; }
 
         public PhonesService(IUnitOfWork db)
         {
@@ -44,13 +45,17 @@ namespace CatalogApp.BLL.Services
             if (filter == null)
                 return Db.Phones.GetAll();
 
-            decimal fromPrice = filter.Price["From"], toPrice = filter.Price["To"];
+            //decimal fromPrice = filter.Price?["From"] ?? 0, toPrice = filter.Price?["To"] ?? 9999;
+            //var phones = Db.Phones.GetAll().Include(p => p.Brand)
+            //    .Include(p => p.OS)
+            //    .Where(p => filter.Brand.Contains(p.Brand.Slug))
+            //    .Where(p => filter.OS.Contains(p.OS.Slug))
+            //    .Where(p => (p.Price >= fromPrice && p.Price <= toPrice));
+
             var phones = Db.Phones.GetAll().Include(p => p.Brand)
                 .Include(p => p.OS)
                 .Where(p => filter.Brand.Contains(p.Brand.Slug))
-                .Where(p => filter.OS.Contains(p.OS.Slug))
-                .Where(p => (p.Price >= fromPrice && p.Price <= toPrice));
-
+                .Where(p => filter.OS.Contains(p.OS.Slug));
 
             return phones.ToList();
         }
@@ -63,7 +68,9 @@ namespace CatalogApp.BLL.Services
                 return phones;
             }
 
-            TotalPages = Convert.ToInt32(Math.Ceiling((double)(phones.Count() / itemsOnPage)));
+            TotalItems = phones.Count();
+            TotalPages = Convert.ToInt32(Math.Ceiling(((double)phones.Count() / itemsOnPage)));
+
             return phones.Skip((page - 1) * itemsOnPage).Take(itemsOnPage);
         }
     }
