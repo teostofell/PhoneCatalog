@@ -35,9 +35,9 @@ namespace CatalogApp.DAL.Contexts
 
             context.ScreenResolutions.AddRange(new List<ScreenResolution>() { sr1, sr2 });
 
-            Phone p1 = new Phone() { Model = "A5", Brand = b1, Battery = 2100, Fingerprint = true, OS = os1, Price = 300M, ScreenSize = 5.2F, ScreenResolution = sr1, ReleaseDate = DateTime.Now };
-            Phone p2 = new Phone() { Model = "A7", Brand = b1, Battery = 3100, Fingerprint = true, OS = os1, Price = 500M, ScreenSize = 6.1F, ScreenResolution = sr1, ReleaseDate = DateTime.Now };
-            Phone p3 = new Phone() { Model = "G7", Brand = b3, Battery = 2700, Fingerprint = true, OS = os1, Price = 800M, ScreenSize = 5.5F, ScreenResolution = sr1, ReleaseDate = DateTime.Now };
+            Phone p1 = new Phone() { Model = "A5", Brand = b1, Battery = 2100, Fingerprint = true, OS = os1, Price = 300M, ScreenSize = 5.2F, ScreenResolution = sr1, ReleaseDate = DateTime.Now, Photo= "//content2.onliner.by/catalog/device/header/6920a71561c4c9c1b63aae084aa9b6b3.jpeg" };
+            Phone p2 = new Phone() { Model = "A7", Brand = b1, Battery = 3100, Fingerprint = true, OS = os1, Price = 500M, ScreenSize = 6.1F, ScreenResolution = sr1, ReleaseDate = DateTime.Now, Photo= "//content2.onliner.by/catalog/device/header/0915a88b6868873a178b0781312f83c9.jpeg" };
+            Phone p3 = new Phone() { Model = "G7", Brand = b3, Battery = 2700, Fingerprint = true, OS = os1, Price = 800M, ScreenSize = 5.5F, ScreenResolution = sr1, ReleaseDate = DateTime.Now, Photo= "//content2.onliner.by/catalog/device/header/9fe6b436edc0a720455c002f1b674af7.jpeg" };
 
             context.Phones.AddRange(new List<Phone>() { p1, p2, p3 });
         }

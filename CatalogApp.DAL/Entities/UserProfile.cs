@@ -19,6 +19,6 @@ namespace CatalogApp.DAL.Entities
         public int CityId { get; set; }
         public City City { get; set; }
 
-        public ApplicationUser ApplicationUser { get; set; }
+        public virtual ApplicationUser ApplicationUser { get; set; }
     }
 }

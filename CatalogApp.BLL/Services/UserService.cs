@@ -25,7 +25,7 @@ namespace CatalogApp.BLL.Services
 
             mapper = new MapperConfiguration(cfg =>
             {
-
+                cfg.CreateMap<UserProfile, UserDTO>();
             }).CreateMapper();
         }
 

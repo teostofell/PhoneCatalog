@@ -40,6 +40,16 @@ namespace CatalogApp.BLL.Services
             return mapper.Map<List<PhoneDTO>>(phones);
         }
 
+        public IEnumerable<PhoneDTO> SearchPhones(string searchString)
+        {
+            var all = Db.Phones.GetAll().Include(p => p.Brand).ToList();
+            var phones = Db.Phones.GetAll().Include(p => p.Brand)
+                .Where(p => 
+                        (p.Model.Contains(searchString) || p.Brand.Name.Contains(searchString))
+                    ).ToList();
+            return mapper.Map<List<PhoneDTO>>(phones);
+        }
+
         private IEnumerable<Phone> Filter(FilterModel filter)
         {
             if (filter == null)

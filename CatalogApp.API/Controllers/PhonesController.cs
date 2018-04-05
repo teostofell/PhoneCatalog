@@ -30,9 +30,13 @@ namespace CatalogApp.API.Controllers
         }
 
         // GET: api/Phones
-        public IEnumerable<string> Get()
+        public HttpResponseMessage Get(string search)
         {
-            return new string[] { "value1", "value2" };
+            IEnumerable<PhoneDTO> phones = db.SearchPhones(search);
+        
+            var response = Request.CreateResponse(HttpStatusCode.OK, phones);
+
+            return response;
         }
 
         // GET: api/Phones/5

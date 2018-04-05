@@ -10,6 +10,7 @@ namespace CatalogApp.API.Models
         public int Id { get; set; }
         public string Model { get; set; }
         public string Description { get; set; }
+        public string Photo { get; set; }
         public int Storage { get; set; }
         public decimal Price { get; set; }
         public DateTime ReleaseDate { get; set; }
