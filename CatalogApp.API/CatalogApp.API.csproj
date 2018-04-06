@@ -244,6 +244,7 @@
     </Compile>
     <Compile Include="Models\FilterVM.cs" />
     <Compile Include="Models\PhoneVM.cs" />
+    <Compile Include="Models\UserVM.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Providers\SimpleAuthorizationServerProvider.cs" />
     <Compile Include="Startup.cs" />

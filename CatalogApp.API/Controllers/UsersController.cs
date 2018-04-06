@@ -30,10 +30,18 @@ namespace CatalogApp.API.Controllers
             return new string[] { "value1", "value2" };
         }
 
-        // GET: api/Users/5
-        public string Get(int id)
+        // GET: api/Users?email=*
+        public async Task<HttpResponseMessage> Get(string email)
         {
-            return "value";
+            var user = await db.FindUser(email);
+            HttpResponseMessage response = null;
+
+            if (user != null)
+            {
+                response = Request.CreateResponse(HttpStatusCode.OK, user);
+            }
+
+            return response;
         }
 
         // POST: api/Users

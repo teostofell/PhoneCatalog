@@ -50,6 +50,14 @@ namespace CatalogApp.BLL.Services
             return mapper.Map<List<PhoneDTO>>(phones);
         }
 
+        public PhoneDTO GetPhone(int id)
+        {
+            Phone phone = Db.Phones.Get(id).Include(p => p.Brand)
+                .Include(p => p.OS).Include(p => p.ScreenResolution).FirstOrDefault();
+
+            return mapper.Map<PhoneDTO>(phone);
+        }
+
         private IEnumerable<Phone> Filter(FilterModel filter)
         {
             if (filter == null)

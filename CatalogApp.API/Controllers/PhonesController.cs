@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Threading.Tasks;
 using System.Web.Http;
 
 namespace CatalogApp.API.Controllers
@@ -39,10 +40,16 @@ namespace CatalogApp.API.Controllers
             return response;
         }
 
-        // GET: api/Phones/5
-        public string Get(int id)
+        // GET: api/Phones/id
+        public async Task<HttpResponseMessage> Get(int id)
         {
-            return "value";
+            HttpResponseMessage response = null;
+
+            PhoneDTO phone = db.GetPhone(id);
+
+            response = Request.CreateResponse(HttpStatusCode.OK, phone);
+
+            return response;
         }
 
         // POST: api/Phones
