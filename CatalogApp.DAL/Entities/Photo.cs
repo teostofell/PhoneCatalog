@@ -11,7 +11,6 @@ namespace CatalogApp.DAL.Entities
     {
         public int Id { get; set; }
         public string Path { get; set; }
-        public string Color { get; set; }
 
         public int PhoneId { get; set; }
         public Phone Phone { get; set; }

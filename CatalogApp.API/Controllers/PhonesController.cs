@@ -22,7 +22,7 @@ namespace CatalogApp.API.Controllers
         {
             db = context;
             mapper = new MapperConfiguration(cfg => {
-                cfg.CreateMap<PhoneDTO, PhoneVM>();
+                cfg.CreateMap<PhoneDTO, PhoneSummaryVM>();
                 cfg.CreateMap<FilterVM, FilterModel>()
                      .ForMember(dest => dest.Brand, opts => opts.MapFrom(src => src.Brand.Where(b => b.Value).Select(b => b.Key).ToList()))
                     .ForMember(dest => dest.OS, opts => opts.MapFrom(src => src.OS.Where(o => o.Value).Select(o => o.Key).ToList()));
@@ -31,6 +31,7 @@ namespace CatalogApp.API.Controllers
         }
 
         // GET: api/Phones
+        [Route("geta")]
         public HttpResponseMessage Get(string search)
         {
             IEnumerable<PhoneDTO> phones = db.SearchPhones(search);
@@ -52,12 +53,25 @@ namespace CatalogApp.API.Controllers
             return response;
         }
 
+        // GET: api/Phones/?slug=*
+        [HttpGet]
+        public async Task<HttpResponseMessage> GetSlug(string slug)
+        {
+            HttpResponseMessage response = null;
+
+            PhoneDTO phone = db.GetPhone(slug);
+
+            response = Request.CreateResponse(HttpStatusCode.OK, phone);
+
+            return response;
+        }
+
         // POST: api/Phones
         public HttpResponseMessage Post([FromBody]FilterVM filter)
         {
             var filterModel = mapper.Map<FilterModel>(filter);
 
-            var phones = mapper.Map<List<PhoneVM>>(db.GetPhones(filterModel, filter.ItemsOnPage, filter.Page));
+            var phones = mapper.Map<List<PhoneSummaryVM>>(db.GetPhones(filterModel, filter.ItemsOnPage, filter.Page));
 
             var response = Request.CreateResponse(HttpStatusCode.OK, phones);
 

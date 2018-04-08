@@ -16,6 +16,7 @@ namespace CatalogApp.BLL.Interfaces
         int TotalItems { get; set; }
         IEnumerable<PhoneDTO> GetPhones(FilterModel filter = null, int itemsOnPage = 0, int page = 1);
         PhoneDTO GetPhone(int id);
+        PhoneDTO GetPhone(string slug);
         IEnumerable<PhoneDTO> SearchPhones(string searchString);
     }
 }
