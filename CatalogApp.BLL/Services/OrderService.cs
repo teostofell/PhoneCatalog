@@ -32,8 +32,6 @@ namespace CatalogApp.BLL.Services
             var orders = Db.Orders.GetAll().Where(o => o.UserId == userId)
                 .Include(o => o.OrderItems);
 
-            
-
             return mapper.Map<List<OrderDTO>>(orders);
         }
     }
