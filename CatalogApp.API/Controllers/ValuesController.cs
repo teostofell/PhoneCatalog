@@ -10,15 +10,17 @@ namespace CatalogApp.API.Controllers
     public class ValuesController : ApiController
     {
         // GET api/values
-        [Authorize]
+        [Authorize(Roles = "Admin")]
         public IEnumerable<string> Get()
         {
             return new string[] { "value1", "value2" };
         }
 
         // GET api/values/5
+        [Authorize]
         public string Get(int id)
         {
+            var a = User.IsInRole("Admin");
             return "value";
         }
 

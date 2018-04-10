@@ -1,4 +1,5 @@
 ﻿using CatalogApp.BLL.Interfaces;
+using Microsoft.Owin.Security;
 using Microsoft.Owin.Security.OAuth;
 using System;
 using System.Collections.Generic;
@@ -32,8 +33,10 @@ namespace CatalogApp.API.Providers
             }
 
             var identity = new ClaimsIdentity(context.Options.AuthenticationType);
-            identity.AddClaim(new Claim("sub", context.UserName));
-            identity.AddClaim(new Claim("role", "user"));
+
+            identity.AddClaim(new Claim(ClaimTypes.Name, context.UserName));
+            identity.AddClaim(new Claim(ClaimTypes.Role, "Admin"));
+            identity.AddClaim(new Claim(ClaimTypes.Role, "Supervisor"));
 
             context.Validated(identity);
         }
