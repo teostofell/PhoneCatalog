@@ -6,6 +6,7 @@ using CatalogApp.DAL.Entities;
 using CatalogApp.DAL.Interfaces;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -23,25 +24,32 @@ namespace CatalogApp.BLL.Services
 
             mapper = new MapperConfiguration(cfg =>
             {
-                cfg.CreateMap<OrderItem, OrderDTO>().ReverseMap();
+                cfg.CreateMap<OrderItem, OrderItemDTO>().ReverseMap();
             }).CreateMapper();
         }
 
 
-        public OperationDetails AddToOrder(int orderId, OrderItemDTO item)
+        public async Task<OperationDetails> AddToOrder(OrderItemDTO item)
         {
-            Db.Orders.Get(orderId).FirstOrDefault().OrderItems.Add(mapper.Map<OrderItem>(item));
+            Order order = await Db.Orders.Get(item.OrderId).FirstOrDefaultAsync();
+            OrderItem orderItem = new OrderItem() { OrderId = item.OrderId, PhoneId = item.Phone.Id, Quantity = item.Quantity };
+
+            orderItem = Db.OrderItems.Create(orderItem);
 
             OperationDetails result = new OperationDetails(true, "Item added");
+
+            await Db.SaveAsync();
 
             return result;
         }
 
-        public OperationDetails RemoveFromOrder(int orderItemId)
+        public async Task<OperationDetails> RemoveFromOrder(int orderItemId)
         {
             Db.OrderItems.Delete(orderItemId);
 
             OperationDetails result = new OperationDetails(true, "Item removed");
+
+            await Db.SaveAsync();
 
             return result;
         }

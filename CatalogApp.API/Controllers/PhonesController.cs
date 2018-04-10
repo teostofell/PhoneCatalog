@@ -31,7 +31,6 @@ namespace CatalogApp.API.Controllers
         }
 
         // GET: api/Phones
-        [Route("geta")]
         public HttpResponseMessage Get(string search)
         {
             IEnumerable<PhoneDTO> phones = db.SearchPhones(search);
@@ -55,7 +54,7 @@ namespace CatalogApp.API.Controllers
 
         // GET: api/Phones/?slug=*
         [HttpGet]
-        public async Task<HttpResponseMessage> GetSlug(string slug)
+        public async Task<HttpResponseMessage> GetBySlug(string slug)
         {
             HttpResponseMessage response = null;
 

@@ -10,7 +10,7 @@ namespace CatalogApp.BLL.Interfaces
 {
     public interface IOrderItemService : IDisposable
     {
-        OperationDetails AddToOrder(int orderId, OrderItemDTO item);
-        OperationDetails RemoveFromOrder(int orderItemId);
+        Task<OperationDetails> AddToOrder(OrderItemDTO item);
+        Task<OperationDetails> RemoveFromOrder(int orderItemId);
     }
 }

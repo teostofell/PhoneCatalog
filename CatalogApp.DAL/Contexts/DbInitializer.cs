@@ -58,7 +58,12 @@ namespace CatalogApp.DAL.Contexts
             Photo ph3 = new Photo() { Phone = p3, Path = "https://shop.velcom.by/ru/images/phones/404x600px_front_Huawei_P20-(Black).png" };
             Photo ph4 = new Photo() { Phone = p4, Path = "https://shop.velcom.by/ru/images/phones/404x600_7_face.png" };
             Photo ph5 = new Photo() { Phone = p5, Path = "https://shop.velcom.by/ru/images/phones/400x600_Samsung-S8_face.png" };
+
             Photo ph6 = new Photo() { Phone = p6, Path = "https://ss7.vzw.com/is/image/VerizonWireless/SAMSUNG_Galaxy_S9_Plus_Blue?$png8alpha256$&hei=410" };
+            Photo ph61 = new Photo() { Phone = p6, Path = "https://ss7.vzw.com/is/image/VerizonWireless/SAMSUNG_Galaxy_S9_Plus_Black_Back?$png8alpha256$&hei=410" };
+            Photo ph62 = new Photo() { Phone = p6, Path = "https://ss7.vzw.com/is/image/VerizonWireless/SAMSUNG_Galaxy_S9_Plus_Black_Right?$png8alpha256$&hei=410" };
+            Photo ph63 = new Photo() { Phone = p6, Path = "https://ss7.vzw.com/is/image/VerizonWireless/SAMSUNG_Galaxy_S9_Plus_Black_Left?$png8alpha256$&hei=410" };
+
             Photo ph7 = new Photo() { Phone = p7, Path = "https://shop.velcom.by/ru/images/phones/404x600_face_xiaomi_note_4.png" };
             Photo ph8 = new Photo() { Phone = p8, Path = "https://shop.velcom.by/ru/images/phones/404x600px_big-face-Xiaomi-Redmi4X.png" };
             Photo ph9 = new Photo() { Phone = p9, Path = "https://shop.velcom.by/ru/images/phones/mate_10lite_404x600_face.png" };
@@ -66,7 +71,7 @@ namespace CatalogApp.DAL.Contexts
             Photo ph11 = new Photo() { Phone = p11, Path = "https://shop.velcom.by/ru/images/phones/404x600_face_Samsung_Galaxy_A7__2017.png" };
             Photo ph12 = new Photo() { Phone = p12, Path = "https://avatars.mds.yandex.net/get-mpic/96484/img_id7311550780281291059/orig" };
 
-            context.Photos.AddRange(new List<Photo>() { ph1, ph2, ph3, ph4, ph5, ph6, ph7, ph8, ph9, ph10, ph11, ph12 });
+            context.Photos.AddRange(new List<Photo>() { ph1, ph2, ph3, ph4, ph5, ph6, ph61, ph62, ph63, ph7, ph8, ph9, ph10, ph11, ph12 });
         }
     }
 }

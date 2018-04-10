@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CatalogApp.DAL.Entities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,6 +11,9 @@ namespace CatalogApp.BLL.DTO
     {
         public int Id { get; set; }
         public DateTime OrderDate { get; set; }
+        public string UserId { get; set; }
+
+        public UserProfile User { get; set; }
 
         public ICollection<OrderItemDTO> OrderItems { get; set; }
     }

@@ -1,14 +1,32 @@
-﻿using System;
+﻿using AutoMapper;
+using CatalogApp.API.Models;
+using CatalogApp.BLL.DTO;
+using CatalogApp.BLL.Interfaces;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Threading.Tasks;
 using System.Web.Http;
 
 namespace CatalogApp.API.Controllers
 {
     public class OrderItemsController : ApiController
     {
+        private IOrderItemService db;
+        private IMapper mapper;
+
+        public OrderItemsController(IOrderItemService context)
+        {
+            db = context;
+            mapper = new MapperConfiguration(cfg => {
+                cfg.CreateMap<OrderItemVM, OrderItemDTO>().ReverseMap();
+                cfg.CreateMap<PhoneDTO, PhoneSummaryVM>().ReverseMap();
+            }).CreateMapper();
+
+        }
+
         // GET: api/OrderItems
         public IEnumerable<string> Get()
         {
@@ -22,8 +40,13 @@ namespace CatalogApp.API.Controllers
         }
 
         // POST: api/OrderItems
-        public void Post([FromBody]string value)
+        public async Task<HttpResponseMessage> Post([FromBody]OrderItemVM item)
         {
+            var result = await db.AddToOrder(mapper.Map<OrderItemDTO>(item));
+
+            var response = Request.CreateResponse(HttpStatusCode.OK, result.Message);
+
+            return response;
         }
 
         // PUT: api/OrderItems/5
@@ -32,8 +55,13 @@ namespace CatalogApp.API.Controllers
         }
 
         // DELETE: api/OrderItems/5
-        public void Delete(int id)
+        public async Task<HttpResponseMessage> Delete(int id)
         {
+            var result = await db.RemoveFromOrder(id);
+
+            var response = Request.CreateResponse(HttpStatusCode.OK, result.Message);
+
+            return response;
         }
     }
 }

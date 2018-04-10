@@ -245,6 +245,8 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\FilterVM.cs" />
+    <Compile Include="Models\OrderItemVM.cs" />
+    <Compile Include="Models\OrderVM.cs" />
     <Compile Include="Models\PhoneSummaryVM.cs" />
     <Compile Include="Models\UserVM.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

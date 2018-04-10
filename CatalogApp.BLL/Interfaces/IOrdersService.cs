@@ -1,4 +1,5 @@
-﻿using CatalogApp.BLL.DTO;
+﻿using CatalogApp.BLL.BusinessModel;
+using CatalogApp.BLL.DTO;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,6 +10,9 @@ namespace CatalogApp.BLL.Interfaces
 {
     public interface IOrdersService
     {
-        IEnumerable<OrderDTO> GetOrders(int userId);
+        IEnumerable<OrderDTO> GetOrders(string userId);
+        IEnumerable<OrderItemDTO> GetOrderItems(int orderId);
+        Task<OperationDetails> CreateOrder(string userId);
+        Task<OrderDTO> GetActualOrder(string userId);
     }
 }

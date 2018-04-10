@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using CatalogApp.BLL.BusinessModel;
 using CatalogApp.BLL.DTO;
 using CatalogApp.BLL.Interfaces;
 using CatalogApp.DAL.Entities;
@@ -24,15 +25,49 @@ namespace CatalogApp.BLL.Services
             mapper = new MapperConfiguration(cfg =>
             {
                 cfg.CreateMap<Order, OrderDTO>();
+                cfg.CreateMap<OrderItem, OrderItemDTO>().ReverseMap();
             }).CreateMapper();
         }
 
-        public IEnumerable<OrderDTO> GetOrders(int userId)
+        public IEnumerable<OrderDTO> GetOrders(string userId)
         {
             var orders = Db.Orders.GetAll().Where(o => o.UserId == userId)
-                .Include(o => o.OrderItems);
+                .Include(o => o.OrderItems).ToList();
 
             return mapper.Map<List<OrderDTO>>(orders);
+        }
+
+        public IEnumerable<OrderItemDTO> GetOrderItems(int orderId)
+        {
+            var items = Db.Orders.Get(orderId).Include(o => o.OrderItems).FirstOrDefault().OrderItems.ToList();
+
+            return mapper.Map<List<OrderItemDTO>>(items);
+        }
+
+        public async Task<OperationDetails> CreateOrder(string userId)
+        {
+            Order order = new Order() { IsActual=true, OrderDate=DateTime.Now, UserId=userId };
+
+            Db.Orders.Create(order);     
+
+            await Db.SaveAsync();
+            return new OperationDetails(true, "Order has been created");
+        }
+
+        public async Task<OrderDTO> GetActualOrder(string userId)
+        {
+            var order = await Db.Orders.GetAll().Where(o => o.UserId == userId)
+                .Where(o => o.IsActual).Include(o => o.OrderItems).Include("OrderItems.Phone").FirstOrDefaultAsync();
+
+            if(order == null)
+            {
+                order = new Order() { IsActual = true, OrderDate = DateTime.Now, UserId = userId };
+                order = Db.Orders.Create(order);
+
+                await Db.SaveAsync();
+            }
+
+            return mapper.Map<OrderDTO>(order);
         }
     }
 }
