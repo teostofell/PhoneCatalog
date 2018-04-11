@@ -41,6 +41,8 @@ namespace CatalogApp.BLL.Services
                 if (!result.Succeeded)
                     return new OperationDetails(false, "Some internal error. Check your values.");
 
+                await Db.UserManager.AddToRoleAsync(appUser.Id, "User");
+
                 UserProfile profile = new UserProfile() { Id = appUser.Id, Avatar = user.Avatar, Name = user.Name, CreateTime = DateTime.Now, CityId = 1 };
 
                 Db.ProfileManager.Create(profile);
@@ -67,6 +69,12 @@ namespace CatalogApp.BLL.Services
             userDTO.Email = user.Email;
 
             return userDTO;
+        }
+
+        public async Task<string> GetRole(string id)
+        {
+            var roles = await Db.UserManager.GetRolesAsync(id);
+            return roles[0];
         }
 
         public void Dispose()

@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using CatalogApp.API.Models;
 using CatalogApp.BLL.DTO;
 using CatalogApp.BLL.Interfaces;
 using System;
@@ -20,6 +21,7 @@ namespace CatalogApp.API.Controllers
         {
             db = context;
             mapper = new MapperConfiguration(cfg => {
+                cfg.CreateMap<UserDTO, UserVM>();
             }).CreateMapper();
 
         }
@@ -33,12 +35,16 @@ namespace CatalogApp.API.Controllers
         // GET: api/Users?email=*
         public async Task<HttpResponseMessage> Get(string email)
         {
-            var user = await db.FindUser(email);
+            var userDto = await db.FindUser(email);
+            var userVm = mapper.Map<UserVM>(userDto);
+
+            userVm.IsAdmin = await db.GetRole(userDto.Id) == "admin";
+
             HttpResponseMessage response = null;
 
-            if (user != null)
+            if (userVm != null)
             {
-                response = Request.CreateResponse(HttpStatusCode.OK, user);
+                response = Request.CreateResponse(HttpStatusCode.OK, userVm);
             }
 
             return response;

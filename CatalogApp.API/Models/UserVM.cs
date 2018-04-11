@@ -13,6 +13,6 @@ namespace CatalogApp.API.Models
         public string Name { get; set; }
         public string Avatar { get; set; }
         public DateTime CreateTime { get; set; }
-        public string Role { get; set; }
+        public bool IsAdmin { get; set; }
     }
 }

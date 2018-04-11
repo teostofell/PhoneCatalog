@@ -31,16 +31,29 @@ namespace CatalogApp.BLL.Services
 
         public async Task<OperationDetails> AddToOrder(OrderItemDTO item)
         {
-            Order order = await Db.Orders.Get(item.OrderId).FirstOrDefaultAsync();
+
             OrderItem orderItem = new OrderItem() { OrderId = item.OrderId, PhoneId = item.Phone.Id, Quantity = item.Quantity };
+
+            var temp = Db.OrderItems.GetAll().Where(oi => (oi.OrderId == item.OrderId && oi.PhoneId == item.Phone.Id));
+
+            if (temp.FirstOrDefault() != null)
+            {
+                temp.Single().Quantity += item.Quantity;
+
+                OperationDetails resultUpdated = new OperationDetails(true, "Item's quantity changed");
+
+                await Db.SaveAsync();
+
+                return resultUpdated;
+            }
 
             orderItem = Db.OrderItems.Create(orderItem);
 
-            OperationDetails result = new OperationDetails(true, "Item added");
+            OperationDetails resultAdded = new OperationDetails(true, "Item added");
 
             await Db.SaveAsync();
 
-            return result;
+            return resultAdded;
         }
 
         public async Task<OperationDetails> RemoveFromOrder(int orderItemId)

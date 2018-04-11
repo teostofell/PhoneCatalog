@@ -20,6 +20,7 @@ namespace CatalogApp.API.Providers
 
         public override async Task GrantResourceOwnerCredentials(OAuthGrantResourceOwnerCredentialsContext context)
         {
+            string role = "";
 
             using (var db = DependencyResolver.Current.GetService<IUserService>())
             {
@@ -30,13 +31,14 @@ namespace CatalogApp.API.Providers
                     context.SetError("invalid_grant", "The user name or password is incorrect.");
                     return;
                 }
+                
+                role = await db.GetRole(user.Id);
             }
 
             var identity = new ClaimsIdentity(context.Options.AuthenticationType);
 
             identity.AddClaim(new Claim(ClaimTypes.Name, context.UserName));
-            identity.AddClaim(new Claim(ClaimTypes.Role, "Admin"));
-            identity.AddClaim(new Claim(ClaimTypes.Role, "Supervisor"));
+            identity.AddClaim(new Claim(ClaimTypes.Role, role));;
 
             context.Validated(identity);
         }

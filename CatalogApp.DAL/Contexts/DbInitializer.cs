@@ -1,4 +1,6 @@
 ﻿using CatalogApp.DAL.Entities;
+using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.EntityFramework;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
@@ -9,6 +11,15 @@ namespace CatalogApp.DAL.Contexts
     {
         protected override void Seed(CatalogContext context)
         {
+            var roleManager = new RoleManager<ApplicationRole>(new RoleStore<ApplicationRole>(context));
+
+            var role1 = new ApplicationRole { Name = "admin" };
+            var role2 = new ApplicationRole { Name = "user" };
+
+            roleManager.Create(role1);
+            roleManager.Create(role2);
+
+
             City c1 = new City() { Name = "Minsk", Slug = "minsk" };
             City c2 = new City() { Name = "Pinsk", Slug = "pinsk" };
             City c3 = new City() { Name = "Brest", Slug = "brest" };

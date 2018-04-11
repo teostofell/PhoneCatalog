@@ -13,5 +13,6 @@ namespace CatalogApp.BLL.Interfaces
         Task<OperationDetails> Register(UserDTO user);
         Task<UserDTO> FindUser(string userName, string password);
         Task<UserDTO> FindUser(string email);
+        Task<string> GetRole(string id);
     }
 }
