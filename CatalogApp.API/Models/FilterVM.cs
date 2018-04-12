@@ -7,8 +7,8 @@ namespace CatalogApp.API.Models
 {
     public class FilterVM
     {
-        public Dictionary<string, bool> Brand { get; set; }
-        public Dictionary<string, bool> OS { get; set; }
+        public List<string> Brand { get; set; }
+        public List<string> OS { get; set; }
         public Dictionary<string, int> Storage { get; set; }
         public Dictionary<string, decimal> Price { get; set; }
 

@@ -23,19 +23,24 @@ namespace CatalogApp.API.Controllers
             db = context;
             mapper = new MapperConfiguration(cfg => {
                 cfg.CreateMap<PhoneDTO, PhoneSummaryVM>();
-                cfg.CreateMap<FilterVM, FilterModel>()
-                     .ForMember(dest => dest.Brand, opts => opts.MapFrom(src => src.Brand.Where(b => b.Value).Select(b => b.Key).ToList()))
-                    .ForMember(dest => dest.OS, opts => opts.MapFrom(src => src.OS.Where(o => o.Value).Select(o => o.Key).ToList()));
+                //cfg.CreateMap<FilterVM, FilterModel>()
+                //     .ForMember(dest => dest.Brand, opts => opts.MapFrom(src => src.Brand.Where(b => b.Value).Select(b => b.Key).ToList()))
+                //    .ForMember(dest => dest.OS, opts => opts.MapFrom(src => src.OS.Where(o => o.Value).Select(o => o.Key).ToList()));
             }).CreateMapper();
 
         }
 
-        // GET: api/Phones
-        public HttpResponseMessage Get(string search)
+        public async Task<HttpResponseMessage> Get([FromUri]FilterVM filter)
         {
-            IEnumerable<PhoneDTO> phones = db.SearchPhones(search);
-        
+            var filterModel = mapper.Map<FilterModel>(filter);
+
+            var phones = mapper.Map<List<PhoneSummaryVM>>(db.GetPhones(filterModel, filter.ItemsOnPage, filter.Page));
+
             var response = Request.CreateResponse(HttpStatusCode.OK, phones);
+
+            // Set headers for paging
+            response.Headers.Add("X-Pages-Total-Count", db.TotalPages.ToString());
+            response.Headers.Add("X-Items-Total-Count", db.TotalItems.ToString());
 
             return response;
         }
@@ -48,6 +53,17 @@ namespace CatalogApp.API.Controllers
             PhoneDTO phone = db.GetPhone(id);
 
             response = Request.CreateResponse(HttpStatusCode.OK, phone);
+
+            return response;
+        }
+
+        // GET: api/Phones/?search=*
+        [HttpGet]
+        public HttpResponseMessage Search(string search)
+        {
+            IEnumerable<PhoneDTO> phones = db.SearchPhones(search);
+
+            var response = Request.CreateResponse(HttpStatusCode.OK, phones);
 
             return response;
         }
@@ -84,6 +100,7 @@ namespace CatalogApp.API.Controllers
         // PUT: api/Phones/5
         public void Put(int id, [FromBody]string value)
         {
+
         }
 
         // DELETE: api/Phones/5

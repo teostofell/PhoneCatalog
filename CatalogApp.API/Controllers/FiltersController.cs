@@ -20,9 +20,9 @@ namespace CatalogApp.API.Controllers
         {
             db = context;
             mapper = new MapperConfiguration(cfg => {
-                cfg.CreateMap<FilterModel, FilterVM>()
-                    .ForMember(dest => dest.Brand, opts => opts.MapFrom(src => src.Brand.ToDictionary(c => c, c => false)))
-                    .ForMember(dest => dest.OS, opts => opts.MapFrom(src => src.OS.ToDictionary(g => g.ToString(), g => false)));
+                cfg.CreateMap<FilterModel, FilterVM>();
+                    //.ForMember(dest => dest.Brand, opts => opts.MapFrom(src => src.Brand.ToDictionary(c => c, c => false)))
+                    //.ForMember(dest => dest.OS, opts => opts.MapFrom(src => src.OS.ToDictionary(g => g.ToString(), g => false)));
             }).CreateMapper();
 
         }
