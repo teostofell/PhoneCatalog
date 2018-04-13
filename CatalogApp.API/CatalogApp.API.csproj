@@ -249,6 +249,7 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\OrderItemsController.cs" />
     <Compile Include="Controllers\OrdersController.cs" />
+    <Compile Include="Controllers\OSController.cs" />
     <Compile Include="Controllers\PhonesController.cs" />
     <Compile Include="Controllers\ScreenResolutionsController.cs" />
     <Compile Include="Controllers\UsersController.cs" />

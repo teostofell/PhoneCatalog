@@ -51,9 +51,10 @@ namespace CatalogApp.API.Controllers
         }
 
         // POST: api/Users
-        public async Task<HttpResponseMessage> Post([FromBody]UserDTO user)
+        public async Task<HttpResponseMessage> Post([FromBody]UserVM user)
         {
-            var result = await db.Register(user);
+            var userDTO = mapper.Map<UserDTO>(user);
+            var result = await db.Register(userDTO);
             HttpResponseMessage response;
 
             if(!result.isSucceed)

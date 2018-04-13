@@ -12,6 +12,7 @@ namespace CatalogApp.API.Models
         public string Password { get; set; }
         public string Name { get; set; }
         public string Avatar { get; set; }
+        public int CityId { get; set; }
         public DateTime CreateTime { get; set; }
         public bool IsAdmin { get; set; }
     }

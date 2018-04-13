@@ -77,6 +77,7 @@
     <Compile Include="Interfaces\IFiltersService.cs" />
     <Compile Include="Interfaces\IOrderItemService.cs" />
     <Compile Include="Interfaces\IOrdersService.cs" />
+    <Compile Include="Interfaces\IOSService.cs" />
     <Compile Include="Interfaces\IPhonesService.cs" />
     <Compile Include="DTO\OSDTO.cs" />
     <Compile Include="DTO\PhotoDTO.cs" />
@@ -87,9 +88,12 @@
     <Compile Include="Services\BrandService.cs" />
     <Compile Include="Services\CitiesService.cs" />
     <Compile Include="Services\FiltersService.cs" />
+    <Compile Include="Interfaces\IPhotoService.cs" />
     <Compile Include="Services\OrderItemService.cs" />
     <Compile Include="Services\OrderService.cs" />
+    <Compile Include="Services\OSService.cs" />
     <Compile Include="Services\PhonesService.cs" />
+    <Compile Include="Services\PhotoService.cs" />
     <Compile Include="Services\ScreenResolutionService.cs" />
     <Compile Include="Services\UserService.cs" />
     <Compile Include="Utils\BusinessModule.cs" />

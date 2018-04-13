@@ -43,7 +43,7 @@ namespace CatalogApp.BLL.Services
 
                 await Db.UserManager.AddToRoleAsync(appUser.Id, "User");
 
-                UserProfile profile = new UserProfile() { Id = appUser.Id, Avatar = user.Avatar, Name = user.Name, CreateTime = DateTime.Now, CityId = 1 };
+                UserProfile profile = new UserProfile() { Id = appUser.Id, Avatar = user.Avatar, Name = user.Name, CreateTime = DateTime.Now, CityId = user.CityId };
 
                 Db.ProfileManager.Create(profile);
                 await Db.SaveAsync();

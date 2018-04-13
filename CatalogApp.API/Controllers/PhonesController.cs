@@ -81,18 +81,29 @@ namespace CatalogApp.API.Controllers
             return response;
         }
 
+        //// POST: api/Phones
+        //public HttpResponseMessage Post([FromBody]FilterVM filter)
+        //{
+        //    var filterModel = mapper.Map<FilterModel>(filter);
+
+        //    var phones = mapper.Map<List<PhoneSummaryVM>>(db.GetPhones(filterModel, filter.ItemsOnPage, filter.Page));
+
+        //    var response = Request.CreateResponse(HttpStatusCode.OK, phones);
+
+        //    // Set headers for paging
+        //    response.Headers.Add("X-Pages-Total-Count", db.TotalPages.ToString());
+        //    response.Headers.Add("X-Items-Total-Count", db.TotalItems.ToString());
+
+        //    return response;
+        //}
+
         // POST: api/Phones
-        public HttpResponseMessage Post([FromBody]FilterVM filter)
+        public async Task<HttpResponseMessage> Post([FromBody]PhoneDTO phoneDto)
         {
-            var filterModel = mapper.Map<FilterModel>(filter);
+            var result = await db.CreatePhone(phoneDto);
 
-            var phones = mapper.Map<List<PhoneSummaryVM>>(db.GetPhones(filterModel, filter.ItemsOnPage, filter.Page));
+            var response = Request.CreateResponse(HttpStatusCode.OK, result.Message);
 
-            var response = Request.CreateResponse(HttpStatusCode.OK, phones);
-
-            // Set headers for paging
-            response.Headers.Add("X-Pages-Total-Count", db.TotalPages.ToString());
-            response.Headers.Add("X-Items-Total-Count", db.TotalItems.ToString());
 
             return response;
         }

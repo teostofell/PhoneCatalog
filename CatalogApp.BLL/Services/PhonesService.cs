@@ -29,6 +29,11 @@ namespace CatalogApp.BLL.Services
             mapper = new MapperConfiguration(cfg =>
             {
                 cfg.CreateMap<Phone, PhoneDTO>();
+                cfg.CreateMap<PhoneDTO, Phone>()
+                    .ForMember(p => p.Brand, opt => opt.Ignore())
+                    .ForMember(p => p.OS, opt => opt.Ignore())
+                    .ForMember(p => p.ScreenResolution, opt => opt.Ignore())
+                    .ForMember(p => p.Photos, opt => opt.Ignore());
             }).CreateMapper();
         }
 
@@ -66,17 +71,22 @@ namespace CatalogApp.BLL.Services
             return mapper.Map<PhoneDTO>(phone);
         }
 
+        public async Task<OperationDetails> CreatePhone(PhoneDTO phoneDto)
+        {
+            Phone phone = mapper.Map<Phone>(phoneDto);
+
+
+
+            Db.Phones.Create(phone);     
+            await Db.SaveAsync();
+
+            return new OperationDetails(true, "Phone has been created");
+        }
+
         private IEnumerable<Phone> Filter(FilterModel filter)
         {
             if (filter == null)
                 return Db.Phones.GetAll();
-
-            //decimal fromPrice = filter.Price?["From"] ?? 0, toPrice = filter.Price?["To"] ?? 9999;
-            //var phones = Db.Phones.GetAll().Include(p => p.Brand)
-            //    .Include(p => p.OS)
-            //    .Where(p => filter.Brand.Contains(p.Brand.Slug))
-            //    .Where(p => filter.OS.Contains(p.OS.Slug))
-            //    .Where(p => (p.Price >= fromPrice && p.Price <= toPrice));
 
             var phones = Db.Phones.GetAll().Include(p => p.Brand)
                 .Include(p => p.OS);
