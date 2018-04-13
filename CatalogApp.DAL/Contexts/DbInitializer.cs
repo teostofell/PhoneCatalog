@@ -1,4 +1,5 @@
 ﻿using CatalogApp.DAL.Entities;
+using CatalogApp.DAL.Repositories.MSSQL;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using System;
@@ -11,6 +12,7 @@ namespace CatalogApp.DAL.Contexts
     {
         protected override void Seed(CatalogContext context)
         {
+            var userManager = new ApplicationUserManager(new UserStore<ApplicationUser>(context));
             var roleManager = new RoleManager<ApplicationRole>(new RoleStore<ApplicationRole>(context));
 
             var role1 = new ApplicationRole { Name = "admin" };
@@ -83,6 +85,19 @@ namespace CatalogApp.DAL.Contexts
             Photo ph12 = new Photo() { Phone = p12, Path = "https://avatars.mds.yandex.net/get-mpic/96484/img_id7311550780281291059/orig" };
 
             context.Photos.AddRange(new List<Photo>() { ph1, ph2, ph3, ph4, ph5, ph6, ph61, ph62, ph63, ph7, ph8, ph9, ph10, ph11, ph12 });
+
+
+            var admin = new ApplicationUser { Email = "admin@gmail.com", UserName = "admin@gmail.com" };
+            string password = "admin5";
+            var result = userManager.Create(admin, password);
+
+            UserProfile adminProfile = new UserProfile() { ApplicationUser = admin, Email = "admin@gmail.com", CreateTime = DateTime.Now, CityId = 1, Name = "Vanya" };
+            context.UserProfiles.Add(adminProfile);
+
+            if (result.Succeeded)
+            {
+                userManager.AddToRole(admin.Id, role1.Name);
+            }
         }
     }
 }

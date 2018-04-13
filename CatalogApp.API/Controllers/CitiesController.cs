@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using CatalogApp.API.Models;
-using CatalogApp.BLL.BusinessModel;
+using CatalogApp.BLL.DTO;
 using CatalogApp.BLL.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -11,44 +11,45 @@ using System.Web.Http;
 
 namespace CatalogApp.API.Controllers
 {
-    public class FiltersController : ApiController
+    public class CitiesController : ApiController
     {
-        private IFiltersService db;
+        private ICitiesService db;
         private IMapper mapper;
 
-        public FiltersController(IFiltersService context)
+        public CitiesController(ICitiesService context)
         {
             db = context;
             mapper = new MapperConfiguration(cfg => {
-                cfg.CreateMap<FilterModel, FilterVM>();           
+                cfg.CreateMap<CityDTO, CityVM>();
             }).CreateMapper();
 
         }
 
-        // GET: api/Filters
-        public FilterVM Get()
+
+        // GET: api/Cities
+        public IEnumerable<CityVM> Get()
         {
-            var filter = db.GetFilterValues();
-            return mapper.Map<FilterVM>(filter);
+            var cities = db.GetCities();
+            return mapper.Map<List<CityVM>>(cities);
         }
 
-        // GET: api/Filters/5
+        // GET: api/Cities/5
         public string Get(int id)
         {
             return "value";
         }
 
-        // POST: api/Filters
+        // POST: api/Cities
         public void Post([FromBody]string value)
         {
         }
 
-        // PUT: api/Filters/5
+        // PUT: api/Cities/5
         public void Put(int id, [FromBody]string value)
         {
         }
 
-        // DELETE: api/Filters/5
+        // DELETE: api/Cities/5
         public void Delete(int id)
         {
         }

@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using CatalogApp.API.Models;
-using CatalogApp.BLL.BusinessModel;
+using CatalogApp.BLL.DTO;
 using CatalogApp.BLL.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -11,44 +11,44 @@ using System.Web.Http;
 
 namespace CatalogApp.API.Controllers
 {
-    public class FiltersController : ApiController
+    public class ScreenResolutionsController : ApiController
     {
-        private IFiltersService db;
+        private IScreenResolutionService db;
         private IMapper mapper;
 
-        public FiltersController(IFiltersService context)
+        public ScreenResolutionsController(IScreenResolutionService context)
         {
             db = context;
             mapper = new MapperConfiguration(cfg => {
-                cfg.CreateMap<FilterModel, FilterVM>();           
+                cfg.CreateMap<ScreenResolutionDTO, ScreenResolutionVM>();
             }).CreateMapper();
 
         }
 
-        // GET: api/Filters
-        public FilterVM Get()
+        // GET: api/ScreenResolutions
+        public IEnumerable<ScreenResolutionVM> Get()
         {
-            var filter = db.GetFilterValues();
-            return mapper.Map<FilterVM>(filter);
+            var resolutions = db.GetScreenResolutions();
+            return mapper.Map<List<ScreenResolutionVM>>(resolutions);
         }
 
-        // GET: api/Filters/5
+        // GET: api/ScreenResolutions/5
         public string Get(int id)
         {
             return "value";
         }
 
-        // POST: api/Filters
+        // POST: api/ScreenResolutions
         public void Post([FromBody]string value)
         {
         }
 
-        // PUT: api/Filters/5
+        // PUT: api/ScreenResolutions/5
         public void Put(int id, [FromBody]string value)
         {
         }
 
-        // DELETE: api/Filters/5
+        // DELETE: api/ScreenResolutions/5
         public void Delete(int id)
         {
         }
