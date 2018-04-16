@@ -14,6 +14,7 @@ namespace CatalogApp.BLL.DTO
         public string Password { get; set; }
         public string Name { get; set; }
         public string Avatar { get; set; }
+        public string Role { get; set; }
         public DateTime CreateTime { get; set; }
     }
 }

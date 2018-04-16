@@ -19,5 +19,6 @@ namespace CatalogApp.BLL.Interfaces
         PhoneDTO GetPhone(string slug);
         IEnumerable<PhoneDTO> SearchPhones(string searchString);
         Task<OperationDetails> CreatePhone(PhoneDTO phoneDto);
+        Task<OperationDetails> UpdatePhone(int id, PhoneDTO phone);
     }
 }

@@ -14,7 +14,7 @@ namespace CatalogApp.API.Models
         public string Photo { get; set; }
         public int Storage { get; set; }
         public decimal Price { get; set; }
-        public DateTime ReleaseDate { get; set; }
+        public int ReleaseYear { get; set; }
         public float ScreenSize { get; set; }
         public int Battery { get; set; }
         public bool Fingerprint { get; set; }

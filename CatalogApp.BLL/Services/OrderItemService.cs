@@ -34,6 +34,10 @@ namespace CatalogApp.BLL.Services
 
             OrderItem orderItem = new OrderItem() { OrderId = item.OrderId, PhoneId = item.Phone.Id, Quantity = item.Quantity };
 
+            Order order = await Db.Orders.Get(item.OrderId).FirstOrDefaultAsync();
+            order.Total += item.Phone.Price * item.Quantity;
+            Db.Orders.Update(order);
+
             var temp = Db.OrderItems.GetAll().Where(oi => (oi.OrderId == item.OrderId && oi.PhoneId == item.Phone.Id));
 
             if (temp.FirstOrDefault() != null)
@@ -58,6 +62,11 @@ namespace CatalogApp.BLL.Services
 
         public async Task<OperationDetails> RemoveFromOrder(int orderItemId)
         {
+            OrderItem item = await Db.OrderItems.Get(orderItemId).Include(oi => oi.Phone).FirstOrDefaultAsync();
+            Order order = await Db.Orders.Get(item.OrderId).FirstOrDefaultAsync();
+            order.Total -= item.Phone.Price * item.Quantity;
+            Db.Orders.Update(order);
+
             Db.OrderItems.Delete(orderItemId);
 
             OperationDetails result = new OperationDetails(true, "Item removed");

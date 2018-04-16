@@ -69,5 +69,18 @@ namespace CatalogApp.BLL.Services
 
             return mapper.Map<OrderDTO>(order);
         }
+
+        public async Task<OperationDetails> CloseOrder(int orderId)
+        {
+            var order = Db.Orders.Get(orderId).FirstOrDefault();
+
+            order.IsActual = false;
+
+            Db.Orders.Update(order);
+
+            await Db.SaveAsync();
+
+            return new OperationDetails(true, "Order has been closed");
+        }
     }
 }

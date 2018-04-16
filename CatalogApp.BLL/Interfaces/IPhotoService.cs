@@ -1,4 +1,5 @@
 ﻿using CatalogApp.BLL.BusinessModel;
+using CatalogApp.BLL.DTO;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,8 +10,9 @@ namespace CatalogApp.BLL.Services
 {
     public interface IPhotoService : IDisposable
     {
-        Task<OperationDetails> SetPhonePhoto(int phoneId);
-        Task<OperationDetails> SetProfileAvatar(int userId);
-        Task<OperationDetails> AddPhonePhoto(int phoneId);
+        Task<OperationDetails> SetProfileAvatar(string userId, string avatarPath);
+        Task<OperationDetails> AddPhonePhoto(int phoneId, string path);
+        IEnumerable<PhotoDTO> GetPhonePhotos(int phoneId);
+        Task<OperationDetails> DeletePhonePhoto(int photoId);
     }
 }

@@ -14,5 +14,6 @@ namespace CatalogApp.BLL.Interfaces
         IEnumerable<OrderItemDTO> GetOrderItems(int orderId);
         Task<OperationDetails> CreateOrder(string userId);
         Task<OrderDTO> GetActualOrder(string userId);
+        Task<OperationDetails> CloseOrder(int orderId);
     }
 }

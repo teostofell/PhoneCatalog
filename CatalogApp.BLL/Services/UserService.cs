@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Net.Http;
+using System.Data.Entity;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -25,7 +26,8 @@ namespace CatalogApp.BLL.Services
 
             mapper = new MapperConfiguration(cfg =>
             {
-                cfg.CreateMap<UserProfile, UserDTO>();
+                cfg.CreateMap<UserProfile, UserDTO>()
+                    .ForMember(dest => dest.Role, opts => opts.MapFrom(src => src.ApplicationUser.Roles.FirstOrDefault().RoleId));
             }).CreateMapper();
         }
 
@@ -77,9 +79,20 @@ namespace CatalogApp.BLL.Services
             return roles[0];
         }
 
+        public List<UserDTO> GetUsers()
+        {
+            var uu = Db.UserManager.Users.ToList();            
+            var profiles = Db.ProfileManager.GetAll().Include(p => p.ApplicationUser).ToList();
+
+            var users = mapper.Map<List<UserDTO>>(profiles);
+
+            return users;
+        }
+
         public void Dispose()
         {
             Db.Dispose();
         }
+
     }
 }

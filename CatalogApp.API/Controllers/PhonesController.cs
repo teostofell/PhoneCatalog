@@ -1,14 +1,21 @@
 ﻿using AutoMapper;
 using CatalogApp.API.Models;
+using CatalogApp.API.Utils;
 using CatalogApp.BLL.BusinessModel;
 using CatalogApp.BLL.DTO;
 using CatalogApp.BLL.Interfaces;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Drawing;
+using System.Drawing.Imaging;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
+using System.Web;
 using System.Web.Http;
 
 namespace CatalogApp.API.Controllers
@@ -23,9 +30,6 @@ namespace CatalogApp.API.Controllers
             db = context;
             mapper = new MapperConfiguration(cfg => {
                 cfg.CreateMap<PhoneDTO, PhoneSummaryVM>();
-                //cfg.CreateMap<FilterVM, FilterModel>()
-                //     .ForMember(dest => dest.Brand, opts => opts.MapFrom(src => src.Brand.Where(b => b.Value).Select(b => b.Key).ToList()))
-                //    .ForMember(dest => dest.OS, opts => opts.MapFrom(src => src.OS.Where(o => o.Value).Select(o => o.Key).ToList()));
             }).CreateMapper();
 
         }
@@ -81,37 +85,35 @@ namespace CatalogApp.API.Controllers
             return response;
         }
 
-        //// POST: api/Phones
-        //public HttpResponseMessage Post([FromBody]FilterVM filter)
-        //{
-        //    var filterModel = mapper.Map<FilterModel>(filter);
 
-        //    var phones = mapper.Map<List<PhoneSummaryVM>>(db.GetPhones(filterModel, filter.ItemsOnPage, filter.Page));
-
-        //    var response = Request.CreateResponse(HttpStatusCode.OK, phones);
-
-        //    // Set headers for paging
-        //    response.Headers.Add("X-Pages-Total-Count", db.TotalPages.ToString());
-        //    response.Headers.Add("X-Items-Total-Count", db.TotalItems.ToString());
-
-        //    return response;
-        //}
 
         // POST: api/Phones
-        public async Task<HttpResponseMessage> Post([FromBody]PhoneDTO phoneDto)
+        public async Task<HttpResponseMessage> Post([FromBody]PhoneDTO phone)
         {
-            var result = await db.CreatePhone(phoneDto);
+            HttpResponseMessage response = null;
 
-            var response = Request.CreateResponse(HttpStatusCode.OK, result.Message);
+            string fileName = Path.GetRandomFileName() + ".png";
+            var thumbPath = ImagesProcessor.GetPhoneThumbnail(phone.Photo, fileName, new Size(104, 220));
+            phone.Photo = Url.Content(thumbPath);
 
+            var result = await db.CreatePhone(phone);
+
+            if(result.isSucceed)
+                response = Request.CreateResponse(HttpStatusCode.OK, phone.Photo);
+            else
+                response = Request.CreateResponse(HttpStatusCode.InternalServerError, "Error");
 
             return response;
         }
 
         // PUT: api/Phones/5
-        public void Put(int id, [FromBody]string value)
+        public void Put(int id, [FromBody]PhoneDTO phone)
         {
+            string fileName = Path.GetRandomFileName() + ".png";
+            var thumbPath = ImagesProcessor.GetPhoneThumbnail(phone.Photo, fileName, new Size(104, 220));
+            phone.Photo = Url.Content(thumbPath);
 
+            db.UpdatePhone(id, phone);
         }
 
         // DELETE: api/Phones/5

@@ -31,6 +31,8 @@ namespace CatalogApp.BLL.Services
 
             filter.Brand = Db.Brands.GetAll().Select(b => b.Slug).ToList();
             filter.OS = Db.OperatingSystems.GetAll().Select(o => o.Slug).ToList();
+            filter.Price = new Range<decimal>();
+            filter.Storage = new Range<int>();
 
             return filter;
         }

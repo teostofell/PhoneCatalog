@@ -66,11 +66,13 @@
     <Compile Include="BusinessModel\FilterModel.cs" />
     <Compile Include="BusinessModel\OperationDetails.cs" />
     <Compile Include="BusinessModel\PageModel.cs" />
+    <Compile Include="BusinessModel\Range.cs" />
     <Compile Include="DTO\CityDTO.cs" />
     <Compile Include="DTO\OrderDTO.cs" />
     <Compile Include="DTO\OrderItemDTO.cs" />
     <Compile Include="DTO\PhoneDTO.cs" />
     <Compile Include="DTO\BrandDTO.cs" />
+    <Compile Include="DTO\RoleDTO.cs" />
     <Compile Include="DTO\UserDTO.cs" />
     <Compile Include="Interfaces\IBrandService.cs" />
     <Compile Include="Interfaces\ICitiesService.cs" />
@@ -82,6 +84,7 @@
     <Compile Include="DTO\OSDTO.cs" />
     <Compile Include="DTO\PhotoDTO.cs" />
     <Compile Include="DTO\ScreenResolutionDTO.cs" />
+    <Compile Include="Interfaces\IRolesService.cs" />
     <Compile Include="Interfaces\IScreenResolutionService.cs" />
     <Compile Include="Interfaces\IUserService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -94,6 +97,7 @@
     <Compile Include="Services\OSService.cs" />
     <Compile Include="Services\PhonesService.cs" />
     <Compile Include="Services\PhotoService.cs" />
+    <Compile Include="Services\RolesService.cs" />
     <Compile Include="Services\ScreenResolutionService.cs" />
     <Compile Include="Services\UserService.cs" />
     <Compile Include="Utils\BusinessModule.cs" />

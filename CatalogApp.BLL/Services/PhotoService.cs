@@ -5,11 +5,13 @@ using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
 using CatalogApp.BLL.BusinessModel;
+using CatalogApp.BLL.DTO;
+using CatalogApp.DAL.Entities;
 using CatalogApp.DAL.Interfaces;
 
 namespace CatalogApp.BLL.Services
 {
-    class PhotoService : IPhotoService
+    public class PhotoService : IPhotoService
     {
         public IUnitOfWork Db { get; set; }
         private IMapper mapper;
@@ -20,25 +22,70 @@ namespace CatalogApp.BLL.Services
 
             mapper = new MapperConfiguration(cfg =>
             {
-                
+                cfg.CreateMap<Photo, PhotoDTO>();
             }).CreateMapper();
         }
 
 
-        public Task<OperationDetails> AddPhonePhoto(int phoneId)
+        public async Task<OperationDetails> AddPhonePhoto(int phoneId, string path)
         {
-            throw new NotImplementedException();
+            Photo photo = new Photo() { PhoneId = phoneId, Path = path };
+            Db.Photos.Create(photo);
+
+            try
+            {
+                await Db.SaveAsync();
+            }
+            catch
+            {
+                return new OperationDetails(false, "Error on saving changes");
+            }
+
+            return new OperationDetails(true, "Image has been added");
         }
 
 
-        public Task<OperationDetails> SetPhonePhoto(int phoneId)
+        public async Task<OperationDetails> SetProfileAvatar(string userId, string avatarPath)
         {
-            throw new NotImplementedException();
+            var profile = Db.ProfileManager.Get(userId).FirstOrDefault();
+            profile.Avatar = avatarPath;
+
+            Db.ProfileManager.Update(profile);
+
+            try
+            {
+                await Db.SaveAsync();
+                return new OperationDetails(true, "Avatar has been changed");
+            }
+            catch(Exception e)
+            {
+                return new OperationDetails(false, "Error on saving changes");
+            }
+
         }
 
-        public Task<OperationDetails> SetProfileAvatar(int userId)
+
+        public IEnumerable<PhotoDTO> GetPhonePhotos(int phoneId)
         {
-            throw new NotImplementedException();
+            var photos = Db.Photos.GetAll().Where(p => p.PhoneId == phoneId);
+            return mapper.Map<List<PhotoDTO>>(photos);
+
+        }
+
+        public async Task<OperationDetails> DeletePhonePhoto(int photoId)
+        {
+            Db.Photos.Delete(photoId);
+
+            try
+            {
+                await Db.SaveAsync();
+            }
+            catch
+            {
+                return new OperationDetails(false, "Error on saving changes");
+            }
+
+            return new OperationDetails(true, "Image has been deleted");
         }
 
         public void Dispose()

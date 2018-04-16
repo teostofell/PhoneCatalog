@@ -24,9 +24,25 @@ namespace CatalogApp.DAL.Repositories.MSSQL
 
         }
 
+        public IQueryable<UserProfile> Get(string userId)
+        {
+            return db.UserProfiles.Where(p => p.Id == userId);
+        }
+
+        public void Update(UserProfile item)
+        {
+            db.Entry(item).State = System.Data.Entity.EntityState.Modified;
+        }
+
+        public IQueryable<UserProfile> GetAll()
+        {
+            return db.UserProfiles;
+        }
+
         public void Dispose()
         {
             db.Dispose();
         }
+
     }
 }

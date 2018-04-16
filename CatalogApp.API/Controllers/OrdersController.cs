@@ -72,6 +72,7 @@ namespace CatalogApp.API.Controllers
         // DELETE: api/Orders/5
         public void Delete(int id)
         {
+            db.CloseOrder(id);
         }
     }
 }

@@ -13,6 +13,8 @@ namespace CatalogApp.BLL.DTO
         public DateTime OrderDate { get; set; }
         public string UserId { get; set; }
 
+        public decimal Total { get; set; }
+
         public UserProfile User { get; set; }
 
         public ICollection<OrderItemDTO> OrderItems { get; set; }

@@ -1,9 +1,12 @@
 ﻿using AutoMapper;
 using CatalogApp.API.Models;
+using CatalogApp.API.Utils;
 using CatalogApp.BLL.DTO;
 using CatalogApp.BLL.Interfaces;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -21,15 +24,21 @@ namespace CatalogApp.API.Controllers
         {
             db = context;
             mapper = new MapperConfiguration(cfg => {
-                cfg.CreateMap<UserDTO, UserVM>();
+                cfg.CreateMap<UserDTO, UserVM>();       
             }).CreateMapper();
 
         }
 
         // GET: api/Users
-        public IEnumerable<string> Get()
+        public async Task<HttpResponseMessage> Get()
         {
-            return new string[] { "value1", "value2" };
+            HttpResponseMessage response;
+
+            var users = db.GetUsers();
+
+            response = Request.CreateResponse(HttpStatusCode.OK, users);
+
+            return response;
         }
 
         // GET: api/Users?email=*
@@ -54,7 +63,14 @@ namespace CatalogApp.API.Controllers
         public async Task<HttpResponseMessage> Post([FromBody]UserVM user)
         {
             var userDTO = mapper.Map<UserDTO>(user);
+
+            string fileName = Path.GetRandomFileName() + ".png";
+            string thumbPath = ImagesProcessor.GetUserAvatar(user.Avatar, fileName, new Size(200, 200));
+            string thumbUrl = Url.Content(thumbPath);
+
+            userDTO.Avatar = thumbUrl;
             var result = await db.Register(userDTO);
+
             HttpResponseMessage response;
 
             if(!result.isSucceed)

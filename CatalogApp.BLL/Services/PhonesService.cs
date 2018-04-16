@@ -29,6 +29,12 @@ namespace CatalogApp.BLL.Services
             mapper = new MapperConfiguration(cfg =>
             {
                 cfg.CreateMap<Phone, PhoneDTO>();
+                cfg.CreateMap<Phone, Phone>()
+                    .ForMember(p => p.Brand, opt => opt.Ignore())
+                    .ForMember(p => p.OS, opt => opt.Ignore())
+                    .ForMember(p => p.ScreenResolution, opt => opt.Ignore())
+                    .ForMember(p => p.Photos, opt => opt.Ignore())
+                    .ForAllOtherMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
                 cfg.CreateMap<PhoneDTO, Phone>()
                     .ForMember(p => p.Brand, opt => opt.Ignore())
                     .ForMember(p => p.OS, opt => opt.Ignore())
@@ -75,14 +81,54 @@ namespace CatalogApp.BLL.Services
         {
             Phone phone = mapper.Map<Phone>(phoneDto);
 
+            Db.Phones.Create(phone);
 
 
-            Db.Phones.Create(phone);     
-            await Db.SaveAsync();
+            try
+            {
+                await Db.SaveAsync();
+            }
+            catch (Exception e)
+            {
+                return new OperationDetails(false, "Error on saving changes");
+            }
 
             return new OperationDetails(true, "Phone has been created");
         }
 
+        public async Task<OperationDetails> UpdatePhone(int id, PhoneDTO phone)
+        {
+            Phone actualPhone = Db.Phones.Get(id).FirstOrDefault();
+            Phone newPhone = mapper.Map<Phone>(phone);            
+
+
+            try
+            {
+                mapper.Map<Phone, Phone>(newPhone, actualPhone);
+            }            
+            catch(Exception e)
+            {
+                return new OperationDetails(false, "Error on mapping types");
+            }
+            
+
+            Db.Phones.Update(actualPhone);
+
+            try
+            {
+                await Db.SaveAsync();
+            }
+            catch(Exception e)
+            {
+                return new OperationDetails(false, "Error on saving changes");
+            }
+
+
+            return new OperationDetails(true, "Changes have been saved");
+        }
+
+
+        #region Service functions
         private IEnumerable<Phone> Filter(FilterModel filter)
         {
             if (filter == null)
@@ -96,6 +142,24 @@ namespace CatalogApp.BLL.Services
 
             if(filter.OS.Count > 0)
                 phones = phones.Where(p => filter.OS.Contains(p.OS.Slug));
+
+            if(filter.Price != null)
+            {
+                if (filter.Price.From > 0)
+                    phones = phones.Where(p => p.Price >= filter.Price.From);
+
+                if (filter.Price.To > 0)
+                    phones = phones.Where(p => p.Price <= filter.Price.To);
+            }
+
+            if (filter.Storage != null)
+            {
+                if (filter.Storage.From > 0)
+                    phones = phones.Where(p => p.Storage >= filter.Storage.From);
+
+                if (filter.Storage.To > 0)
+                    phones = phones.Where(p => p.Storage <= filter.Storage.To);
+            }
 
             return phones.ToList();
         }
@@ -113,6 +177,7 @@ namespace CatalogApp.BLL.Services
 
             return phones.Skip((page - 1) * itemsOnPage).Take(itemsOnPage);
         }
+        #endregion
 
         public void Dispose()
         {

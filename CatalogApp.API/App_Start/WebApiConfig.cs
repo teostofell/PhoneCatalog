@@ -15,8 +15,6 @@ namespace CatalogApp.API
             config.Formatters.JsonFormatter.SupportedMediaTypes
                 .Add(new MediaTypeHeaderValue("text/html"));
 
-            //var cors = new EnableCorsAttribute("*", "*", "*");
-            //config.EnableCors(cors);
 
 
             // Маршруты веб-API
