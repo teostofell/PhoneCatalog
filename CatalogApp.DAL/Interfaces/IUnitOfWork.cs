@@ -17,6 +17,7 @@ namespace CatalogApp.DAL.Interfaces
         IRepository<Order> Orders { get; }
         IRepository<City> Cities { get; }
         IRepository<Photo> Photos { get; }
+        IRepository<Comment> Comments { get; }
         IRepository<OrderItem> OrderItems { get; }
         ApplicationUserManager UserManager { get; }
         IProfileManager ProfileManager { get; }

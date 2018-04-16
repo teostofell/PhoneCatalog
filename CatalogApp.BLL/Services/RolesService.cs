@@ -37,11 +37,22 @@ namespace CatalogApp.BLL.Services
 
         public async Task<OperationDetails> ChangeRole(string userId, string roleId)
         {
-            var roles = await Db.UserManager.GetRolesAsync(userId);
+            IList<string> roles;
+           
+            try
+            {
+                roles = await Db.UserManager.GetRolesAsync(userId);
+            }
+            catch (Exception e)
+            {
+                return new OperationDetails(false, $"Error on getting roles. {e.Message}");
+            }
+
             await Db.UserManager.RemoveFromRolesAsync(userId, roles.ToArray());
 
+            var role = await Db.RoleManager.FindByIdAsync(roleId);
 
-            await Db.UserManager.AddToRoleAsync(userId, roleId);
+            await Db.UserManager.AddToRoleAsync(userId, role.Name);
 
             await Db.SaveAsync();
 

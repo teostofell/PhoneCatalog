@@ -20,6 +20,7 @@ namespace CatalogApp.DAL.Entities
         public float ScreenSize { get; set; }
         public int Battery { get; set; }
         public bool Fingerprint { get; set; }
+        public int Grade { get; set; }
 
         public int BrandId { get; set; }
         public Brand Brand { get; set; }
@@ -31,10 +32,12 @@ namespace CatalogApp.DAL.Entities
         public ScreenResolution ScreenResolution { get; set; }
 
         public ICollection<Photo> Photos { get; set; }
+        public ICollection<Comment> Comments { get; set; }
 
         public Phone()
         {
             Photos = new List<Photo>();
+            Comments = new List<Comment>();
         }
     }
 }

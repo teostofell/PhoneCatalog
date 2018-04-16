@@ -28,6 +28,7 @@ namespace CatalogApp.API.Controllers
         }
 
         // GET: api/Orders
+        [HttpGet]
         public IEnumerable<string> Get()
         {
             return new string[] { "value1", "value2" };
@@ -38,7 +39,9 @@ namespace CatalogApp.API.Controllers
         {
             var result = db.GetOrders(id);
 
-            var response = Request.CreateResponse(HttpStatusCode.OK, result);
+            var resultVm = mapper.Map<List<OrderVM>>(result);
+
+            var response = Request.CreateResponse(HttpStatusCode.OK, resultVm);
 
             return response;
         }

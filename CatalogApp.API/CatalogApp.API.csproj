@@ -245,6 +245,7 @@
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
     <Compile Include="Controllers\BrandsController.cs" />
     <Compile Include="Controllers\CitiesController.cs" />
+    <Compile Include="Controllers\CommentsController.cs" />
     <Compile Include="Controllers\FiltersController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\OrderItemsController.cs" />
@@ -262,6 +263,7 @@
     <Compile Include="Models\AvatarVM.cs" />
     <Compile Include="Models\BrandVM.cs" />
     <Compile Include="Models\CityVM.cs" />
+    <Compile Include="Models\CommentVM.cs" />
     <Compile Include="Models\FilterVM.cs" />
     <Compile Include="Models\OrderItemVM.cs" />
     <Compile Include="Models\OrderVM.cs" />

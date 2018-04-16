@@ -62,6 +62,7 @@
     <Compile Include="Entities\ApplicationUser.cs" />
     <Compile Include="Entities\Brand.cs" />
     <Compile Include="Entities\City.cs" />
+    <Compile Include="Entities\Comment.cs" />
     <Compile Include="Entities\Order.cs" />
     <Compile Include="Entities\OrderItem.cs" />
     <Compile Include="Entities\OS.cs" />

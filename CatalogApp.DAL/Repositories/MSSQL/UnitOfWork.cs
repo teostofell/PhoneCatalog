@@ -22,6 +22,7 @@ namespace CatalogApp.DAL.Repositories.MSSQL
         private IRepository<Order> orderRepository;
         private IRepository<City> cityRepository;
         private IRepository<OrderItem> orderItemRepository;
+        private IRepository<Comment> commentRepository;
         private ApplicationUserManager userManager;
         private ApplicationRoleManager roleManager;
         private IProfileManager profileManager;
@@ -53,6 +54,8 @@ namespace CatalogApp.DAL.Repositories.MSSQL
         public IProfileManager ProfileManager => profileManager ?? (profileManager = new ProfileManager(db));
 
         public ApplicationRoleManager RoleManager => roleManager ?? (roleManager = new ApplicationRoleManager(new RoleStore<ApplicationRole>(db)));
+
+        public IRepository<Comment> Comments => commentRepository ?? (commentRepository = new Repository<Comment>(db));
 
         public void Dispose()
         {

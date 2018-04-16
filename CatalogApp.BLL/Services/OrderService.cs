@@ -31,8 +31,8 @@ namespace CatalogApp.BLL.Services
 
         public IEnumerable<OrderDTO> GetOrders(string userId)
         {
-            var orders = Db.Orders.GetAll().Where(o => o.UserId == userId)
-                .Include(o => o.OrderItems).ToList();
+            var orders = Db.Orders.GetAll().Where(o => o.UserId == userId).Where(o => !o.IsActual)
+                .Include(o => o.OrderItems).Include(o => o.OrderItems.Select(oi => oi.Phone)).ToList();
 
             return mapper.Map<List<OrderDTO>>(orders);
         }

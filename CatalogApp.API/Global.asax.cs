@@ -51,6 +51,7 @@ namespace CatalogApp.API
             kernel.Bind<IOSService>().To<OSService>();
             kernel.Bind<IPhotoService>().To<PhotoService>();
             kernel.Bind<IRolesService>().To<RolesService>();
+            kernel.Bind<ICommentsService>().To<CommentsService>();
 
 
             BusinessModule businessModule = new BusinessModule("Data Source=localhost;Initial Catalog=Catalog;Integrated Security=True");

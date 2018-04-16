@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Threading.Tasks;
 using System.Web.Http;
 
 namespace CatalogApp.API.Controllers
@@ -44,9 +45,18 @@ namespace CatalogApp.API.Controllers
         }
 
         // PUT: api/Roles/5
-        public void Put(string id, [FromUri]string userId)
+        public async Task<HttpResponseMessage> Put(string id, [FromUri]string userId)
         {
-            db.ChangeRole(userId, id);
+            var result = await db.ChangeRole(userId, id);
+
+            if(result.isSucceed)
+            {                
+                return Request.CreateResponse(HttpStatusCode.OK, result.Message);
+            }
+            else
+            {
+                return Request.CreateResponse(HttpStatusCode.InternalServerError, result.Message);
+            }
         }
 
         // DELETE: api/Roles/5

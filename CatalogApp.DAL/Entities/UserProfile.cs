@@ -23,5 +23,13 @@ namespace CatalogApp.DAL.Entities
         public virtual ApplicationUser ApplicationUser { get; set; }
 
         public ICollection<Order> Orders { get; set; }
+        public ICollection<Comment> Comments { get; set; }
+
+        public UserProfile()
+        {
+            Orders = new List<Order>();
+            Comments = new List<Comment>();
+        }
+
     }
 }

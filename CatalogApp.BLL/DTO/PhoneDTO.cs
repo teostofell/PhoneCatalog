@@ -31,6 +31,7 @@ namespace CatalogApp.BLL.DTO
         public ScreenResolutionDTO ScreenResolution { get; set; }
 
         public List<PhotoDTO> Photos { get; set; }
+        public List<CommentDTO> Comments { get; set; }
 
     }
 }
