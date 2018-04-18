@@ -22,6 +22,7 @@ namespace CatalogApp.API.Controllers
             db = context;
             mapper = new MapperConfiguration(cfg => {
                 cfg.CreateMap<CommentDTO, CommentVM>();
+                cfg.CreateMap<UserDTO, UserVM>();
             }).CreateMapper();
 
         }
@@ -36,7 +37,7 @@ namespace CatalogApp.API.Controllers
         public HttpResponseMessage Get(int id)
         {
             var comments = db.GetComments(id);
-            return Request.CreateResponse(HttpStatusCode.OK, comments);
+            return Request.CreateResponse(HttpStatusCode.OK, mapper.Map<List<CommentVM>>(comments));
         }
 
         // POST: api/Comments

@@ -127,6 +127,22 @@ namespace CatalogApp.BLL.Services
             return new OperationDetails(true, "Changes have been saved");
         }
 
+        public async Task<OperationDetails> DeletePhone(int id)
+        {
+            Db.Phones.Delete(id);
+
+            try
+            {
+                await Db.SaveAsync();
+            }
+            catch(Exception e)
+            {
+                return new OperationDetails(false, "Error on saving changes");
+            }
+
+            return new OperationDetails(true, "Phone has been deleted");
+        }
+
 
         #region Service functions
         private IEnumerable<Phone> Filter(FilterModel filter)

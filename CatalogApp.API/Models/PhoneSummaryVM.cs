@@ -18,5 +18,6 @@ namespace CatalogApp.API.Models
         public float ScreenSize { get; set; }
         public int Battery { get; set; }
         public bool Fingerprint { get; set; }
+        public int Grade { get; set; }
     }
 }

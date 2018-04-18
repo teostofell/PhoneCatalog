@@ -19,6 +19,7 @@ namespace CatalogApp.BLL.DTO
         public float ScreenSize { get; set; }
         public int Battery { get; set; }
         public bool Fingerprint { get; set; }
+        public int Grade { get; set; }
 
         public int BrandId { get; set; }
         public BrandDTO Brand { get; set; }

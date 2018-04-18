@@ -26,12 +26,12 @@ namespace CatalogApp.API.Utils
 
             using (Image imageFile = Image.FromStream(new MemoryStream(bytes)))
             {
-                string root = HttpContext.Current.Server.MapPath("~/Images"); 
+                string root = HttpContext.Current.Server.MapPath("~/Images/Thumb"); 
 
                 Image thumbnail = (Image)(new Bitmap(imageFile, thumbSize));
                 thumbnail.Save($"{root}/{filename}", ImageFormat.Png);
 
-                return $"~/Images/{filename}";
+                return $"~/Images/Thumb/{filename}";
             }
         }
 
@@ -61,6 +61,12 @@ namespace CatalogApp.API.Utils
 
         public static string GetUserAvatar(string base64, string filename, Size thumbSize)
         {
+            if(base64 == null)
+            {
+                return $"~/Images/Avatars/default.png";
+            }
+
+
             byte[] bytes;
 
             try

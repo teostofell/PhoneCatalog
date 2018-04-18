@@ -88,6 +88,7 @@ namespace CatalogApp.API.Controllers
 
 
         // POST: api/Phones
+        [Authorize(Roles = "admin")]
         public async Task<HttpResponseMessage> Post([FromBody]PhoneDTO phone)
         {
             HttpResponseMessage response = null;
@@ -107,6 +108,7 @@ namespace CatalogApp.API.Controllers
         }
 
         // PUT: api/Phones/5
+        [Authorize(Roles = "admin")]
         public void Put(int id, [FromBody]PhoneDTO phone)
         {
             string fileName = Path.GetRandomFileName() + ".png";
@@ -117,8 +119,19 @@ namespace CatalogApp.API.Controllers
         }
 
         // DELETE: api/Phones/5
-        public void Delete(int id)
+        [Authorize(Roles="admin")]
+        public async Task<HttpResponseMessage> Delete(int id)
         {
+            HttpResponseMessage response = null;
+
+            var result = await db.DeletePhone(id);
+
+            if (result.isSucceed)
+                response = Request.CreateResponse(HttpStatusCode.OK, result.Message);
+            else
+                response = Request.CreateResponse(HttpStatusCode.InternalServerError, result.Message);
+
+            return response;
         }
     }
 }
