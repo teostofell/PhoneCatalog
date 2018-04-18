@@ -22,12 +22,12 @@ namespace CatalogApp.API.Controllers
 {
     public class PhonesController : ApiController
     {
-        private IPhonesService db;
+        private IPhonesService phonesService;
         private IMapper mapper;
 
         public PhonesController(IPhonesService context, IMapper mapper)
         {
-            db = context;
+            phonesService = context;
             this.mapper = mapper;
         }
 
@@ -35,13 +35,13 @@ namespace CatalogApp.API.Controllers
         {
             var filterModel = mapper.Map<FilterModel>(filter);
 
-            var phones = mapper.Map<List<PhoneSummaryVM>>(db.GetPhones(filterModel, filter.ItemsOnPage, filter.Page));
+            var phones = mapper.Map<List<PhoneSummaryVM>>(phonesService.GetPhones(filterModel, filter.ItemsOnPage, filter.Page));
 
             var response = Request.CreateResponse(HttpStatusCode.OK, phones);
 
             // Set headers for paging
-            response.Headers.Add("X-Pages-Total-Count", db.TotalPages.ToString());
-            response.Headers.Add("X-Items-Total-Count", db.TotalItems.ToString());
+            response.Headers.Add("X-Pages-Total-Count", phonesService.TotalPages.ToString());
+            response.Headers.Add("X-Items-Total-Count", phonesService.TotalItems.ToString());
 
             return response;
         }
@@ -51,7 +51,7 @@ namespace CatalogApp.API.Controllers
         {
             HttpResponseMessage response = null;
 
-            PhoneDTO phone = db.GetPhone(id);
+            PhoneDTO phone = phonesService.GetPhone(id);
 
             response = Request.CreateResponse(HttpStatusCode.OK, phone);
 
@@ -62,7 +62,7 @@ namespace CatalogApp.API.Controllers
         [HttpGet]
         public HttpResponseMessage Search(string search)
         {
-            IEnumerable<PhoneDTO> phones = db.SearchPhones(search);
+            IEnumerable<PhoneDTO> phones = phonesService.SearchPhones(search);
 
             var response = Request.CreateResponse(HttpStatusCode.OK, phones);
 
@@ -75,7 +75,7 @@ namespace CatalogApp.API.Controllers
         {
             HttpResponseMessage response = null;
 
-            PhoneDTO phone = db.GetPhone(slug);
+            PhoneDTO phone = phonesService.GetPhone(slug);
 
             response = Request.CreateResponse(HttpStatusCode.OK, phone);
 
@@ -94,7 +94,7 @@ namespace CatalogApp.API.Controllers
             var thumbPath = ImagesProcessor.GetPhoneThumbnail(phone.Photo, fileName, new Size(104, 220));
             phone.Photo = Url.Content(thumbPath);
 
-            var result = await db.CreatePhone(phone);
+            var result = await phonesService.CreatePhone(phone);
 
             if(result.isSucceed)
                 response = Request.CreateResponse(HttpStatusCode.OK, phone.Photo);
@@ -112,7 +112,7 @@ namespace CatalogApp.API.Controllers
             var thumbPath = ImagesProcessor.GetPhoneThumbnail(phone.Photo, fileName, new Size(104, 220));
             phone.Photo = Url.Content(thumbPath);
 
-            var result = await db.UpdatePhone(id, phone);
+            var result = await phonesService.UpdatePhone(id, phone);
 
             if(result.isSucceed)
                 return Request.CreateResponse(HttpStatusCode.OK, result.Message);
@@ -126,7 +126,7 @@ namespace CatalogApp.API.Controllers
         {
             HttpResponseMessage response = null;
 
-            var result = await db.DeletePhone(id);
+            var result = await phonesService.DeletePhone(id);
 
             if (result.isSucceed)
                 response = Request.CreateResponse(HttpStatusCode.OK, result.Message);

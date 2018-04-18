@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace CatalogApp.BLL.Interfaces
 {
-    public interface IUserService : IDisposable
+    public interface IUserService
     {
         Task<OperationDetails> Register(UserDTO user);
         Task<UserDTO> FindUser(string userName, string password);

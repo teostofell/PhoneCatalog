@@ -13,19 +13,19 @@ namespace CatalogApp.API.Controllers
 {
     public class OSController : ApiController
     {
-        private IOSService db;
+        private IOSService osService;
         private IMapper mapper;
 
         public OSController(IOSService context, IMapper mapper)
         {
-            db = context;
+            osService = context;
             this.mapper = mapper;
         }
 
         // GET: api/OS
         public IEnumerable<OSVM> Get()
         {
-            var os = db.GetOS();
+            var os = osService.GetOS();
             return mapper.Map<List<OSVM>>(os);
         }
 

@@ -14,19 +14,19 @@ namespace CatalogApp.API.Controllers
 {
     public class RolesController : ApiController
     {
-        private IRolesService db;
+        private IRolesService rolesService;
         private IMapper mapper;
 
         public RolesController(IRolesService context, IMapper mapper)
         {
-            db = context;
+            rolesService = context;
             this.mapper = mapper; 
         }
 
         // GET: api/Roles
         public IEnumerable<RoleVM> Get()
         {
-            var roles = db.GetRoles();
+            var roles = rolesService.GetRoles();
             return mapper.Map<List<RoleVM>>(roles);
         }
 
@@ -44,7 +44,7 @@ namespace CatalogApp.API.Controllers
         // PUT: api/Roles/5
         public async Task<HttpResponseMessage> Put(string id, [FromUri]string userId)
         {
-            var result = await db.ChangeRole(userId, id);
+            var result = await rolesService.ChangeRole(userId, id);
 
             if(result.isSucceed)
             {                

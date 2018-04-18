@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace CatalogApp.BLL.Interfaces
 {
-    public interface IPhonesService : IDisposable
+    public interface IPhonesService
     {
         int TotalPages { get; set; }
         int TotalItems { get; set; }

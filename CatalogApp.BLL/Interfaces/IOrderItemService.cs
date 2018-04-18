@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace CatalogApp.BLL.Interfaces
 {
-    public interface IOrderItemService : IDisposable
+    public interface IOrderItemService
     {
         Task<OperationDetails> AddToOrder(OrderItemDTO item);
         Task<OperationDetails> RemoveFromOrder(int orderItemId);

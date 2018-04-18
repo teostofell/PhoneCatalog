@@ -14,12 +14,12 @@ namespace CatalogApp.API.Controllers
 {
     public class CommentsController : ApiController
     {
-        private ICommentsService db;
+        private ICommentsService commentsService;
         private IMapper mapper;
 
         public CommentsController(ICommentsService context, IMapper mapper)
         {
-            db = context;
+            commentsService = context;
             this.mapper = mapper;
         }
 
@@ -32,14 +32,14 @@ namespace CatalogApp.API.Controllers
         // GET: api/Comments/5
         public HttpResponseMessage Get(int id)
         {
-            var comments = db.GetComments(id);
+            var comments = commentsService.GetComments(id);
             return Request.CreateResponse(HttpStatusCode.OK, mapper.Map<List<CommentVM>>(comments));
         }
 
         // POST: api/Comments
         public async Task<HttpResponseMessage> Post([FromBody]CommentVM comment)
         {
-            var result = await db.AddComment(mapper.Map<CommentDTO>(comment));
+            var result = await commentsService.AddComment(mapper.Map<CommentDTO>(comment));
 
             if(result.isSucceed)
             {

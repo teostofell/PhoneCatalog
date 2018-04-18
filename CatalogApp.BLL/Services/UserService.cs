@@ -15,35 +15,28 @@ using System.Threading.Tasks;
 
 namespace CatalogApp.BLL.Services
 {
-    public class UserService : IUserService
+    public class UserService : BaseService, IUserService
     {
-        private IUnitOfWork Db { get; set; }
-        private IMapper mapper;        
-
-        public UserService(IUnitOfWork db, IMapper mapper)
-        {
-            Db = db;
-            this.mapper = mapper;
-        }
+        public UserService(IUnitOfWork db, IMapper mapper) : base(db, mapper) {}
 
         public async Task<OperationDetails> Register(UserDTO user)
         {
-            ApplicationUser appUser = await Db.UserManager.FindByEmailAsync(user.Email);
+            ApplicationUser appUser = await unitOfWork.UserManager.FindByEmailAsync(user.Email);
 
             if(appUser == null)
             {
                 appUser = new ApplicationUser() { Email = user.Email, UserName = user.Email };
-                var result = await Db.UserManager.CreateAsync(appUser, user.Password);
+                var result = await unitOfWork.UserManager.CreateAsync(appUser, user.Password);
 
                 if (!result.Succeeded)
                     return new OperationDetails(false, "Some internal error. Check your values.");
 
-                await Db.UserManager.AddToRoleAsync(appUser.Id, "User");
+                await unitOfWork.UserManager.AddToRoleAsync(appUser.Id, "User");
 
                 UserProfile profile = new UserProfile() { Id = appUser.Id, Avatar = user.Avatar, Name = user.Name, CreateTime = DateTime.Now, CityId = user.CityId };
 
-                Db.ProfileManager.Create(profile);
-                await Db.SaveAsync();
+                unitOfWork.ProfileManager.Create(profile);
+                await unitOfWork.SaveAsync();
                 return new OperationDetails(true, $"User registered succesfully. Id - {appUser.Id}");
             }
             return new OperationDetails(false, "The emails already exist.");
@@ -51,7 +44,7 @@ namespace CatalogApp.BLL.Services
 
         public async Task<UserDTO> FindUser(string userName, string password)
         {
-            ApplicationUser user = await Db.UserManager.FindAsync(userName, password);
+            ApplicationUser user = await unitOfWork.UserManager.FindAsync(userName, password);
             var userDTO = mapper.Map<UserDTO>(user.UserProfile);
             userDTO.Email = user.Email;
 
@@ -60,7 +53,7 @@ namespace CatalogApp.BLL.Services
 
         public async Task<UserDTO> FindUser(string email)
         {
-            ApplicationUser user = await Db.UserManager.FindByEmailAsync(email);
+            ApplicationUser user = await unitOfWork.UserManager.FindByEmailAsync(email);
 
             var userDTO = mapper.Map<UserDTO>(user.UserProfile);
             userDTO.Email = user.Email;
@@ -70,24 +63,18 @@ namespace CatalogApp.BLL.Services
 
         public async Task<string> GetRole(string id)
         {
-            var roles = await Db.UserManager.GetRolesAsync(id);
+            var roles = await unitOfWork.UserManager.GetRolesAsync(id);
             return roles[0];
         }
 
         public List<UserDTO> GetUsers()
         {
-            var uu = Db.UserManager.Users.ToList();            
-            var profiles = Db.ProfileManager.GetAll().Include(p => p.ApplicationUser).ToList();
+            var uu = unitOfWork.UserManager.Users.ToList();            
+            var profiles = unitOfWork.ProfileManager.GetAll().Include(p => p.ApplicationUser).ToList();
 
             var users = mapper.Map<List<UserDTO>>(profiles);
 
             return users;
         }
-
-        public void Dispose()
-        {
-            Db.Dispose();
-        }
-
     }
 }

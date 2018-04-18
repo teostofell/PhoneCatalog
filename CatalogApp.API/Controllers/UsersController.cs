@@ -17,12 +17,12 @@ namespace CatalogApp.API.Controllers
 {
     public class UsersController : ApiController
     {
-        private IUserService db;
+        private IUserService userService;
         private IMapper mapper;
 
         public UsersController(IUserService context, IMapper mapper)
         {
-            db = context;
+            userService = context;
             this.mapper = mapper;
         }
 
@@ -31,7 +31,7 @@ namespace CatalogApp.API.Controllers
         {
             HttpResponseMessage response;
 
-            var users = db.GetUsers();
+            var users = userService.GetUsers();
 
             response = Request.CreateResponse(HttpStatusCode.OK, users);
 
@@ -41,10 +41,10 @@ namespace CatalogApp.API.Controllers
         // GET: api/Users?email=*
         public async Task<HttpResponseMessage> Get(string email)
         {
-            var userDto = await db.FindUser(email);
+            var userDto = await userService.FindUser(email);
             var userVm = mapper.Map<UserVM>(userDto);
 
-            userVm.IsAdmin = await db.GetRole(userDto.Id) == "admin";
+            userVm.IsAdmin = await userService.GetRole(userDto.Id) == "admin";
 
             HttpResponseMessage response = null;
 
@@ -66,7 +66,7 @@ namespace CatalogApp.API.Controllers
             string thumbUrl = Url.Content(thumbPath);
 
             userDTO.Avatar = thumbUrl;
-            var result = await db.Register(userDTO);
+            var result = await userService.Register(userDTO);
 
             HttpResponseMessage response;
 

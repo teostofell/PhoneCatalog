@@ -14,12 +14,12 @@ namespace CatalogApp.API.Controllers
 {
     public class OrdersController : ApiController
     {
-        private IOrdersService db;
+        private IOrdersService ordersService;
         private IMapper mapper;
 
         public OrdersController(IOrdersService context, IMapper mapper)
         {
-            db = context;
+            ordersService = context;
             this.mapper = mapper;
         }
 
@@ -33,7 +33,7 @@ namespace CatalogApp.API.Controllers
         // GET: api/Orders/5
         public HttpResponseMessage Get(string id)
         {
-            var result = db.GetOrders(id);
+            var result = ordersService.GetOrders(id);
 
             var resultVm = mapper.Map<List<OrderVM>>(result);
 
@@ -45,7 +45,7 @@ namespace CatalogApp.API.Controllers
         [HttpGet]
         public async Task<HttpResponseMessage> GetActualOrder(string userId)
         {
-            var result = await db.GetActualOrder(userId);
+            var result = await ordersService.GetActualOrder(userId);
 
             var response = Request.CreateResponse(HttpStatusCode.OK, mapper.Map<OrderVM>(result));
 
@@ -55,7 +55,7 @@ namespace CatalogApp.API.Controllers
         // POST: api/Orders
         public async Task<HttpResponseMessage> Post([FromBody]string userId)
         {
-            var result = await db.CreateOrder(userId);
+            var result = await ordersService.CreateOrder(userId);
 
             var response = Request.CreateResponse(HttpStatusCode.OK, result.Message);
 
@@ -71,7 +71,7 @@ namespace CatalogApp.API.Controllers
         // DELETE: api/Orders/5
         public void Delete(int id)
         {
-            db.CloseOrder(id);
+            ordersService.CloseOrder(id);
         }
     }
 }

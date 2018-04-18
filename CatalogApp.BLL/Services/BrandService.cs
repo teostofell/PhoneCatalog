@@ -11,27 +11,15 @@ using System.Threading.Tasks;
 
 namespace CatalogApp.BLL.Services
 {
-    public class BrandService : IBrandService
+    public class BrandService : BaseService, IBrandService
     {
-        private IUnitOfWork Db { get; set; }
-        private IMapper mapper;
-
-        public BrandService(IUnitOfWork db, IMapper mapper)
-        {
-            Db = db;
-            this.mapper = mapper;
-        }
+        public BrandService(IUnitOfWork db, IMapper mapper) : base(db, mapper) {}
 
 
         public IEnumerable<BrandDTO> GetBrands()
         {
-            var brands = Db.Brands.GetAll();
+            var brands = unitOfWork.Brands.GetAll();
             return mapper.Map<List<BrandDTO>>(brands);
-        }
-
-        public void Dispose()
-        {
-            throw new NotImplementedException();
         }
     }
 }

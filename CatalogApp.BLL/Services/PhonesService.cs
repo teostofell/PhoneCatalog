@@ -14,19 +14,12 @@ using System.Threading.Tasks;
 
 namespace CatalogApp.BLL.Services
 {
-    public class PhonesService : IPhonesService
+    public class PhonesService : BaseService, IPhonesService
     {
-        private IUnitOfWork Db { get; set; }
-        private IMapper mapper;
-
         public int TotalPages { get; set; }
         public int TotalItems { get; set; }
 
-        public PhonesService(IUnitOfWork db, IMapper mapper)
-        {
-            Db = db;
-            this.mapper = mapper;
-        }
+        public PhonesService(IUnitOfWork db, IMapper mapper) : base(db, mapper) {}
 
         public IEnumerable<PhoneDTO> GetPhones(FilterModel filter, int itemsOnPage, int page)
         {
@@ -38,8 +31,8 @@ namespace CatalogApp.BLL.Services
 
         public IEnumerable<PhoneDTO> SearchPhones(string searchString)
         {
-            var all = Db.Phones.GetAll().Include(p => p.Brand).ToList();
-            var phones = Db.Phones.GetAll().Include(p => p.Brand)
+            var all = unitOfWork.Phones.GetAll().Include(p => p.Brand).ToList();
+            var phones = unitOfWork.Phones.GetAll().Include(p => p.Brand)
                 .Where(p => 
                         (p.Model.Contains(searchString) || p.Brand.Name.Contains(searchString))
                     ).ToList();
@@ -48,7 +41,7 @@ namespace CatalogApp.BLL.Services
 
         public PhoneDTO GetPhone(int id)
         {
-            Phone phone = Db.Phones.Get(id).Include(p => p.Brand)
+            Phone phone = unitOfWork.Phones.Get(id).Include(p => p.Brand)
                 .Include(p => p.OS).Include(p => p.ScreenResolution).FirstOrDefault();
 
             return mapper.Map<PhoneDTO>(phone);
@@ -56,7 +49,7 @@ namespace CatalogApp.BLL.Services
 
         public PhoneDTO GetPhone(string slug)
         {
-            Phone phone = Db.Phones.GetAll().Where(p => p.Slug == slug).Include(p => p.Brand)
+            Phone phone = unitOfWork.Phones.GetAll().Where(p => p.Slug == slug).Include(p => p.Brand)
                 .Include(p => p.OS).Include(p => p.ScreenResolution).Include(p => p.Photos).FirstOrDefault();
 
             return mapper.Map<PhoneDTO>(phone);
@@ -66,12 +59,12 @@ namespace CatalogApp.BLL.Services
         {
             Phone phone = mapper.Map<Phone>(phoneDto);
 
-            Db.Phones.Create(phone);
+            unitOfWork.Phones.Create(phone);
 
 
             try
             {
-                await Db.SaveAsync();
+                await unitOfWork.SaveAsync();
             }
             catch (Exception e)
             {
@@ -83,7 +76,7 @@ namespace CatalogApp.BLL.Services
 
         public async Task<OperationDetails> UpdatePhone(int id, PhoneDTO phone)
         {
-            Phone actualPhone = Db.Phones.Get(id).FirstOrDefault();
+            Phone actualPhone = unitOfWork.Phones.Get(id).FirstOrDefault();
             Phone newPhone = mapper.Map<Phone>(phone);            
 
 
@@ -97,11 +90,11 @@ namespace CatalogApp.BLL.Services
             }
             
 
-            Db.Phones.Update(actualPhone);
+            unitOfWork.Phones.Update(actualPhone);
 
             try
             {
-                await Db.SaveAsync();
+                await unitOfWork.SaveAsync();
             }
             catch(Exception e)
             {
@@ -114,11 +107,11 @@ namespace CatalogApp.BLL.Services
 
         public async Task<OperationDetails> DeletePhone(int id)
         {
-            Db.Phones.Delete(id);
+            unitOfWork.Phones.Delete(id);
 
             try
             {
-                await Db.SaveAsync();
+                await unitOfWork.SaveAsync();
             }
             catch(Exception e)
             {
@@ -133,9 +126,9 @@ namespace CatalogApp.BLL.Services
         private IEnumerable<Phone> Filter(FilterModel filter)
         {
             if (filter == null)
-                return Db.Phones.GetAll();
+                return unitOfWork.Phones.GetAll();
 
-            var phones = Db.Phones.GetAll().Include(p => p.Brand)
+            var phones = unitOfWork.Phones.GetAll().Include(p => p.Brand)
                 .Include(p => p.OS);
 
             if (filter.Brand.Count > 0)
@@ -180,9 +173,5 @@ namespace CatalogApp.BLL.Services
         }
         #endregion
 
-        public void Dispose()
-        {
-            Db.Dispose();
-        }
     }
 }

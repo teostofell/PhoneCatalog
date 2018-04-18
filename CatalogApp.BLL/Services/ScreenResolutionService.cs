@@ -11,31 +11,14 @@ using System.Threading.Tasks;
 
 namespace CatalogApp.BLL.Services
 {
-    public class ScreenResolutionService : IScreenResolutionService
+    public class ScreenResolutionService : BaseService, IScreenResolutionService
     {
-        private IUnitOfWork Db { get; set; }
-        private IMapper mapper;
-
-        public ScreenResolutionService(IUnitOfWork db, IMapper mapper)
-        {
-            Db = db;
-            this.mapper = mapper;
-
-            mapper = new MapperConfiguration(cfg =>
-            {
-                cfg.CreateMap<ScreenResolution, ScreenResolutionDTO>();
-            }).CreateMapper();
-        }
+        public ScreenResolutionService(IUnitOfWork db, IMapper mapper) : base(db, mapper) { }
 
         public IEnumerable<ScreenResolutionDTO> GetScreenResolutions()
         {
-            var resolutions = Db.ScreenResolutions.GetAll();
+            var resolutions = unitOfWork.ScreenResolutions.GetAll();
             return mapper.Map<List<ScreenResolutionDTO>>(resolutions);
-        }
-
-        public void Dispose()
-        {
-            Db.Dispose();
         }
     }
 }

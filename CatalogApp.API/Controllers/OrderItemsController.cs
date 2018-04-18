@@ -14,18 +14,13 @@ namespace CatalogApp.API.Controllers
 {
     public class OrderItemsController : ApiController
     {
-        private IOrderItemService db;
+        private IOrderItemService orderItemService;
         private IMapper mapper;
 
         public OrderItemsController(IOrderItemService context, IMapper mapper)
         {
-            db = context;
+            orderItemService = context;
             this.mapper = mapper;
-            //mapper = new MapperConfiguration(cfg => {
-            //    cfg.CreateMap<OrderItemVM, OrderItemDTO>().ReverseMap();
-            //    cfg.CreateMap<PhoneDTO, PhoneSummaryVM>().ReverseMap();
-            //}).CreateMapper();
-
         }
 
         // GET: api/OrderItems
@@ -43,7 +38,7 @@ namespace CatalogApp.API.Controllers
         // POST: api/OrderItems
         public async Task<HttpResponseMessage> Post([FromBody]OrderItemVM item)
         {
-            var result = await db.AddToOrder(mapper.Map<OrderItemDTO>(item));
+            var result = await orderItemService.AddToOrder(mapper.Map<OrderItemDTO>(item));
 
             var response = Request.CreateResponse(HttpStatusCode.OK, result.Message);
 
@@ -58,7 +53,7 @@ namespace CatalogApp.API.Controllers
         // DELETE: api/OrderItems/5
         public async Task<HttpResponseMessage> Delete(int id)
         {
-            var result = await db.RemoveFromOrder(id);
+            var result = await orderItemService.RemoveFromOrder(id);
 
             var response = Request.CreateResponse(HttpStatusCode.OK, result.Message);
 

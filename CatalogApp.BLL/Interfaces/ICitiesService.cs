@@ -7,7 +7,7 @@ using System.Text;
 
 namespace CatalogApp.BLL.Interfaces
 {
-    public interface ICitiesService : IDisposable
+    public interface ICitiesService
     {
         IEnumerable<CityDTO> GetCities();
     }

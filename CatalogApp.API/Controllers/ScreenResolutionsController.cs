@@ -13,19 +13,19 @@ namespace CatalogApp.API.Controllers
 {
     public class ScreenResolutionsController : ApiController
     {
-        private IScreenResolutionService db;
+        private IScreenResolutionService screenResolutionService;
         private IMapper mapper;
 
         public ScreenResolutionsController(IScreenResolutionService context, IMapper mapper)
         {
-            db = context;
+            screenResolutionService = context;
             this.mapper = mapper;
         }
 
         // GET: api/ScreenResolutions
         public IEnumerable<ScreenResolutionVM> Get()
         {
-            var resolutions = db.GetScreenResolutions();
+            var resolutions = screenResolutionService.GetScreenResolutions();
             return mapper.Map<List<ScreenResolutionVM>>(resolutions);
         }
 

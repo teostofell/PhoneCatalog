@@ -13,19 +13,19 @@ namespace CatalogApp.API.Controllers
 {
     public class FiltersController : ApiController
     {
-        private IFiltersService db;
+        private IFiltersService filtersService;
         private IMapper mapper;
 
         public FiltersController(IFiltersService context, IMapper mapper)
         {
-            db = context;
+            filtersService = context;
             this.mapper = mapper;
         }
 
         // GET: api/Filters
         public FilterVM Get()
         {
-            var filter = db.GetFilterValues();
+            var filter = filtersService.GetFilterValues();
             return mapper.Map<FilterVM>(filter);
         }
 

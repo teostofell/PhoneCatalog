@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace CatalogApp.BLL.Interfaces
 {
-    public interface IRolesService : IDisposable
+    public interface IRolesService
     {
         IEnumerable<RoleDTO> GetRoles();
         Task<OperationDetails> ChangeRole(string userId, string roleId);

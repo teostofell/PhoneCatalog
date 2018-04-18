@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace CatalogApp.BLL.Interfaces
 {
-    public interface IBrandService : IDisposable
+    public interface IBrandService
     {
         IEnumerable<BrandDTO> GetBrands();
     }

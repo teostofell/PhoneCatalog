@@ -13,37 +13,30 @@ using System.Threading.Tasks;
 
 namespace CatalogApp.BLL.Services
 {
-    public class CommentsService : ICommentsService
+    public class CommentsService : BaseService, ICommentsService
     {
-        private IUnitOfWork Db { get; set; }
-        private IMapper mapper;
-
-        public CommentsService(IUnitOfWork db, IMapper mapper)
-        {
-            Db = db;
-            this.mapper = mapper;
-        }
+        public CommentsService(IUnitOfWork db, IMapper mapper) : base(db, mapper) {}
 
         public async Task<OperationDetails> AddComment(CommentDTO comment)
         {
             try
             {
-                var result = Db.Comments.Create(mapper.Map<Comment>(comment));
+                var result = unitOfWork.Comments.Create(mapper.Map<Comment>(comment));
             }
             catch(Exception e)
             {
                 return new OperationDetails(false, "Error on creating comment");
             }
 
-            var phone = await Db.Phones.Get(comment.PhoneId).Include(p => p.Comments).FirstOrDefaultAsync();
+            var phone = await unitOfWork.Phones.Get(comment.PhoneId).Include(p => p.Comments).FirstOrDefaultAsync();
 
             var average = phone.Comments.Select(c => c.Grade).Average();
             phone.Grade = Convert.ToInt32(average);
-            Db.Phones.Update(phone);
+            unitOfWork.Phones.Update(phone);
 
             try
             {
-                await Db.SaveAsync();
+                await unitOfWork.SaveAsync();
             }
             catch(Exception e)
             {
@@ -56,15 +49,10 @@ namespace CatalogApp.BLL.Services
 
         public IEnumerable<CommentDTO> GetComments(int phoneId)
         {
-            var comments = Db.Comments.GetAll().Where(c => c.PhoneId == phoneId)
+            var comments = unitOfWork.Comments.GetAll().Where(c => c.PhoneId == phoneId)
                 .Include(c => c.User).ToList();
 
             return mapper.Map<List<CommentDTO>>(comments);
-        }
-
-        public void Dispose()
-        {
-            Db.Dispose();
         }
     }
 }

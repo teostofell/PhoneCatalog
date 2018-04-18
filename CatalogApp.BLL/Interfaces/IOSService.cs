@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace CatalogApp.BLL.Interfaces
 {
-    public interface IOSService : IDisposable
+    public interface IOSService
     {
         IEnumerable<OSDTO> GetOS();
     }

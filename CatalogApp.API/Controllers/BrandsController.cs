@@ -13,19 +13,19 @@ namespace CatalogApp.API.Controllers
 {
     public class BrandsController : ApiController
     {
-        private IBrandService db;
+        private IBrandService brandService;
         private IMapper mapper;
 
         public BrandsController(IBrandService context, IMapper mapper)
         {
-            db = context;
+            brandService = context;
             this.mapper = mapper;
         }
 
         // GET: api/Brands
         public IEnumerable<BrandVM> Get()
         {
-            var brands = db.GetBrands();
+            var brands = brandService.GetBrands();
             return mapper.Map<List<BrandVM>>(brands);
         }
 

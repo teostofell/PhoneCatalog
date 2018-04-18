@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace CatalogApp.BLL.Interfaces
 {
-    public interface ICommentsService : IDisposable
+    public interface ICommentsService
     {
         IEnumerable<CommentDTO> GetComments(int phoneId);
         Task<OperationDetails> AddComment(CommentDTO comment);

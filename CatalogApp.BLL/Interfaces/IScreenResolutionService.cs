@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace CatalogApp.BLL.Interfaces
 {
-    public interface IScreenResolutionService : IDisposable
+    public interface IScreenResolutionService
     {
         IEnumerable<ScreenResolutionDTO> GetScreenResolutions();
     }

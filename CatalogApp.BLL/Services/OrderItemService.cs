@@ -13,16 +13,9 @@ using System.Threading.Tasks;
 
 namespace CatalogApp.BLL.Services
 {
-    public class OrderItemService : IOrderItemService
+    public class OrderItemService : BaseService, IOrderItemService
     {
-        private IUnitOfWork Db { get; set; }
-        private IMapper mapper;
-
-        public OrderItemService(IUnitOfWork db, IMapper mapper)
-        {
-            Db = db;
-            this.mapper = mapper;
-        }
+        public OrderItemService(IUnitOfWork db, IMapper mapper) : base(db, mapper) {}
 
 
         public async Task<OperationDetails> AddToOrder(OrderItemDTO item)
@@ -30,11 +23,11 @@ namespace CatalogApp.BLL.Services
 
             OrderItem orderItem = new OrderItem() { OrderId = item.OrderId, PhoneId = item.Phone.Id, Quantity = item.Quantity };
 
-            Order order = await Db.Orders.Get(item.OrderId).FirstOrDefaultAsync();
+            Order order = await unitOfWork.Orders.Get(item.OrderId).FirstOrDefaultAsync();
             order.Total += item.Phone.Price * item.Quantity;
-            Db.Orders.Update(order);
+            unitOfWork.Orders.Update(order);
 
-            var temp = Db.OrderItems.GetAll().Where(oi => (oi.OrderId == item.OrderId && oi.PhoneId == item.Phone.Id));
+            var temp = unitOfWork.OrderItems.GetAll().Where(oi => (oi.OrderId == item.OrderId && oi.PhoneId == item.Phone.Id));
 
             if (temp.FirstOrDefault() != null)
             {
@@ -42,39 +35,34 @@ namespace CatalogApp.BLL.Services
 
                 OperationDetails resultUpdated = new OperationDetails(true, "Item's quantity changed");
 
-                await Db.SaveAsync();
+                await unitOfWork.SaveAsync();
 
                 return resultUpdated;
             }
 
-            orderItem = Db.OrderItems.Create(orderItem);
+            orderItem = unitOfWork.OrderItems.Create(orderItem);
 
             OperationDetails resultAdded = new OperationDetails(true, "Item added");
 
-            await Db.SaveAsync();
+            await unitOfWork.SaveAsync();
 
             return resultAdded;
         }
 
         public async Task<OperationDetails> RemoveFromOrder(int orderItemId)
         {
-            OrderItem item = await Db.OrderItems.Get(orderItemId).Include(oi => oi.Phone).FirstOrDefaultAsync();
-            Order order = await Db.Orders.Get(item.OrderId).FirstOrDefaultAsync();
+            OrderItem item = await unitOfWork.OrderItems.Get(orderItemId).Include(oi => oi.Phone).FirstOrDefaultAsync();
+            Order order = await unitOfWork.Orders.Get(item.OrderId).FirstOrDefaultAsync();
             order.Total -= item.Phone.Price * item.Quantity;
-            Db.Orders.Update(order);
+            unitOfWork.Orders.Update(order);
 
-            Db.OrderItems.Delete(orderItemId);
+            unitOfWork.OrderItems.Delete(orderItemId);
 
             OperationDetails result = new OperationDetails(true, "Item removed");
 
-            await Db.SaveAsync();
+            await unitOfWork.SaveAsync();
 
             return result;
-        }
-
-        public void Dispose()
-        {
-            Db.Dispose();
         }
     }
 }

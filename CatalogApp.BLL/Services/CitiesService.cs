@@ -11,26 +11,15 @@ using System.Threading.Tasks;
 
 namespace CatalogApp.BLL.Services
 {
-    public class CitiesService : ICitiesService
+    public class CitiesService : BaseService, ICitiesService
     {
-        private IUnitOfWork Db { get; set; }
-        private IMapper mapper;
-
-        public CitiesService(IUnitOfWork db, IMapper mapper)
-        {
-            Db = db;
-            this.mapper = mapper;
-        }
+        public CitiesService(IUnitOfWork db, IMapper mapper) : base(db, mapper) {}
 
         public IEnumerable<CityDTO> GetCities()
         {
-            var cities = Db.Cities.GetAll();
+            var cities = unitOfWork.Cities.GetAll();
             return mapper.Map<List<CityDTO>>(cities);
         }
 
-        public void Dispose()
-        {
-            Db.Dispose();
-        }
     }
 }

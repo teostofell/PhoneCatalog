@@ -13,12 +13,12 @@ namespace CatalogApp.API.Controllers
 {
     public class CitiesController : ApiController
     {
-        private ICitiesService db;
+        private ICitiesService citiesService;
         private IMapper mapper;
 
         public CitiesController(ICitiesService context, IMapper mapper)
         {
-            db = context;
+            citiesService = context;
             this.mapper = mapper;
         }
 
@@ -26,7 +26,7 @@ namespace CatalogApp.API.Controllers
         // GET: api/Cities
         public IEnumerable<CityVM> Get()
         {
-            var cities = db.GetCities();
+            var cities = citiesService.GetCities();
             return mapper.Map<List<CityVM>>(cities);
         }
 

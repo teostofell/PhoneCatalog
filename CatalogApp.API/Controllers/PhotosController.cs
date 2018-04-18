@@ -17,12 +17,12 @@ namespace CatalogApp.API.Controllers
 {
     public class PhotosController : ApiController
     {
-        private IPhotoService db;
+        private IPhotoService photoService;
         private IMapper mapper;
 
         public PhotosController(IPhotoService context, IMapper mapper)
         {
-            db = context;
+            photoService = context;
             this.mapper = mapper;
         }
 
@@ -30,7 +30,7 @@ namespace CatalogApp.API.Controllers
         [HttpGet]
         public IEnumerable<PhotoVM> GetPhonePhotos(int phoneId)
         {
-            var photos = db.GetPhonePhotos(phoneId);
+            var photos = photoService.GetPhonePhotos(phoneId);
             return mapper.Map<List<PhotoVM>>(photos);
         }
 
@@ -47,7 +47,7 @@ namespace CatalogApp.API.Controllers
             string thumbPath = ImagesProcessor.GetUserAvatar(avatar.Photo, fileName, new Size(200, 200));
             string thumbUrl = Url.Content(thumbPath);
 
-            var result = await db.SetProfileAvatar(userId, thumbUrl);
+            var result = await photoService.SetProfileAvatar(userId, thumbUrl);
 
             if (result.isSucceed)
             {
@@ -66,7 +66,7 @@ namespace CatalogApp.API.Controllers
             string thumbPath = ImagesProcessor.GetPhoneImage(photo.Photo, fileName, new Size(193, 410));
             string thumbUrl = Url.Content(thumbPath);
 
-            var result = await db.AddPhonePhoto(phoneId, thumbUrl);
+            var result = await photoService.AddPhonePhoto(phoneId, thumbUrl);
 
             if (result.isSucceed)
             {
@@ -86,7 +86,7 @@ namespace CatalogApp.API.Controllers
         // DELETE: api/Photos/5
         public void Delete(int id)
         {
-            db.DeletePhonePhoto(id);
+            photoService.DeletePhonePhoto(id);
         }
     }
 }

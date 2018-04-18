@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace CatalogApp.BLL.Services
 {
-    public interface IPhotoService : IDisposable
+    public interface IPhotoService
     {
         Task<OperationDetails> SetProfileAvatar(string userId, string avatarPath);
         Task<OperationDetails> AddPhonePhoto(int phoneId, string path);

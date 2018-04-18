@@ -10,32 +10,20 @@ using System.Threading.Tasks;
 
 namespace CatalogApp.BLL.Services
 {
-    public class FiltersService : IFiltersService
-    {
-        private IUnitOfWork Db { get; set; }
-        private IMapper mapper;
-
-        public FiltersService(IUnitOfWork db, IMapper mapper)
-        {
-            Db = db;
-            this.mapper = mapper;
-        }
+    public class FiltersService : BaseService, IFiltersService
+    {       
+        public FiltersService(IUnitOfWork db, IMapper mapper) :base(db, mapper) {}
 
         public FilterModel GetFilterValues()
         {
             FilterModel filter = new FilterModel();
 
-            filter.Brand = Db.Brands.GetAll().Select(b => b.Slug).ToList();
-            filter.OS = Db.OperatingSystems.GetAll().Select(o => o.Slug).ToList();
+            filter.Brand = unitOfWork.Brands.GetAll().Select(b => b.Slug).ToList();
+            filter.OS = unitOfWork.OperatingSystems.GetAll().Select(o => o.Slug).ToList();
             filter.Price = new Range<decimal>();
             filter.Storage = new Range<int>();
 
             return filter;
-        }
-
-        public void Dispose()
-        {
-            Db.Dispose();
         }
     }
 }
