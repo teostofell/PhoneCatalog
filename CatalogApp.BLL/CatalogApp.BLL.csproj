@@ -91,6 +91,7 @@
     <Compile Include="Interfaces\IScreenResolutionService.cs" />
     <Compile Include="Interfaces\IUserService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\BaseService.cs" />
     <Compile Include="Services\BrandService.cs" />
     <Compile Include="Services\CitiesService.cs" />
     <Compile Include="Services\CommentsService.cs" />
