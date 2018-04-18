@@ -17,14 +17,10 @@ namespace CatalogApp.API.Controllers
         private IOrdersService db;
         private IMapper mapper;
 
-        public OrdersController(IOrdersService context)
+        public OrdersController(IOrdersService context, IMapper mapper)
         {
             db = context;
-            mapper = new MapperConfiguration(cfg => {
-                cfg.CreateMap<OrderDTO, OrderVM>().ReverseMap();
-                cfg.CreateMap<OrderItemDTO, OrderItemVM>().ReverseMap();
-            }).CreateMapper();
-
+            this.mapper = mapper;
         }
 
         // GET: api/Orders

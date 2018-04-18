@@ -17,14 +17,10 @@ namespace CatalogApp.API.Controllers
         private ICommentsService db;
         private IMapper mapper;
 
-        public CommentsController(ICommentsService context)
+        public CommentsController(ICommentsService context, IMapper mapper)
         {
             db = context;
-            mapper = new MapperConfiguration(cfg => {
-                cfg.CreateMap<CommentDTO, CommentVM>();
-                cfg.CreateMap<UserDTO, UserVM>();
-            }).CreateMapper();
-
+            this.mapper = mapper;
         }
 
         // GET: api/Comments
@@ -44,7 +40,15 @@ namespace CatalogApp.API.Controllers
         public async Task<HttpResponseMessage> Post([FromBody]CommentVM comment)
         {
             var result = await db.AddComment(mapper.Map<CommentDTO>(comment));
-            return Request.CreateResponse("asf");
+
+            if(result.isSucceed)
+            {
+                return Request.CreateResponse(HttpStatusCode.OK, result.Message);
+            }
+            else
+            {
+                return Request.CreateResponse(HttpStatusCode.InternalServerError, result.Message);
+            }            
         }
 
         // PUT: api/Comments/5

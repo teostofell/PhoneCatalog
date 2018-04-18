@@ -22,25 +22,10 @@ namespace CatalogApp.BLL.Services
         public int TotalPages { get; set; }
         public int TotalItems { get; set; }
 
-        public PhonesService(IUnitOfWork db)
+        public PhonesService(IUnitOfWork db, IMapper mapper)
         {
             Db = db;
-
-            mapper = new MapperConfiguration(cfg =>
-            {
-                cfg.CreateMap<Phone, PhoneDTO>();
-                cfg.CreateMap<Phone, Phone>()
-                    .ForMember(p => p.Brand, opt => opt.Ignore())
-                    .ForMember(p => p.OS, opt => opt.Ignore())
-                    .ForMember(p => p.ScreenResolution, opt => opt.Ignore())
-                    .ForMember(p => p.Photos, opt => opt.Ignore())
-                    .ForAllOtherMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
-                cfg.CreateMap<PhoneDTO, Phone>()
-                    .ForMember(p => p.Brand, opt => opt.Ignore())
-                    .ForMember(p => p.OS, opt => opt.Ignore())
-                    .ForMember(p => p.ScreenResolution, opt => opt.Ignore())
-                    .ForMember(p => p.Photos, opt => opt.Ignore());
-            }).CreateMapper();
+            this.mapper = mapper;
         }
 
         public IEnumerable<PhoneDTO> GetPhones(FilterModel filter, int itemsOnPage, int page)

@@ -17,13 +17,10 @@ namespace CatalogApp.API.Controllers
         private IRolesService db;
         private IMapper mapper;
 
-        public RolesController(IRolesService context)
+        public RolesController(IRolesService context, IMapper mapper)
         {
             db = context;
-            mapper = new MapperConfiguration(cfg => {
-                cfg.CreateMap<RoleDTO, RoleVM>();
-            }).CreateMapper();
-
+            this.mapper = mapper; 
         }
 
         // GET: api/Roles

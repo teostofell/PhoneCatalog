@@ -16,13 +16,10 @@ namespace CatalogApp.API.Controllers
         private IScreenResolutionService db;
         private IMapper mapper;
 
-        public ScreenResolutionsController(IScreenResolutionService context)
+        public ScreenResolutionsController(IScreenResolutionService context, IMapper mapper)
         {
             db = context;
-            mapper = new MapperConfiguration(cfg => {
-                cfg.CreateMap<ScreenResolutionDTO, ScreenResolutionVM>();
-            }).CreateMapper();
-
+            this.mapper = mapper;
         }
 
         // GET: api/ScreenResolutions

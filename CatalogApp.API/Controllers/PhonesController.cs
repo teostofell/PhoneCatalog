@@ -25,13 +25,10 @@ namespace CatalogApp.API.Controllers
         private IPhonesService db;
         private IMapper mapper;
 
-        public PhonesController(IPhonesService context)
+        public PhonesController(IPhonesService context, IMapper mapper)
         {
             db = context;
-            mapper = new MapperConfiguration(cfg => {
-                cfg.CreateMap<PhoneDTO, PhoneSummaryVM>();
-            }).CreateMapper();
-
+            this.mapper = mapper;
         }
 
         public async Task<HttpResponseMessage> Get([FromUri]FilterVM filter)
@@ -109,13 +106,18 @@ namespace CatalogApp.API.Controllers
 
         // PUT: api/Phones/5
         [Authorize(Roles = "admin")]
-        public void Put(int id, [FromBody]PhoneDTO phone)
+        public async Task<HttpResponseMessage> Put(int id, [FromBody]PhoneDTO phone)
         {
             string fileName = Path.GetRandomFileName() + ".png";
             var thumbPath = ImagesProcessor.GetPhoneThumbnail(phone.Photo, fileName, new Size(104, 220));
             phone.Photo = Url.Content(thumbPath);
 
-            db.UpdatePhone(id, phone);
+            var result = await db.UpdatePhone(id, phone);
+
+            if(result.isSucceed)
+                return Request.CreateResponse(HttpStatusCode.OK, result.Message);
+            else
+                return Request.CreateResponse(HttpStatusCode.InternalServerError, result.Message);
         }
 
         // DELETE: api/Phones/5

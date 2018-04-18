@@ -15,14 +15,10 @@ namespace CatalogApp.BLL.Services
         private IUnitOfWork Db { get; set; }
         private IMapper mapper;
 
-        public FiltersService(IUnitOfWork db)
+        public FiltersService(IUnitOfWork db, IMapper mapper)
         {
             Db = db;
-
-            mapper = new MapperConfiguration(cfg =>
-            {
-                
-            }).CreateMapper();
+            this.mapper = mapper;
         }
 
         public FilterModel GetFilterValues()

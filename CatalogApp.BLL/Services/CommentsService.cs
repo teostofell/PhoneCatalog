@@ -18,15 +18,10 @@ namespace CatalogApp.BLL.Services
         private IUnitOfWork Db { get; set; }
         private IMapper mapper;
 
-        public CommentsService(IUnitOfWork db)
+        public CommentsService(IUnitOfWork db, IMapper mapper)
         {
             Db = db;
-
-            mapper = new MapperConfiguration(cfg =>
-            {
-                cfg.CreateMap<Comment, CommentDTO>().ReverseMap();
-                cfg.CreateMap<UserProfile, UserDTO>();
-            }).CreateMapper();
+            this.mapper = mapper;
         }
 
         public async Task<OperationDetails> AddComment(CommentDTO comment)
@@ -55,7 +50,7 @@ namespace CatalogApp.BLL.Services
                 return new OperationDetails(false, "Error on saving changes");
             }
 
-            return new OperationDetails(true, "Comment has benn added");
+            return new OperationDetails(true, "Comment has been added");
 
         }
 

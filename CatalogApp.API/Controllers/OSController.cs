@@ -16,13 +16,10 @@ namespace CatalogApp.API.Controllers
         private IOSService db;
         private IMapper mapper;
 
-        public OSController(IOSService context)
+        public OSController(IOSService context, IMapper mapper)
         {
             db = context;
-            mapper = new MapperConfiguration(cfg => {
-                cfg.CreateMap<OSDTO, OSVM>();
-            }).CreateMapper();
-
+            this.mapper = mapper;
         }
 
         // GET: api/OS

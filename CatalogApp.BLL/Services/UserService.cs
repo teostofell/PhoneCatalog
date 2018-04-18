@@ -20,15 +20,10 @@ namespace CatalogApp.BLL.Services
         private IUnitOfWork Db { get; set; }
         private IMapper mapper;        
 
-        public UserService(IUnitOfWork db)
+        public UserService(IUnitOfWork db, IMapper mapper)
         {
             Db = db;
-
-            mapper = new MapperConfiguration(cfg =>
-            {
-                cfg.CreateMap<UserProfile, UserDTO>()
-                    .ForMember(dest => dest.Role, opts => opts.MapFrom(src => src.ApplicationUser.Roles.FirstOrDefault().RoleId));
-            }).CreateMapper();
+            this.mapper = mapper;
         }
 
         public async Task<OperationDetails> Register(UserDTO user)

@@ -18,14 +18,10 @@ namespace CatalogApp.BLL.Services
         private IUnitOfWork Db { get; set; }
         private IMapper mapper;
 
-        public RolesService(IUnitOfWork db)
+        public RolesService(IUnitOfWork db, IMapper mapper)
         {
             Db = db;
-
-            mapper = new MapperConfiguration(cfg =>
-            {
-                cfg.CreateMap<ApplicationRole, RoleDTO>();
-            }).CreateMapper();
+            this.mapper = mapper;
         }
 
         public IEnumerable<RoleDTO> GetRoles()

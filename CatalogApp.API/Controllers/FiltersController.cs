@@ -16,13 +16,10 @@ namespace CatalogApp.API.Controllers
         private IFiltersService db;
         private IMapper mapper;
 
-        public FiltersController(IFiltersService context)
+        public FiltersController(IFiltersService context, IMapper mapper)
         {
             db = context;
-            mapper = new MapperConfiguration(cfg => {
-                cfg.CreateMap<FilterModel, FilterVM>();           
-            }).CreateMapper();
-
+            this.mapper = mapper;
         }
 
         // GET: api/Filters

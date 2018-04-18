@@ -16,14 +16,10 @@ namespace CatalogApp.BLL.Services
         private IUnitOfWork Db { get; set; }
         private IMapper mapper;
 
-        public OSService(IUnitOfWork db)
+        public OSService(IUnitOfWork db, IMapper mapper)
         {
             Db = db;
-
-            mapper = new MapperConfiguration(cfg =>
-            {
-                cfg.CreateMap<OS, OSDTO>();
-            }).CreateMapper();
+            this.mapper = mapper;
         }
 
         public IEnumerable<OSDTO> GetOS()

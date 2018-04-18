@@ -17,13 +17,14 @@ namespace CatalogApp.API.Controllers
         private IOrderItemService db;
         private IMapper mapper;
 
-        public OrderItemsController(IOrderItemService context)
+        public OrderItemsController(IOrderItemService context, IMapper mapper)
         {
             db = context;
-            mapper = new MapperConfiguration(cfg => {
-                cfg.CreateMap<OrderItemVM, OrderItemDTO>().ReverseMap();
-                cfg.CreateMap<PhoneDTO, PhoneSummaryVM>().ReverseMap();
-            }).CreateMapper();
+            this.mapper = mapper;
+            //mapper = new MapperConfiguration(cfg => {
+            //    cfg.CreateMap<OrderItemVM, OrderItemDTO>().ReverseMap();
+            //    cfg.CreateMap<PhoneDTO, PhoneSummaryVM>().ReverseMap();
+            //}).CreateMapper();
 
         }
 

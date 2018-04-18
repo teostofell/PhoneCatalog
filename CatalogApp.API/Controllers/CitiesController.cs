@@ -16,13 +16,10 @@ namespace CatalogApp.API.Controllers
         private ICitiesService db;
         private IMapper mapper;
 
-        public CitiesController(ICitiesService context)
+        public CitiesController(ICitiesService context, IMapper mapper)
         {
             db = context;
-            mapper = new MapperConfiguration(cfg => {
-                cfg.CreateMap<CityDTO, CityVM>();
-            }).CreateMapper();
-
+            this.mapper = mapper;
         }
 
 

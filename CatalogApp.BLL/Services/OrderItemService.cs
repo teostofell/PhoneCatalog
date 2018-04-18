@@ -18,14 +18,10 @@ namespace CatalogApp.BLL.Services
         private IUnitOfWork Db { get; set; }
         private IMapper mapper;
 
-        public OrderItemService(IUnitOfWork db)
+        public OrderItemService(IUnitOfWork db, IMapper mapper)
         {
             Db = db;
-
-            mapper = new MapperConfiguration(cfg =>
-            {
-                cfg.CreateMap<OrderItem, OrderItemDTO>().ReverseMap();
-            }).CreateMapper();
+            this.mapper = mapper;
         }
 
 

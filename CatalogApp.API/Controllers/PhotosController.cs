@@ -20,13 +20,10 @@ namespace CatalogApp.API.Controllers
         private IPhotoService db;
         private IMapper mapper;
 
-        public PhotosController(IPhotoService context)
+        public PhotosController(IPhotoService context, IMapper mapper)
         {
             db = context;
-            mapper = new MapperConfiguration(cfg => {
-                cfg.CreateMap<PhotoDTO, PhotoVM>();
-            }).CreateMapper();
-
+            this.mapper = mapper;
         }
 
         // GET: api/Photos

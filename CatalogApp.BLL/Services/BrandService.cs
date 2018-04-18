@@ -16,14 +16,10 @@ namespace CatalogApp.BLL.Services
         private IUnitOfWork Db { get; set; }
         private IMapper mapper;
 
-        public BrandService(IUnitOfWork db)
+        public BrandService(IUnitOfWork db, IMapper mapper)
         {
             Db = db;
-
-            mapper = new MapperConfiguration(cfg =>
-            {
-                cfg.CreateMap<Brand, BrandDTO>();
-            }).CreateMapper();
+            this.mapper = mapper;
         }
 
 

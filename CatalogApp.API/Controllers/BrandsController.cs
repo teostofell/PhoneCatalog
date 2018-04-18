@@ -16,13 +16,10 @@ namespace CatalogApp.API.Controllers
         private IBrandService db;
         private IMapper mapper;
 
-        public BrandsController(IBrandService context)
+        public BrandsController(IBrandService context, IMapper mapper)
         {
             db = context;
-            mapper = new MapperConfiguration(cfg => {
-                cfg.CreateMap<BrandDTO, BrandVM>();
-            }).CreateMapper();
-
+            this.mapper = mapper;
         }
 
         // GET: api/Brands

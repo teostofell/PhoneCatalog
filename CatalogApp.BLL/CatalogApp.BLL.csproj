@@ -63,6 +63,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Automapper\EntityToDtoProfile.cs" />
     <Compile Include="BusinessModel\FilterModel.cs" />
     <Compile Include="BusinessModel\OperationDetails.cs" />
     <Compile Include="BusinessModel\PageModel.cs" />
@@ -115,5 +116,6 @@
       <Name>CatalogApp.DAL</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

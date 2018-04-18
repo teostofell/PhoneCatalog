@@ -16,14 +16,10 @@ namespace CatalogApp.BLL.Services
         private IUnitOfWork Db { get; set; }
         private IMapper mapper;
 
-        public CitiesService(IUnitOfWork db)
+        public CitiesService(IUnitOfWork db, IMapper mapper)
         {
             Db = db;
-
-            mapper = new MapperConfiguration(cfg =>
-            {
-                cfg.CreateMap<City, CityDTO>();
-            }).CreateMapper();
+            this.mapper = mapper;
         }
 
         public IEnumerable<CityDTO> GetCities()

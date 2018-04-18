@@ -16,14 +16,10 @@ namespace CatalogApp.BLL.Services
         public IUnitOfWork Db { get; set; }
         private IMapper mapper;
 
-        public PhotoService(IUnitOfWork db)
+        public PhotoService(IUnitOfWork db, IMapper mapper)
         {
             Db = db;
-
-            mapper = new MapperConfiguration(cfg =>
-            {
-                cfg.CreateMap<Photo, PhotoDTO>();
-            }).CreateMapper();
+            this.mapper = mapper;
         }
 
 

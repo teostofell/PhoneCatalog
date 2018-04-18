@@ -1,4 +1,6 @@
-﻿using CatalogApp.BLL.Interfaces;
+﻿using AutoMapper;
+using CatalogApp.API.Automapper;
+using CatalogApp.BLL.Interfaces;
 using CatalogApp.BLL.Services;
 using CatalogApp.BLL.Utils;
 using Ninject;
@@ -25,6 +27,7 @@ namespace CatalogApp.API
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
+
         }
 
         protected override IKernel CreateKernel()
@@ -52,6 +55,11 @@ namespace CatalogApp.API
             kernel.Bind<IPhotoService>().To<PhotoService>();
             kernel.Bind<IRolesService>().To<RolesService>();
             kernel.Bind<ICommentsService>().To<CommentsService>();
+
+            var config = AutoMapperConfiguration.Configure();
+            var mapper = config.CreateMapper();
+
+            kernel.Bind<IMapper>().ToConstant(mapper);
 
 
             BusinessModule businessModule = new BusinessModule("Data Source=localhost;Initial Catalog=Catalog;Integrated Security=True");

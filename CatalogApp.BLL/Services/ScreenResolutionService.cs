@@ -16,9 +16,10 @@ namespace CatalogApp.BLL.Services
         private IUnitOfWork Db { get; set; }
         private IMapper mapper;
 
-        public ScreenResolutionService(IUnitOfWork db)
+        public ScreenResolutionService(IUnitOfWork db, IMapper mapper)
         {
             Db = db;
+            this.mapper = mapper;
 
             mapper = new MapperConfiguration(cfg =>
             {

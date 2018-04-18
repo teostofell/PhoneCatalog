@@ -20,13 +20,10 @@ namespace CatalogApp.API.Controllers
         private IUserService db;
         private IMapper mapper;
 
-        public UsersController(IUserService context)
+        public UsersController(IUserService context, IMapper mapper)
         {
             db = context;
-            mapper = new MapperConfiguration(cfg => {
-                cfg.CreateMap<UserDTO, UserVM>();       
-            }).CreateMapper();
-
+            this.mapper = mapper;
         }
 
         // GET: api/Users
