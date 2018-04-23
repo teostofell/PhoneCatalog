@@ -1,11 +1,6 @@
 ﻿using AutoMapper;
 using CatalogApp.BLL.DTO;
 using CatalogApp.DAL.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CatalogApp.BLL.Automapper
 {
@@ -13,17 +8,17 @@ namespace CatalogApp.BLL.Automapper
     {
         public EntityToDtoProfile()
         {
-            CreateMap<Brand, BrandDTO>();
-            CreateMap<City, CityDTO>();
-            CreateMap<Comment, CommentDTO>().ReverseMap();
-            CreateMap<Order, OrderDTO>();
-            CreateMap<OrderItem, OrderItemDTO>();
-            CreateMap<OS, OSDTO>();
-            CreateMap<Phone, PhoneDTO>();
+            CreateMap<Brand, BrandDto>();
+            CreateMap<City, CityDto>();
+            CreateMap<Comment, CommentDto>().ReverseMap();
+            CreateMap<Order, OrderDto>();
+            CreateMap<OrderItem, OrderItemDto>();
+            CreateMap<Os, Osdto>();
+            CreateMap<Phone, PhoneDto>();
             CreateMap<Phone, Phone>();
-            CreateMap<Photo, PhotoDTO>();
-            CreateMap<ScreenResolution, ScreenResolutionDTO>();
-            CreateMap<UserProfile, UserDTO>();
+            CreateMap<Photo, PhotoDto>();
+            CreateMap<ScreenResolution, ScreenResolutionDto>();
+            CreateMap<UserProfile, UserDto>();
         }
     }
 }

@@ -38,11 +38,11 @@ namespace CatalogApp.DAL.Contexts
             context.Brands.AddRange(new List<Brand>() { b1, b2, b3, b4, b5, b6 });
 
 
-            OS os1 = new OS() { Name = "Android", Slug = "android" };
-            OS os2 = new OS() { Name = "IOS", Slug = "ios" };
-            OS os3 = new OS() { Name = "Windows Mobile", Slug = "windows-mobile" };
+            Os os1 = new Os() { Name = "Android", Slug = "android" };
+            Os os2 = new Os() { Name = "IOS", Slug = "ios" };
+            Os os3 = new Os() { Name = "Windows Mobile", Slug = "windows-mobile" };
 
-            context.OperatingSystems.AddRange(new List<OS>() { os1, os2, os3 });
+            context.OperatingSystems.AddRange(new List<Os>() { os1, os2, os3 });
 
 
             ScreenResolution sr1 = new ScreenResolution() { Height = 1920, Width = 1080, Name = "Full HD" };
@@ -50,18 +50,18 @@ namespace CatalogApp.DAL.Contexts
 
             context.ScreenResolutions.AddRange(new List<ScreenResolution>() { sr1, sr2 });
 
-            Phone p1 = new Phone() { Model = "Redmi 5 Plus", Slug = "redmi5p32", Brand = b5, Battery = 4000, Fingerprint = true, OS = os1, Price = 410M, ScreenSize = 6F, ScreenResolution = sr1, ReleaseYear = 2016, Photo = "//content2.onliner.by/catalog/device/header/36a93587166940725b538d02c23a6b2c.jpeg" };
-            Phone p2 = new Phone() { Model = "iPhone X", Slug = "iphonex", Brand = b2, Battery = 2716, Fingerprint = false, OS = os2, Price = 2500M, ScreenSize = 5.8F, ScreenResolution = sr1, ReleaseYear = 2016, Photo = "//content2.onliner.by/catalog/device/header/a83458571f2c39fc9c435bd1116b4876.jpeg" };
-            Phone p3 = new Phone() { Model = "P20", Slug = "hp20", Brand = b6, Battery = 3400, Fingerprint = true, OS = os1, Price = 1600M, ScreenSize = 5.8F, ScreenResolution = sr1, ReleaseYear = 2016, Photo = "//content2.onliner.by/catalog/device/header/8c96ef80b69f9e3f3ea0153eb628ca81.jpeg" };
-            Phone p4 = new Phone() { Model = "iPhone 7", Slug = "iphone732", Brand = b2, Battery = 1960, Fingerprint = true, OS = os2, Price = 1390M, ScreenSize = 4.7F, ScreenResolution = sr1, ReleaseYear = 2016, Photo = "//content2.onliner.by/catalog/device/header/0ab0b43eb38b5767ea29c4509f0a9d3b.jpeg" };
-            Phone p5 = new Phone() { Model = "Galaxy S8", Slug = "galaxys8", Brand = b1, Battery = 3000, Fingerprint = true, OS = os1, Price = 1370M, ScreenSize = 5.8F, ScreenResolution = sr1, ReleaseYear = 2016, Photo = "//content2.onliner.by/catalog/device/header/272d80e5c1b51824c5034a0dffb29254.jpeg" };
-            Phone p6 = new Phone() { Model = "Galaxy S9", Slug = "galaxys9", Brand = b1, Battery = 3000, Fingerprint = true, OS = os1, Price = 1850M, ScreenSize = 5.8F, ScreenResolution = sr1, ReleaseYear = 2016, Photo = "//content2.onliner.by/catalog/device/header/198eab8de1166942eff6c394f2ca8980.jpeg" };
-            Phone p7 = new Phone() { Model = "Redmi Note 5", Slug = "note5pro", Brand = b5, Battery = 4000, Fingerprint = true, OS = os1, Price = 699M, ScreenSize = 6F, ScreenResolution = sr1, ReleaseYear = 2016, Photo = "//content2.onliner.by/catalog/device/header/5bd9331be19e40399301151fb6dc347b.jpeg" };
-            Phone p8 = new Phone() { Model = "Redmi 4X", Slug = "redmi4x", Brand = b5, Battery = 4100, Fingerprint = true, OS = os1, Price = 285M, ScreenSize = 5F, ScreenResolution = sr1, ReleaseYear = 2016, Photo = "//content2.onliner.by/catalog/device/header/44c42062fcc6be99bdce2350506f9ce6.jpeg" };
-            Phone p9 = new Phone() { Model = "Mate 10 Lite", Slug = "mate10lite", Brand = b6, Battery = 3340, Fingerprint = true, OS = os1, Price = 620M, ScreenSize = 5.9F, ScreenResolution = sr1, ReleaseYear = 2016, Photo = "//content2.onliner.by/catalog/device/header/c3e2b364b63e368c6d0a3b81d8e512b0.jpeg" };
-            Phone p10 = new Phone() { Model = "P Smart", Slug = "psmart", Brand = b6, Battery = 3000, Fingerprint = true, OS = os1, Price = 499M, ScreenSize = 5.65F, ScreenResolution = sr1, ReleaseYear = 2016, Photo = "//content2.onliner.by/catalog/device/header/26cdb2e51cfe95def27a56b4b8f13ad5.jpeg" };
-            Phone p11 = new Phone() { Model = "A7", Slug = "galaxya7", Brand = b1, Battery = 3100, Fingerprint = true, OS = os1, Price = 500M, ScreenSize = 6.1F, ScreenResolution = sr1, ReleaseYear = 2016, Photo = "//content2.onliner.by/catalog/device/header/0915a88b6868873a178b0781312f83c9.jpeg" };
-            Phone p12 = new Phone() { Model = "G6", Slug = "lgg6", Brand = b3, Battery = 3300, Fingerprint = true, OS = os1, Price = 1030M, ScreenSize = 5.7F, ScreenResolution = sr1, ReleaseYear = 2016, Photo = "//content2.onliner.by/catalog/device/header/9fe6b436edc0a720455c002f1b674af7.jpeg" };
+            Phone p1 = new Phone() { Model = "Redmi 5 Plus", Slug = "redmi5p32", Brand = b5, Battery = 4000, Fingerprint = true, Os = os1, Price = 410M, ScreenSize = 6F, ScreenResolution = sr1, ReleaseYear = 2016, Photo = "//content2.onliner.by/catalog/device/header/36a93587166940725b538d02c23a6b2c.jpeg" };
+            Phone p2 = new Phone() { Model = "iPhone X", Slug = "iphonex", Brand = b2, Battery = 2716, Fingerprint = false, Os = os2, Price = 2500M, ScreenSize = 5.8F, ScreenResolution = sr1, ReleaseYear = 2016, Photo = "//content2.onliner.by/catalog/device/header/a83458571f2c39fc9c435bd1116b4876.jpeg" };
+            Phone p3 = new Phone() { Model = "P20", Slug = "hp20", Brand = b6, Battery = 3400, Fingerprint = true, Os = os1, Price = 1600M, ScreenSize = 5.8F, ScreenResolution = sr1, ReleaseYear = 2016, Photo = "//content2.onliner.by/catalog/device/header/8c96ef80b69f9e3f3ea0153eb628ca81.jpeg" };
+            Phone p4 = new Phone() { Model = "iPhone 7", Slug = "iphone732", Brand = b2, Battery = 1960, Fingerprint = true, Os = os2, Price = 1390M, ScreenSize = 4.7F, ScreenResolution = sr1, ReleaseYear = 2016, Photo = "//content2.onliner.by/catalog/device/header/0ab0b43eb38b5767ea29c4509f0a9d3b.jpeg" };
+            Phone p5 = new Phone() { Model = "Galaxy S8", Slug = "galaxys8", Brand = b1, Battery = 3000, Fingerprint = true, Os = os1, Price = 1370M, ScreenSize = 5.8F, ScreenResolution = sr1, ReleaseYear = 2016, Photo = "//content2.onliner.by/catalog/device/header/272d80e5c1b51824c5034a0dffb29254.jpeg" };
+            Phone p6 = new Phone() { Model = "Galaxy S9", Slug = "galaxys9", Brand = b1, Battery = 3000, Fingerprint = true, Os = os1, Price = 1850M, ScreenSize = 5.8F, ScreenResolution = sr1, ReleaseYear = 2016, Photo = "//content2.onliner.by/catalog/device/header/198eab8de1166942eff6c394f2ca8980.jpeg" };
+            Phone p7 = new Phone() { Model = "Redmi Note 5", Slug = "note5pro", Brand = b5, Battery = 4000, Fingerprint = true, Os = os1, Price = 699M, ScreenSize = 6F, ScreenResolution = sr1, ReleaseYear = 2016, Photo = "//content2.onliner.by/catalog/device/header/5bd9331be19e40399301151fb6dc347b.jpeg" };
+            Phone p8 = new Phone() { Model = "Redmi 4X", Slug = "redmi4x", Brand = b5, Battery = 4100, Fingerprint = true, Os = os1, Price = 285M, ScreenSize = 5F, ScreenResolution = sr1, ReleaseYear = 2016, Photo = "//content2.onliner.by/catalog/device/header/44c42062fcc6be99bdce2350506f9ce6.jpeg" };
+            Phone p9 = new Phone() { Model = "Mate 10 Lite", Slug = "mate10lite", Brand = b6, Battery = 3340, Fingerprint = true, Os = os1, Price = 620M, ScreenSize = 5.9F, ScreenResolution = sr1, ReleaseYear = 2016, Photo = "//content2.onliner.by/catalog/device/header/c3e2b364b63e368c6d0a3b81d8e512b0.jpeg" };
+            Phone p10 = new Phone() { Model = "P Smart", Slug = "psmart", Brand = b6, Battery = 3000, Fingerprint = true, Os = os1, Price = 499M, ScreenSize = 5.65F, ScreenResolution = sr1, ReleaseYear = 2016, Photo = "//content2.onliner.by/catalog/device/header/26cdb2e51cfe95def27a56b4b8f13ad5.jpeg" };
+            Phone p11 = new Phone() { Model = "A7", Slug = "galaxya7", Brand = b1, Battery = 3100, Fingerprint = true, Os = os1, Price = 500M, ScreenSize = 6.1F, ScreenResolution = sr1, ReleaseYear = 2016, Photo = "//content2.onliner.by/catalog/device/header/0915a88b6868873a178b0781312f83c9.jpeg" };
+            Phone p12 = new Phone() { Model = "G6", Slug = "lgg6", Brand = b3, Battery = 3300, Fingerprint = true, Os = os1, Price = 1030M, ScreenSize = 5.7F, ScreenResolution = sr1, ReleaseYear = 2016, Photo = "//content2.onliner.by/catalog/device/header/9fe6b436edc0a720455c002f1b674af7.jpeg" };
 
             context.Phones.AddRange(new List<Phone>() { p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11, p12 });
 

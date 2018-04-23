@@ -1,9 +1,5 @@
 ﻿using AutoMapper;
 using CatalogApp.BLL.Automapper;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 
 namespace CatalogApp.API.Automapper
 {

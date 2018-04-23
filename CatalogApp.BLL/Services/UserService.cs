@@ -6,11 +6,8 @@ using CatalogApp.DAL.Entities;
 using CatalogApp.DAL.Interfaces;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
-using System.Net.Http;
 using System.Data.Entity;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace CatalogApp.BLL.Services
@@ -19,60 +16,60 @@ namespace CatalogApp.BLL.Services
     {
         public UserService(IUnitOfWork db, IMapper mapper) : base(db, mapper) {}
 
-        public async Task<OperationDetails> Register(UserDTO user)
+        public async Task<OperationDetails> Register(UserDto user)
         {
-            ApplicationUser appUser = await unitOfWork.UserManager.FindByEmailAsync(user.Email);
+            ApplicationUser appUser = await UnitOfWork.UserManager.FindByEmailAsync(user.Email);
 
             if(appUser == null)
             {
                 appUser = new ApplicationUser() { Email = user.Email, UserName = user.Email };
-                var result = await unitOfWork.UserManager.CreateAsync(appUser, user.Password);
+                var result = await UnitOfWork.UserManager.CreateAsync(appUser, user.Password);
 
                 if (!result.Succeeded)
                     return new OperationDetails(false, "Some internal error. Check your values.");
 
-                await unitOfWork.UserManager.AddToRoleAsync(appUser.Id, "User");
+                await UnitOfWork.UserManager.AddToRoleAsync(appUser.Id, "User");
 
                 UserProfile profile = new UserProfile() { Id = appUser.Id, Avatar = user.Avatar, Name = user.Name, CreateTime = DateTime.Now, CityId = user.CityId };
 
-                unitOfWork.ProfileManager.Create(profile);
-                await unitOfWork.SaveAsync();
+                UnitOfWork.ProfileManager.Create(profile);
+                await UnitOfWork.SaveAsync();
                 return new OperationDetails(true, $"User registered succesfully. Id - {appUser.Id}");
             }
             return new OperationDetails(false, "The emails already exist.");
         }
 
-        public async Task<UserDTO> FindUser(string userName, string password)
+        public async Task<UserDto> FindUser(string userName, string password)
         {
-            ApplicationUser user = await unitOfWork.UserManager.FindAsync(userName, password);
-            var userDTO = mapper.Map<UserDTO>(user.UserProfile);
-            userDTO.Email = user.Email;
+            ApplicationUser user = await UnitOfWork.UserManager.FindAsync(userName, password);
+            var userDto = Mapper.Map<UserDto>(user.UserProfile);
+            userDto.Email = user.Email;
 
-            return userDTO;
+            return userDto;
         }
 
-        public async Task<UserDTO> FindUser(string email)
+        public async Task<UserDto> FindUser(string email)
         {
-            ApplicationUser user = await unitOfWork.UserManager.FindByEmailAsync(email);
+            ApplicationUser user = await UnitOfWork.UserManager.FindByEmailAsync(email);
 
-            var userDTO = mapper.Map<UserDTO>(user.UserProfile);
-            userDTO.Email = user.Email;
+            var userDto = Mapper.Map<UserDto>(user.UserProfile);
+            userDto.Email = user.Email;
 
-            return userDTO;
+            return userDto;
         }
 
         public async Task<string> GetRole(string id)
         {
-            var roles = await unitOfWork.UserManager.GetRolesAsync(id);
+            var roles = await UnitOfWork.UserManager.GetRolesAsync(id);
             return roles[0];
         }
 
-        public List<UserDTO> GetUsers()
+        public List<UserDto> GetUsers()
         {
-            var uu = unitOfWork.UserManager.Users.ToList();            
-            var profiles = unitOfWork.ProfileManager.GetAll().Include(p => p.ApplicationUser).ToList();
+            var uu = UnitOfWork.UserManager.Users.ToList();            
+            var profiles = UnitOfWork.ProfileManager.GetAll().Include(p => p.ApplicationUser).ToList();
 
-            var users = mapper.Map<List<UserDTO>>(profiles);
+            var users = Mapper.Map<List<UserDto>>(profiles);
 
             return users;
         }

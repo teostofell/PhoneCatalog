@@ -5,9 +5,6 @@ using CatalogApp.BLL.Services;
 using CatalogApp.BLL.Utils;
 using Ninject;
 using Ninject.Web.Common.WebHost;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Web;
 using System.Web.Http;
 using System.Web.Mvc;
@@ -43,18 +40,18 @@ namespace CatalogApp.API
         /// <param name="kernel">The kernel.</param>
         private void RegisterServices(IKernel kernel)
         {
-            kernel.Bind<IPhonesService>().To<PhonesService>();
-            kernel.Bind<IFiltersService>().To<FiltersService>();
-            kernel.Bind<IUserService>().To<UserService>();
-            kernel.Bind<IOrdersService>().To<OrderService>();
-            kernel.Bind<IOrderItemService>().To<OrderItemService>();
-            kernel.Bind<ICitiesService>().To<CitiesService>();
-            kernel.Bind<IBrandService>().To<BrandService>();
-            kernel.Bind<IScreenResolutionService>().To<ScreenResolutionService>();
-            kernel.Bind<IOSService>().To<OSService>();
-            kernel.Bind<IPhotoService>().To<PhotoService>();
-            kernel.Bind<IRolesService>().To<RolesService>();
-            kernel.Bind<ICommentsService>().To<CommentsService>();
+            kernel.Bind<IPhonesService>().To<PhonesService>().InScope(cfg => HttpContext.Current);
+            kernel.Bind<IFiltersService>().To<FiltersService>().InScope(cfg => HttpContext.Current);
+            kernel.Bind<IUserService>().To<UserService>().InScope(cfg => HttpContext.Current);
+            kernel.Bind<IOrdersService>().To<OrderService>().InScope(cfg => HttpContext.Current);
+            kernel.Bind<IOrderItemService>().To<OrderItemService>().InScope(cfg => HttpContext.Current);
+            kernel.Bind<ICitiesService>().To<CitiesService>().InScope(cfg => HttpContext.Current);
+            kernel.Bind<IBrandService>().To<BrandService>().InScope(cfg => HttpContext.Current);
+            kernel.Bind<IScreenResolutionService>().To<ScreenResolutionService>().InScope(cfg => HttpContext.Current);
+            kernel.Bind<IOsService>().To<OsService>().InScope(cfg => HttpContext.Current);
+            kernel.Bind<IPhotoService>().To<PhotoService>().InScope(cfg => HttpContext.Current);
+            kernel.Bind<IRolesService>().To<RolesService>().InScope(cfg => HttpContext.Current);
+            kernel.Bind<ICommentsService>().To<CommentsService>().InScope(cfg => HttpContext.Current);
 
             var config = AutoMapperConfiguration.Configure();
             var mapper = config.CreateMapper();

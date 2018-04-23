@@ -1,32 +1,26 @@
 ﻿using AutoMapper;
 using CatalogApp.API.Models;
-using CatalogApp.BLL.BusinessModel;
 using CatalogApp.BLL.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Net.Http;
 using System.Web.Http;
 
 namespace CatalogApp.API.Controllers
 {
     public class FiltersController : ApiController
     {
-        private IFiltersService filtersService;
-        private IMapper mapper;
+        private readonly IFiltersService _filtersService;
+        private readonly IMapper _mapper;
 
         public FiltersController(IFiltersService context, IMapper mapper)
         {
-            filtersService = context;
-            this.mapper = mapper;
+            _filtersService = context;
+            _mapper = mapper;
         }
 
         // GET: api/Filters
-        public FilterVM Get()
+        public FilterVm Get()
         {
-            var filter = filtersService.GetFilterValues();
-            return mapper.Map<FilterVM>(filter);
+            var filter = _filtersService.GetFilterValues();
+            return _mapper.Map<FilterVm>(filter);
         }
 
         // GET: api/Filters/5

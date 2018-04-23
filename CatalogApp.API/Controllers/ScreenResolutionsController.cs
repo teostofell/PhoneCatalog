@@ -1,32 +1,27 @@
 ﻿using AutoMapper;
 using CatalogApp.API.Models;
-using CatalogApp.BLL.DTO;
 using CatalogApp.BLL.Interfaces;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Net.Http;
 using System.Web.Http;
 
 namespace CatalogApp.API.Controllers
 {
     public class ScreenResolutionsController : ApiController
     {
-        private IScreenResolutionService screenResolutionService;
-        private IMapper mapper;
+        private readonly IScreenResolutionService _screenResolutionService;
+        private readonly IMapper _mapper;
 
         public ScreenResolutionsController(IScreenResolutionService context, IMapper mapper)
         {
-            screenResolutionService = context;
-            this.mapper = mapper;
+            _screenResolutionService = context;
+            _mapper = mapper;
         }
 
         // GET: api/ScreenResolutions
-        public IEnumerable<ScreenResolutionVM> Get()
+        public IEnumerable<ScreenResolutionVm> Get()
         {
-            var resolutions = screenResolutionService.GetScreenResolutions();
-            return mapper.Map<List<ScreenResolutionVM>>(resolutions);
+            var resolutions = _screenResolutionService.GetScreenResolutions();
+            return _mapper.Map<List<ScreenResolutionVm>>(resolutions);
         }
 
         // GET: api/ScreenResolutions/5

@@ -1,9 +1,6 @@
 ﻿using CatalogApp.DAL.Entities;
 using CatalogApp.DAL.Repositories.MSSQL;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace CatalogApp.DAL.Interfaces
@@ -12,7 +9,7 @@ namespace CatalogApp.DAL.Interfaces
     {
         IRepository<Phone> Phones { get; }
         IRepository<Brand> Brands { get; }
-        IRepository<OS> OperatingSystems { get; }
+        IRepository<Os> OperatingSystems { get; }
         IRepository<ScreenResolution> ScreenResolutions { get; }
         IRepository<Order> Orders { get; }
         IRepository<City> Cities { get; }

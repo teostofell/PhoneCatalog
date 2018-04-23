@@ -1,13 +1,8 @@
 ﻿using AutoMapper;
 using CatalogApp.BLL.DTO;
 using CatalogApp.BLL.Interfaces;
-using CatalogApp.DAL.Entities;
 using CatalogApp.DAL.Interfaces;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CatalogApp.BLL.Services
 {
@@ -16,10 +11,10 @@ namespace CatalogApp.BLL.Services
         public BrandService(IUnitOfWork db, IMapper mapper) : base(db, mapper) {}
 
 
-        public IEnumerable<BrandDTO> GetBrands()
+        public IEnumerable<BrandDto> GetBrands()
         {
-            var brands = unitOfWork.Brands.GetAll();
-            return mapper.Map<List<BrandDTO>>(brands);
+            var brands = UnitOfWork.Brands.GetAll();
+            return Mapper.Map<List<BrandDto>>(brands);
         }
     }
 }

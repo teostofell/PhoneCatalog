@@ -1,33 +1,28 @@
 ﻿using AutoMapper;
 using CatalogApp.API.Models;
-using CatalogApp.BLL.DTO;
 using CatalogApp.BLL.Interfaces;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Net.Http;
 using System.Web.Http;
 
 namespace CatalogApp.API.Controllers
 {
     public class CitiesController : ApiController
     {
-        private ICitiesService citiesService;
-        private IMapper mapper;
+        private readonly ICitiesService _citiesService;
+        private readonly IMapper _mapper;
 
         public CitiesController(ICitiesService context, IMapper mapper)
         {
-            citiesService = context;
-            this.mapper = mapper;
+            _citiesService = context;
+            _mapper = mapper;
         }
 
 
         // GET: api/Cities
-        public IEnumerable<CityVM> Get()
+        public IEnumerable<CityVm> Get()
         {
-            var cities = citiesService.GetCities();
-            return mapper.Map<List<CityVM>>(cities);
+            var cities = _citiesService.GetCities();
+            return _mapper.Map<List<CityVm>>(cities);
         }
 
         // GET: api/Cities/5

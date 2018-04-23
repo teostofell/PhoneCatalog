@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
 using CatalogApp.BLL.BusinessModel;
@@ -19,11 +18,11 @@ namespace CatalogApp.BLL.Services
         public async Task<OperationDetails> AddPhonePhoto(int phoneId, string path)
         {
             Photo photo = new Photo() { PhoneId = phoneId, Path = path };
-            unitOfWork.Photos.Create(photo);
+            UnitOfWork.Photos.Create(photo);
 
             try
             {
-                await unitOfWork.SaveAsync();
+                await UnitOfWork.SaveAsync();
             }
             catch
             {
@@ -36,14 +35,14 @@ namespace CatalogApp.BLL.Services
 
         public async Task<OperationDetails> SetProfileAvatar(string userId, string avatarPath)
         {
-            var profile = unitOfWork.ProfileManager.Get(userId).FirstOrDefault();
+            var profile = UnitOfWork.ProfileManager.Get(userId).FirstOrDefault();
             profile.Avatar = avatarPath;
 
-            unitOfWork.ProfileManager.Update(profile);
+            UnitOfWork.ProfileManager.Update(profile);
 
             try
             {
-                await unitOfWork.SaveAsync();
+                await UnitOfWork.SaveAsync();
                 return new OperationDetails(true, "Avatar has been changed");
             }
             catch(Exception e)
@@ -54,20 +53,20 @@ namespace CatalogApp.BLL.Services
         }
 
 
-        public IEnumerable<PhotoDTO> GetPhonePhotos(int phoneId)
+        public IEnumerable<PhotoDto> GetPhonePhotos(int phoneId)
         {
-            var photos = unitOfWork.Photos.GetAll().Where(p => p.PhoneId == phoneId);
-            return mapper.Map<List<PhotoDTO>>(photos);
+            var photos = UnitOfWork.Photos.GetAll().Where(p => p.PhoneId == phoneId);
+            return Mapper.Map<List<PhotoDto>>(photos);
 
         }
 
         public async Task<OperationDetails> DeletePhonePhoto(int photoId)
         {
-            unitOfWork.Photos.Delete(photoId);
+            UnitOfWork.Photos.Delete(photoId);
 
             try
             {
-                await unitOfWork.SaveAsync();
+                await UnitOfWork.SaveAsync();
             }
             catch
             {

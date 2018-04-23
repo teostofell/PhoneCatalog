@@ -1,10 +1,7 @@
 ﻿using AutoMapper;
 using CatalogApp.API.Models;
-using CatalogApp.BLL.DTO;
 using CatalogApp.BLL.Interfaces;
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -14,20 +11,20 @@ namespace CatalogApp.API.Controllers
 {
     public class RolesController : ApiController
     {
-        private IRolesService rolesService;
-        private IMapper mapper;
+        private readonly IRolesService _rolesService;
+        private readonly IMapper _mapper;
 
         public RolesController(IRolesService context, IMapper mapper)
         {
-            rolesService = context;
-            this.mapper = mapper; 
+            _rolesService = context;
+            _mapper = mapper; 
         }
 
         // GET: api/Roles
-        public IEnumerable<RoleVM> Get()
+        public IEnumerable<RoleVm> Get()
         {
-            var roles = rolesService.GetRoles();
-            return mapper.Map<List<RoleVM>>(roles);
+            var roles = _rolesService.GetRoles();
+            return _mapper.Map<List<RoleVm>>(roles);
         }
 
         // GET: api/Roles/5
@@ -44,9 +41,9 @@ namespace CatalogApp.API.Controllers
         // PUT: api/Roles/5
         public async Task<HttpResponseMessage> Put(string id, [FromUri]string userId)
         {
-            var result = await rolesService.ChangeRole(userId, id);
+            var result = await _rolesService.ChangeRole(userId, id);
 
-            if(result.isSucceed)
+            if(result.IsSucceed)
             {                
                 return Request.CreateResponse(HttpStatusCode.OK, result.Message);
             }

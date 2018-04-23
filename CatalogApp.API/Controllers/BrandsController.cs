@@ -1,32 +1,27 @@
 ﻿using AutoMapper;
 using CatalogApp.API.Models;
-using CatalogApp.BLL.DTO;
 using CatalogApp.BLL.Interfaces;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Net.Http;
 using System.Web.Http;
 
 namespace CatalogApp.API.Controllers
 {
     public class BrandsController : ApiController
     {
-        private IBrandService brandService;
-        private IMapper mapper;
+        private readonly IBrandService _brandService;
+        private readonly IMapper _mapper;
 
         public BrandsController(IBrandService context, IMapper mapper)
         {
-            brandService = context;
-            this.mapper = mapper;
+            _brandService = context;
+            _mapper = mapper;
         }
 
         // GET: api/Brands
-        public IEnumerable<BrandVM> Get()
+        public IEnumerable<BrandVm> Get()
         {
-            var brands = brandService.GetBrands();
-            return mapper.Map<List<BrandVM>>(brands);
+            var brands = _brandService.GetBrands();
+            return _mapper.Map<List<BrandVm>>(brands);
         }
 
         // GET: api/Brands/5

@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-
-namespace CatalogApp.BLL.BusinessModel
+﻿namespace CatalogApp.BLL.BusinessModel
 {
     public class Range<T>
     {

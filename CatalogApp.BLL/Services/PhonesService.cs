@@ -6,10 +6,8 @@ using CatalogApp.DAL.Entities;
 using CatalogApp.DAL.Interfaces;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Data.Entity;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace CatalogApp.BLL.Services
@@ -21,50 +19,50 @@ namespace CatalogApp.BLL.Services
 
         public PhonesService(IUnitOfWork db, IMapper mapper) : base(db, mapper) {}
 
-        public IEnumerable<PhoneDTO> GetPhones(FilterModel filter, int itemsOnPage, int page)
+        public IEnumerable<PhoneDto> GetPhones(FilterModel filter, int itemsOnPage, int page)
         {
             var phones = Filter(filter);
             phones = Paginate(phones, itemsOnPage, page);
 
-            return mapper.Map<List<PhoneDTO>>(phones);
+            return Mapper.Map<List<PhoneDto>>(phones);
         }
 
-        public IEnumerable<PhoneDTO> SearchPhones(string searchString)
+        public IEnumerable<PhoneDto> SearchPhones(string searchString)
         {
-            var all = unitOfWork.Phones.GetAll().Include(p => p.Brand).ToList();
-            var phones = unitOfWork.Phones.GetAll().Include(p => p.Brand)
+            var all = UnitOfWork.Phones.GetAll().Include(p => p.Brand).ToList();
+            var phones = UnitOfWork.Phones.GetAll().Include(p => p.Brand)
                 .Where(p => 
                         (p.Model.Contains(searchString) || p.Brand.Name.Contains(searchString))
                     ).ToList();
-            return mapper.Map<List<PhoneDTO>>(phones);
+            return Mapper.Map<List<PhoneDto>>(phones);
         }
 
-        public PhoneDTO GetPhone(int id)
+        public PhoneDto GetPhone(int id)
         {
-            Phone phone = unitOfWork.Phones.Get(id).Include(p => p.Brand)
-                .Include(p => p.OS).Include(p => p.ScreenResolution).FirstOrDefault();
+            Phone phone = UnitOfWork.Phones.Get(id).Include(p => p.Brand)
+                .Include(p => p.Os).Include(p => p.ScreenResolution).FirstOrDefault();
 
-            return mapper.Map<PhoneDTO>(phone);
+            return Mapper.Map<PhoneDto>(phone);
         }
 
-        public PhoneDTO GetPhone(string slug)
+        public PhoneDto GetPhone(string slug)
         {
-            Phone phone = unitOfWork.Phones.GetAll().Where(p => p.Slug == slug).Include(p => p.Brand)
-                .Include(p => p.OS).Include(p => p.ScreenResolution).Include(p => p.Photos).FirstOrDefault();
+            Phone phone = UnitOfWork.Phones.GetAll().Where(p => p.Slug == slug).Include(p => p.Brand)
+                .Include(p => p.Os).Include(p => p.ScreenResolution).Include(p => p.Photos).FirstOrDefault();
 
-            return mapper.Map<PhoneDTO>(phone);
+            return Mapper.Map<PhoneDto>(phone);
         }
 
-        public async Task<OperationDetails> CreatePhone(PhoneDTO phoneDto)
+        public async Task<OperationDetails> CreatePhone(PhoneDto phoneDto)
         {
-            Phone phone = mapper.Map<Phone>(phoneDto);
+            Phone phone = Mapper.Map<Phone>(phoneDto);
 
-            unitOfWork.Phones.Create(phone);
+            UnitOfWork.Phones.Create(phone);
 
 
             try
             {
-                await unitOfWork.SaveAsync();
+                await UnitOfWork.SaveAsync();
             }
             catch (Exception e)
             {
@@ -74,15 +72,15 @@ namespace CatalogApp.BLL.Services
             return new OperationDetails(true, "Phone has been created");
         }
 
-        public async Task<OperationDetails> UpdatePhone(int id, PhoneDTO phone)
+        public async Task<OperationDetails> UpdatePhone(int id, PhoneDto phone)
         {
-            Phone actualPhone = unitOfWork.Phones.Get(id).FirstOrDefault();
-            Phone newPhone = mapper.Map<Phone>(phone);            
+            Phone actualPhone = UnitOfWork.Phones.Get(id).FirstOrDefault();
+            Phone newPhone = Mapper.Map<Phone>(phone);            
 
 
             try
             {
-                mapper.Map<Phone, Phone>(newPhone, actualPhone);
+                Mapper.Map<Phone, Phone>(newPhone, actualPhone);
             }            
             catch(Exception e)
             {
@@ -90,11 +88,11 @@ namespace CatalogApp.BLL.Services
             }
             
 
-            unitOfWork.Phones.Update(actualPhone);
+            UnitOfWork.Phones.Update(actualPhone);
 
             try
             {
-                await unitOfWork.SaveAsync();
+                await UnitOfWork.SaveAsync();
             }
             catch(Exception e)
             {
@@ -107,11 +105,11 @@ namespace CatalogApp.BLL.Services
 
         public async Task<OperationDetails> DeletePhone(int id)
         {
-            unitOfWork.Phones.Delete(id);
+            UnitOfWork.Phones.Delete(id);
 
             try
             {
-                await unitOfWork.SaveAsync();
+                await UnitOfWork.SaveAsync();
             }
             catch(Exception e)
             {
@@ -126,16 +124,16 @@ namespace CatalogApp.BLL.Services
         private IEnumerable<Phone> Filter(FilterModel filter)
         {
             if (filter == null)
-                return unitOfWork.Phones.GetAll();
+                return UnitOfWork.Phones.GetAll();
 
-            var phones = unitOfWork.Phones.GetAll().Include(p => p.Brand)
-                .Include(p => p.OS);
+            var phones = UnitOfWork.Phones.GetAll().Include(p => p.Brand)
+                .Include(p => p.Os);
 
             if (filter.Brand.Count > 0)
                 phones = phones.Where(p => filter.Brand.Contains(p.Brand.Slug));
 
-            if(filter.OS.Count > 0)
-                phones = phones.Where(p => filter.OS.Contains(p.OS.Slug));
+            if(filter.Os.Count > 0)
+                phones = phones.Where(p => filter.Os.Contains(p.Os.Slug));
 
             if(filter.Price != null)
             {

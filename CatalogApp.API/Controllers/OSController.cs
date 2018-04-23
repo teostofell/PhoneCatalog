@@ -1,32 +1,27 @@
 ﻿using AutoMapper;
 using CatalogApp.API.Models;
-using CatalogApp.BLL.DTO;
 using CatalogApp.BLL.Interfaces;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Net.Http;
 using System.Web.Http;
 
 namespace CatalogApp.API.Controllers
 {
-    public class OSController : ApiController
+    public class OsController : ApiController
     {
-        private IOSService osService;
-        private IMapper mapper;
+        private readonly IOsService _osService;
+        private readonly IMapper _mapper;
 
-        public OSController(IOSService context, IMapper mapper)
+        public OsController(IOsService context, IMapper mapper)
         {
-            osService = context;
-            this.mapper = mapper;
+            _osService = context;
+            _mapper = mapper;
         }
 
         // GET: api/OS
-        public IEnumerable<OSVM> Get()
+        public IEnumerable<Osvm> Get()
         {
-            var os = osService.GetOS();
-            return mapper.Map<List<OSVM>>(os);
+            var os = _osService.GetOs();
+            return _mapper.Map<List<Osvm>>(os);
         }
 
         // GET: api/OS/5

@@ -3,11 +3,8 @@ using CatalogApp.API.Models;
 using CatalogApp.API.Utils;
 using CatalogApp.BLL.DTO;
 using CatalogApp.BLL.Interfaces;
-using System;
-using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
-using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -17,23 +14,21 @@ namespace CatalogApp.API.Controllers
 {
     public class UsersController : ApiController
     {
-        private IUserService userService;
-        private IMapper mapper;
+        private readonly IUserService _userService;
+        private readonly IMapper _mapper;
 
         public UsersController(IUserService context, IMapper mapper)
         {
-            userService = context;
-            this.mapper = mapper;
+            _userService = context;
+            _mapper = mapper;
         }
 
         // GET: api/Users
         public async Task<HttpResponseMessage> Get()
         {
-            HttpResponseMessage response;
+            var users = _userService.GetUsers();
 
-            var users = userService.GetUsers();
-
-            response = Request.CreateResponse(HttpStatusCode.OK, users);
+            var response = Request.CreateResponse(HttpStatusCode.OK, users);
 
             return response;
         }
@@ -41,10 +36,10 @@ namespace CatalogApp.API.Controllers
         // GET: api/Users?email=*
         public async Task<HttpResponseMessage> Get(string email)
         {
-            var userDto = await userService.FindUser(email);
-            var userVm = mapper.Map<UserVM>(userDto);
+            var userDto = await _userService.FindUser(email);
+            var userVm = _mapper.Map<UserVm>(userDto);
 
-            userVm.IsAdmin = await userService.GetRole(userDto.Id) == "admin";
+            userVm.IsAdmin = await _userService.GetRole(userDto.Id) == "admin";
 
             HttpResponseMessage response = null;
 
@@ -57,20 +52,20 @@ namespace CatalogApp.API.Controllers
         }
 
         // POST: api/Users
-        public async Task<HttpResponseMessage> Post([FromBody]UserVM user)
+        public async Task<HttpResponseMessage> Post([FromBody]UserVm user)
         {
-            var userDTO = mapper.Map<UserDTO>(user);
+            var userDto = _mapper.Map<UserDto>(user);
 
             string fileName = Path.GetRandomFileName() + ".png";
             string thumbPath = ImagesProcessor.GetUserAvatar(user.Avatar, fileName, new Size(200, 200));
             string thumbUrl = Url.Content(thumbPath);
 
-            userDTO.Avatar = thumbUrl;
-            var result = await userService.Register(userDTO);
+            userDto.Avatar = thumbUrl;
+            var result = await _userService.Register(userDto);
 
             HttpResponseMessage response;
 
-            if(!result.isSucceed)
+            if(!result.IsSucceed)
             {
                 HttpError err = new HttpError(result.Message);
                 response = Request.CreateResponse(HttpStatusCode.BadRequest, err);
@@ -84,7 +79,7 @@ namespace CatalogApp.API.Controllers
         }
 
         // PUT: api/Users/5
-        public void Put(int id, [FromBody]UserDTO user)
+        public void Put(int id, [FromBody]UserDto user)
         {
 
         }

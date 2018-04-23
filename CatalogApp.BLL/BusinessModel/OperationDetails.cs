@@ -1,20 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace CatalogApp.BLL.BusinessModel
+﻿namespace CatalogApp.BLL.BusinessModel
 {
     public class OperationDetails
     {
-        public string Message { get; set; }
-        public bool isSucceed { get; set; }
+        public string Message { get; }
+        public bool IsSucceed { get; }
 
         public OperationDetails(bool isSucceed, string message)
         {
             Message = message;
-            this.isSucceed = isSucceed;
+            IsSucceed = isSucceed;
         }
     }
 }

@@ -4,44 +4,39 @@ using CatalogApp.API.Utils;
 using CatalogApp.BLL.BusinessModel;
 using CatalogApp.BLL.DTO;
 using CatalogApp.BLL.Interfaces;
-using Newtonsoft.Json;
-using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Drawing;
-using System.Drawing.Imaging;
 using System.IO;
-using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
-using System.Web;
 using System.Web.Http;
 
 namespace CatalogApp.API.Controllers
 {
     public class PhonesController : ApiController
     {
-        private IPhonesService phonesService;
-        private IMapper mapper;
+        private readonly IPhonesService _phonesService;
+        private readonly IMapper _mapper;
 
         public PhonesController(IPhonesService context, IMapper mapper)
         {
-            phonesService = context;
-            this.mapper = mapper;
+            _phonesService = context;
+            _mapper = mapper;
         }
 
-        public async Task<HttpResponseMessage> Get([FromUri]FilterVM filter)
+        public async Task<HttpResponseMessage> Get([FromUri]FilterVm filter)
         {
-            var filterModel = mapper.Map<FilterModel>(filter);
+            PageViewModel result = new PageViewModel();
 
-            var phones = mapper.Map<List<PhoneSummaryVM>>(phonesService.GetPhones(filterModel, filter.ItemsOnPage, filter.Page));
+            var filterModel = _mapper.Map<FilterModel>(filter);
 
-            var response = Request.CreateResponse(HttpStatusCode.OK, phones);
+            result.Items = _mapper.Map<List<PhoneSummaryVm>>(_phonesService.GetPhones(filterModel, filter.ItemsOnPage, filter.Page));
 
-            // Set headers for paging
-            response.Headers.Add("X-Pages-Total-Count", phonesService.TotalPages.ToString());
-            response.Headers.Add("X-Items-Total-Count", phonesService.TotalItems.ToString());
+            result.TotalItems = _phonesService.TotalItems;
+            result.TotalPages = _phonesService.TotalPages;
+
+            var response = Request.CreateResponse(HttpStatusCode.OK, result);
 
             return response;
         }
@@ -51,7 +46,7 @@ namespace CatalogApp.API.Controllers
         {
             HttpResponseMessage response = null;
 
-            PhoneDTO phone = phonesService.GetPhone(id);
+            PhoneDto phone = _phonesService.GetPhone(id);
 
             response = Request.CreateResponse(HttpStatusCode.OK, phone);
 
@@ -62,7 +57,7 @@ namespace CatalogApp.API.Controllers
         [HttpGet]
         public HttpResponseMessage Search(string search)
         {
-            IEnumerable<PhoneDTO> phones = phonesService.SearchPhones(search);
+            IEnumerable<PhoneDto> phones = _phonesService.SearchPhones(search);
 
             var response = Request.CreateResponse(HttpStatusCode.OK, phones);
 
@@ -75,7 +70,7 @@ namespace CatalogApp.API.Controllers
         {
             HttpResponseMessage response = null;
 
-            PhoneDTO phone = phonesService.GetPhone(slug);
+            PhoneDto phone = _phonesService.GetPhone(slug);
 
             response = Request.CreateResponse(HttpStatusCode.OK, phone);
 
@@ -86,7 +81,7 @@ namespace CatalogApp.API.Controllers
 
         // POST: api/Phones
         [Authorize(Roles = "admin")]
-        public async Task<HttpResponseMessage> Post([FromBody]PhoneDTO phone)
+        public async Task<HttpResponseMessage> Post([FromBody]PhoneDto phone)
         {
             HttpResponseMessage response = null;
 
@@ -94,9 +89,9 @@ namespace CatalogApp.API.Controllers
             var thumbPath = ImagesProcessor.GetPhoneThumbnail(phone.Photo, fileName, new Size(104, 220));
             phone.Photo = Url.Content(thumbPath);
 
-            var result = await phonesService.CreatePhone(phone);
+            var result = await _phonesService.CreatePhone(phone);
 
-            if(result.isSucceed)
+            if(result.IsSucceed)
                 response = Request.CreateResponse(HttpStatusCode.OK, phone.Photo);
             else
                 response = Request.CreateResponse(HttpStatusCode.InternalServerError, "Error");
@@ -106,15 +101,15 @@ namespace CatalogApp.API.Controllers
 
         // PUT: api/Phones/5
         [Authorize(Roles = "admin")]
-        public async Task<HttpResponseMessage> Put(int id, [FromBody]PhoneDTO phone)
+        public async Task<HttpResponseMessage> Put(int id, [FromBody]PhoneDto phone)
         {
             string fileName = Path.GetRandomFileName() + ".png";
             var thumbPath = ImagesProcessor.GetPhoneThumbnail(phone.Photo, fileName, new Size(104, 220));
             phone.Photo = Url.Content(thumbPath);
 
-            var result = await phonesService.UpdatePhone(id, phone);
+            var result = await _phonesService.UpdatePhone(id, phone);
 
-            if(result.isSucceed)
+            if(result.IsSucceed)
                 return Request.CreateResponse(HttpStatusCode.OK, result.Message);
             else
                 return Request.CreateResponse(HttpStatusCode.InternalServerError, result.Message);
@@ -126,9 +121,9 @@ namespace CatalogApp.API.Controllers
         {
             HttpResponseMessage response = null;
 
-            var result = await phonesService.DeletePhone(id);
+            var result = await _phonesService.DeletePhone(id);
 
-            if (result.isSucceed)
+            if (result.IsSucceed)
                 response = Request.CreateResponse(HttpStatusCode.OK, result.Message);
             else
                 response = Request.CreateResponse(HttpStatusCode.InternalServerError, result.Message);

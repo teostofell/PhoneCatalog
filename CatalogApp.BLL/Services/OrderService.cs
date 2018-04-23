@@ -8,7 +8,6 @@ using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace CatalogApp.BLL.Services
@@ -17,56 +16,56 @@ namespace CatalogApp.BLL.Services
     {
         public OrderService(IUnitOfWork db, IMapper mapper) : base(db, mapper) {}
 
-        public IEnumerable<OrderDTO> GetOrders(string userId)
+        public IEnumerable<OrderDto> GetOrders(string userId)
         {
-            var orders = unitOfWork.Orders.GetAll().Where(o => o.UserId == userId).Where(o => !o.IsActual)
+            var orders = UnitOfWork.Orders.GetAll().Where(o => o.UserId == userId).Where(o => !o.IsActual)
                 .Include(o => o.OrderItems).Include(o => o.OrderItems.Select(oi => oi.Phone)).ToList();
 
-            return mapper.Map<List<OrderDTO>>(orders);
+            return Mapper.Map<List<OrderDto>>(orders);
         }
 
-        public IEnumerable<OrderItemDTO> GetOrderItems(int orderId)
+        public IEnumerable<OrderItemDto> GetOrderItems(int orderId)
         {
-            var items = unitOfWork.Orders.Get(orderId).Include(o => o.OrderItems).FirstOrDefault().OrderItems.ToList();
+            var items = UnitOfWork.Orders.Get(orderId).Include(o => o.OrderItems).FirstOrDefault().OrderItems.ToList();
 
-            return mapper.Map<List<OrderItemDTO>>(items);
+            return Mapper.Map<List<OrderItemDto>>(items);
         }
 
         public async Task<OperationDetails> CreateOrder(string userId)
         {
             Order order = new Order() { IsActual=true, OrderDate=DateTime.Now, UserId=userId };
 
-            unitOfWork.Orders.Create(order);     
+            UnitOfWork.Orders.Create(order);     
 
-            await unitOfWork.SaveAsync();
+            await UnitOfWork.SaveAsync();
             return new OperationDetails(true, "Order has been created");
         }
 
-        public async Task<OrderDTO> GetActualOrder(string userId)
+        public async Task<OrderDto> GetActualOrder(string userId)
         {
-            var order = await unitOfWork.Orders.GetAll().Where(o => o.UserId == userId)
+            var order = await UnitOfWork.Orders.GetAll().Where(o => o.UserId == userId)
                 .Where(o => o.IsActual).Include(o => o.OrderItems).Include("OrderItems.Phone").FirstOrDefaultAsync();
 
             if(order == null)
             {
                 order = new Order() { IsActual = true, OrderDate = DateTime.Now, UserId = userId };
-                order = unitOfWork.Orders.Create(order);
+                order = UnitOfWork.Orders.Create(order);
 
-                await unitOfWork.SaveAsync();
+                await UnitOfWork.SaveAsync();
             }
 
-            return mapper.Map<OrderDTO>(order);
+            return Mapper.Map<OrderDto>(order);
         }
 
         public async Task<OperationDetails> CloseOrder(int orderId)
         {
-            var order = unitOfWork.Orders.Get(orderId).FirstOrDefault();
+            var order = UnitOfWork.Orders.Get(orderId).FirstOrDefault();
 
             order.IsActual = false;
 
-            unitOfWork.Orders.Update(order);
+            UnitOfWork.Orders.Update(order);
 
-            await unitOfWork.SaveAsync();
+            await UnitOfWork.SaveAsync();
 
             return new OperationDetails(true, "Order has been closed");
         }

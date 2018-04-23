@@ -1,13 +1,8 @@
 ﻿using AutoMapper;
 using CatalogApp.BLL.DTO;
 using CatalogApp.BLL.Interfaces;
-using CatalogApp.DAL.Entities;
 using CatalogApp.DAL.Interfaces;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CatalogApp.BLL.Services
 {
@@ -15,10 +10,10 @@ namespace CatalogApp.BLL.Services
     {
         public ScreenResolutionService(IUnitOfWork db, IMapper mapper) : base(db, mapper) { }
 
-        public IEnumerable<ScreenResolutionDTO> GetScreenResolutions()
+        public IEnumerable<ScreenResolutionDto> GetScreenResolutions()
         {
-            var resolutions = unitOfWork.ScreenResolutions.GetAll();
-            return mapper.Map<List<ScreenResolutionDTO>>(resolutions);
+            var resolutions = UnitOfWork.ScreenResolutions.GetAll();
+            return Mapper.Map<List<ScreenResolutionDto>>(resolutions);
         }
     }
 }

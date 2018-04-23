@@ -1,47 +1,43 @@
 ﻿using CatalogApp.DAL.Contexts;
 using CatalogApp.DAL.Entities;
 using CatalogApp.DAL.Interfaces;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CatalogApp.DAL.Repositories.MSSQL
 {
     public class ProfileManager : IProfileManager
     {
-        private CatalogContext db;
+        private readonly CatalogContext _db;
 
         public ProfileManager(CatalogContext context)
         {
-            db = context;
+            _db = context;
         }
 
         public void Create(UserProfile item)
         {
-            db.UserProfiles.Add(item);
+            _db.UserProfiles.Add(item);
 
         }
 
         public IQueryable<UserProfile> Get(string userId)
         {
-            return db.UserProfiles.Where(p => p.Id == userId);
+            return _db.UserProfiles.Where(p => p.Id == userId);
         }
 
         public void Update(UserProfile item)
         {
-            db.Entry(item).State = System.Data.Entity.EntityState.Modified;
+            _db.Entry(item).State = System.Data.Entity.EntityState.Modified;
         }
 
         public IQueryable<UserProfile> GetAll()
         {
-            return db.UserProfiles;
+            return _db.UserProfiles;
         }
 
         public void Dispose()
         {
-            db.Dispose();
+            _db.Dispose();
         }
 
     }

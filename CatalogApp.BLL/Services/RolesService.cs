@@ -2,14 +2,11 @@
 using CatalogApp.BLL.BusinessModel;
 using CatalogApp.BLL.DTO;
 using CatalogApp.BLL.Interfaces;
-using CatalogApp.DAL.Entities;
 using CatalogApp.DAL.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using System.Data.Entity;
 
 namespace CatalogApp.BLL.Services
 {
@@ -17,10 +14,10 @@ namespace CatalogApp.BLL.Services
     {
         public RolesService(IUnitOfWork db, IMapper mapper) : base(db, mapper) { }
 
-        public IEnumerable<RoleDTO> GetRoles()
+        public IEnumerable<RoleDto> GetRoles()
         {
-            var roles = unitOfWork.RoleManager.Roles.ToList();
-            return mapper.Map<List<RoleDTO>>(roles);
+            var roles = UnitOfWork.RoleManager.Roles.ToList();
+            return Mapper.Map<List<RoleDto>>(roles);
         }
 
 
@@ -30,20 +27,20 @@ namespace CatalogApp.BLL.Services
            
             try
             {
-                roles = await unitOfWork.UserManager.GetRolesAsync(userId);
+                roles = await UnitOfWork.UserManager.GetRolesAsync(userId);
             }
             catch (Exception e)
             {
                 return new OperationDetails(false, $"Error on getting roles. {e.Message}");
             }
 
-            await unitOfWork.UserManager.RemoveFromRolesAsync(userId, roles.ToArray());
+            await UnitOfWork.UserManager.RemoveFromRolesAsync(userId, roles.ToArray());
 
-            var role = await unitOfWork.RoleManager.FindByIdAsync(roleId);
+            var role = await UnitOfWork.RoleManager.FindByIdAsync(roleId);
 
-            await unitOfWork.UserManager.AddToRoleAsync(userId, role.Name);
+            await UnitOfWork.UserManager.AddToRoleAsync(userId, role.Name);
 
-            await unitOfWork.SaveAsync();
+            await UnitOfWork.SaveAsync();
 
             return new OperationDetails(true, "Role has been changed");
         }

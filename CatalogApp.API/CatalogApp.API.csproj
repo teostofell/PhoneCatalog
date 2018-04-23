@@ -270,6 +270,7 @@
     <Compile Include="Models\OrderItemVM.cs" />
     <Compile Include="Models\OrderVM.cs" />
     <Compile Include="Models\OSVM.cs" />
+    <Compile Include="Models\PageViewModel.cs" />
     <Compile Include="Models\PhoneSummaryVM.cs" />
     <Compile Include="Models\PhotoVM.cs" />
     <Compile Include="Models\RoleVM.cs" />

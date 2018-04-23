@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-
-namespace CatalogApp.API.Models
+﻿namespace CatalogApp.API.Models
 {
-    public class AvatarVM
+    public class AvatarVm
     {
         public string UserId { get; set; }
         public string Photo { get; set; }

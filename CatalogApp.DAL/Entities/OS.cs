@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace CatalogApp.DAL.Entities
 {
-    public class OS : IIdentifiable
+    public class Os : IIdentifiable
     {
         public int Id { get; set; }
         public string Name { get; set; }
@@ -11,7 +11,7 @@ namespace CatalogApp.DAL.Entities
 
         public ICollection<Phone> Phones { get; set; }
 
-        public OS()
+        public Os()
         {
             Phones = new List<Phone>();
         }

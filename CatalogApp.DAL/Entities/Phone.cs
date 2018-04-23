@@ -1,9 +1,5 @@
 ﻿using CatalogApp.DAL.Interfaces;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CatalogApp.DAL.Entities
 {
@@ -25,8 +21,8 @@ namespace CatalogApp.DAL.Entities
         public int BrandId { get; set; }
         public Brand Brand { get; set; }
 
-        public int OSId { get; set; }
-        public OS OS { get; set; }
+        public int OsId { get; set; }
+        public Os Os { get; set; }
 
         public int ScreenResolutionId { get; set; }
         public ScreenResolution ScreenResolution { get; set; }

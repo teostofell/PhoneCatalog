@@ -2,69 +2,65 @@
 using CatalogApp.DAL.Entities;
 using CatalogApp.DAL.Interfaces;
 using Microsoft.AspNet.Identity.EntityFramework;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace CatalogApp.DAL.Repositories.MSSQL
 {
     public class UnitOfWork : IUnitOfWork
     {
-        private CatalogContext db;
+        private readonly CatalogContext _db;
 
-        private IRepository<Phone> phoneRepository;
-        private IRepository<Photo> photoRepository;
-        private IRepository<ScreenResolution> screenResolutionRepository;
-        private IRepository<Brand> brandRepository;
-        private IRepository<OS> osRepository;
-        private IRepository<Order> orderRepository;
-        private IRepository<City> cityRepository;
-        private IRepository<OrderItem> orderItemRepository;
-        private IRepository<Comment> commentRepository;
-        private ApplicationUserManager userManager;
-        private ApplicationRoleManager roleManager;
-        private IProfileManager profileManager;
+        private IRepository<Phone> _phoneRepository;
+        private IRepository<Photo> _photoRepository;
+        private IRepository<ScreenResolution> _screenResolutionRepository;
+        private IRepository<Brand> _brandRepository;
+        private IRepository<Os> _osRepository;
+        private IRepository<Order> _orderRepository;
+        private IRepository<City> _cityRepository;
+        private IRepository<OrderItem> _orderItemRepository;
+        private IRepository<Comment> _commentRepository;
+        private ApplicationUserManager _userManager;
+        private ApplicationRoleManager _roleManager;
+        private IProfileManager _profileManager;
 
         public UnitOfWork(string connectionString)
         {
-            db = new CatalogContext(connectionString);
+            _db = new CatalogContext(connectionString);
         }
 
 
-        public IRepository<Phone> Phones => phoneRepository ?? (phoneRepository = new Repository<Phone>(db));
+        public IRepository<Phone> Phones => _phoneRepository ?? (_phoneRepository = new Repository<Phone>(_db));
 
-        public IRepository<Brand> Brands => brandRepository ?? (brandRepository = new Repository<Brand>(db));
+        public IRepository<Brand> Brands => _brandRepository ?? (_brandRepository = new Repository<Brand>(_db));
 
-        public IRepository<OS> OperatingSystems => osRepository ?? (osRepository = new Repository<OS>(db));
+        public IRepository<Os> OperatingSystems => _osRepository ?? (_osRepository = new Repository<Os>(_db));
 
-        public IRepository<ScreenResolution> ScreenResolutions => screenResolutionRepository ?? (screenResolutionRepository = new Repository<ScreenResolution>(db));
+        public IRepository<ScreenResolution> ScreenResolutions => _screenResolutionRepository ?? (_screenResolutionRepository = new Repository<ScreenResolution>(_db));
 
-        public IRepository<Order> Orders => orderRepository ?? (orderRepository = new Repository<Order>(db));
+        public IRepository<Order> Orders => _orderRepository ?? (_orderRepository = new Repository<Order>(_db));
 
-        public IRepository<City> Cities => cityRepository ?? (cityRepository = new Repository<City>(db));
+        public IRepository<City> Cities => _cityRepository ?? (_cityRepository = new Repository<City>(_db));
 
-        public IRepository<Photo> Photos => photoRepository ?? (photoRepository = new Repository<Photo>(db));
+        public IRepository<Photo> Photos => _photoRepository ?? (_photoRepository = new Repository<Photo>(_db));
 
-        public IRepository<OrderItem> OrderItems => orderItemRepository ?? (orderItemRepository = new Repository<OrderItem>(db));
+        public IRepository<OrderItem> OrderItems => _orderItemRepository ?? (_orderItemRepository = new Repository<OrderItem>(_db));
 
-        public ApplicationUserManager UserManager => userManager ?? (userManager = new ApplicationUserManager(new UserStore<ApplicationUser>(db)));
+        public ApplicationUserManager UserManager => _userManager ?? (_userManager = new ApplicationUserManager(new UserStore<ApplicationUser>(_db)));
 
-        public IProfileManager ProfileManager => profileManager ?? (profileManager = new ProfileManager(db));
+        public IProfileManager ProfileManager => _profileManager ?? (_profileManager = new ProfileManager(_db));
 
-        public ApplicationRoleManager RoleManager => roleManager ?? (roleManager = new ApplicationRoleManager(new RoleStore<ApplicationRole>(db)));
+        public ApplicationRoleManager RoleManager => _roleManager ?? (_roleManager = new ApplicationRoleManager(new RoleStore<ApplicationRole>(_db)));
 
-        public IRepository<Comment> Comments => commentRepository ?? (commentRepository = new Repository<Comment>(db));
+        public IRepository<Comment> Comments => _commentRepository ?? (_commentRepository = new Repository<Comment>(_db));
 
         public void Dispose()
         {
-            db.Dispose();
+            _db.Dispose();
         }
 
         public async Task SaveAsync()
         {
-            await db.SaveChangesAsync();
+            await _db.SaveChangesAsync();
         }
     }
 }

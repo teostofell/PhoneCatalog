@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace CatalogApp.BLL.DTO
 {
-    public class PhoneDTO
+    public class PhoneDto
     {
         public int Id { get; set; }
         public string Model { get; set; }
@@ -22,17 +18,17 @@ namespace CatalogApp.BLL.DTO
         public int Grade { get; set; }
 
         public int BrandId { get; set; }
-        public BrandDTO Brand { get; set; }
+        public BrandDto Brand { get; set; }
 
-        public int OSId { get; set; }
-        public OSDTO OS { get; set; }
+        public int OsId { get; set; }
+        public Osdto Os { get; set; }
 
 
         public int ScreenResolutionId { get; set; }
-        public ScreenResolutionDTO ScreenResolution { get; set; }
+        public ScreenResolutionDto ScreenResolution { get; set; }
 
-        public List<PhotoDTO> Photos { get; set; }
-        public List<CommentDTO> Comments { get; set; }
+        public List<PhotoDto> Photos { get; set; }
+        public List<CommentDto> Comments { get; set; }
 
     }
 }

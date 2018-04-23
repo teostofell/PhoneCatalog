@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Threading.Tasks;
 using CatalogApp.API.Providers;
 using Microsoft.Owin;
 using Microsoft.Owin.Security.OAuth;
@@ -17,9 +16,9 @@ namespace CatalogApp.API
             ConfigureOAuth(app);
         }
 
-        public void ConfigureOAuth(IAppBuilder app)
+        private void ConfigureOAuth(IAppBuilder app)
         {
-            OAuthAuthorizationServerOptions OAuthServerOptions = new OAuthAuthorizationServerOptions()
+            OAuthAuthorizationServerOptions oAuthServerOptions = new OAuthAuthorizationServerOptions()
             {
                 AllowInsecureHttp = true,
                 TokenEndpointPath = new PathString("/token"),
@@ -28,7 +27,7 @@ namespace CatalogApp.API
             };
 
             // Token Generation
-            app.UseOAuthAuthorizationServer(OAuthServerOptions);
+            app.UseOAuthAuthorizationServer(oAuthServerOptions);
             app.UseOAuthBearerAuthentication(new OAuthBearerAuthenticationOptions());
 
         }

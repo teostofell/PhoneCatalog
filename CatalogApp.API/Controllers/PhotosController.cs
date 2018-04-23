@@ -1,13 +1,10 @@
 ﻿using AutoMapper;
 using CatalogApp.API.Models;
 using CatalogApp.API.Utils;
-using CatalogApp.BLL.DTO;
 using CatalogApp.BLL.Services;
-using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
-using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -17,21 +14,21 @@ namespace CatalogApp.API.Controllers
 {
     public class PhotosController : ApiController
     {
-        private IPhotoService photoService;
-        private IMapper mapper;
+        private readonly IPhotoService _photoService;
+        private readonly IMapper _mapper;
 
         public PhotosController(IPhotoService context, IMapper mapper)
         {
-            photoService = context;
-            this.mapper = mapper;
+            _photoService = context;
+            _mapper = mapper;
         }
 
         // GET: api/Photos
         [HttpGet]
-        public IEnumerable<PhotoVM> GetPhonePhotos(int phoneId)
+        public IEnumerable<PhotoVm> GetPhonePhotos(int phoneId)
         {
-            var photos = photoService.GetPhonePhotos(phoneId);
-            return mapper.Map<List<PhotoVM>>(photos);
+            var photos = _photoService.GetPhonePhotos(phoneId);
+            return _mapper.Map<List<PhotoVm>>(photos);
         }
 
         // GET: api/Photos/5
@@ -41,15 +38,15 @@ namespace CatalogApp.API.Controllers
         }
 
         // POST: api/Photos/?userId=*
-        public async Task<HttpResponseMessage> SetUserAvatar(string userId, [FromBody]AvatarVM avatar)
+        public async Task<HttpResponseMessage> SetUserAvatar(string userId, [FromBody]AvatarVm avatar)
         {
             string fileName = Path.GetRandomFileName() + ".png";
             string thumbPath = ImagesProcessor.GetUserAvatar(avatar.Photo, fileName, new Size(200, 200));
             string thumbUrl = Url.Content(thumbPath);
 
-            var result = await photoService.SetProfileAvatar(userId, thumbUrl);
+            var result = await _photoService.SetProfileAvatar(userId, thumbUrl);
 
-            if (result.isSucceed)
+            if (result.IsSucceed)
             {
                 return Request.CreateResponse(HttpStatusCode.OK, thumbUrl);
             }
@@ -60,15 +57,15 @@ namespace CatalogApp.API.Controllers
         }
 
         // POST: api/Photos/?phoneId=*
-        public async Task<HttpResponseMessage> AddPhonePhoto(int phoneId, [FromBody]AvatarVM photo)
+        public async Task<HttpResponseMessage> AddPhonePhoto(int phoneId, [FromBody]AvatarVm photo)
         {
             string fileName = Path.GetRandomFileName() + ".png";
             string thumbPath = ImagesProcessor.GetPhoneImage(photo.Photo, fileName, new Size(193, 410));
             string thumbUrl = Url.Content(thumbPath);
 
-            var result = await photoService.AddPhonePhoto(phoneId, thumbUrl);
+            var result = await _photoService.AddPhonePhoto(phoneId, thumbUrl);
 
-            if (result.isSucceed)
+            if (result.IsSucceed)
             {
                 return Request.CreateResponse(HttpStatusCode.OK, thumbUrl);
             }
@@ -86,7 +83,7 @@ namespace CatalogApp.API.Controllers
         // DELETE: api/Photos/5
         public void Delete(int id)
         {
-            photoService.DeletePhonePhoto(id);
+            _photoService.DeletePhonePhoto(id);
         }
     }
 }
