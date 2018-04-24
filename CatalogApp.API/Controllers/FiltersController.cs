@@ -1,4 +1,8 @@
-﻿using AutoMapper;
+﻿using System;
+using System.Diagnostics;
+using System.Net;
+using System.Net.Http;
+using AutoMapper;
 using CatalogApp.API.Models;
 using CatalogApp.BLL.Interfaces;
 using System.Web.Http;
@@ -17,10 +21,22 @@ namespace CatalogApp.API.Controllers
         }
 
         // GET: api/Filters
-        public FilterViewModel Get()
+        public HttpResponseMessage Get()
         {
-            var filter = _filtersService.GetFilterValues();
-            return _mapper.Map<FilterViewModel>(filter);
+            HttpResponseMessage response;
+            try
+            {
+                var filter = _filtersService.GetFilterValues();
+                var filterVm = _mapper.Map<FilterViewModel>(filter);
+                response = Request.CreateResponse(HttpStatusCode.OK, filterVm);
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e);
+                response = Request.CreateResponse(HttpStatusCode.InternalServerError, e.Message);
+            }
+
+            return response;
         }
     }
 }

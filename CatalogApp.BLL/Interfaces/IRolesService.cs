@@ -8,6 +8,6 @@ namespace CatalogApp.BLL.Interfaces
     public interface IRolesService
     {
         IEnumerable<RoleDto> GetRoles();
-        Task<OperationDetails> ChangeRole(string userId, string roleId);
+        Task ChangeRole(string userId, string roleId);
     }
 }

@@ -21,7 +21,7 @@ namespace CatalogApp.DAL.Contexts
         /// </summary>
         static CatalogContext()
         {
-            Database.SetInitializer<CatalogContext>(new DbInitializer());
+            //Database.SetInitializer<CatalogContext>(new DbInitializer());
         }       
 
         public CatalogContext(string connectionString)

@@ -16,8 +16,9 @@ namespace CatalogApp.BLL.Services
     {
         public UserService(IUnitOfWork db, IMapper mapper) : base(db, mapper) {}
 
-        public async Task<OperationDetails> Register(UserDto user)
+        public async Task Register(UserDto user)
         {
+
             ApplicationUser appUser = await UnitOfWork.UserManager.FindByEmailAsync(user.Email);
 
             if(appUser == null)
@@ -26,7 +27,7 @@ namespace CatalogApp.BLL.Services
                 var result = await UnitOfWork.UserManager.CreateAsync(appUser, user.Password);
 
                 if (!result.Succeeded)
-                    return new OperationDetails(false, "Some internal error. Check your values.");
+                    throw new Exception("Some internal error. Check your values.");
 
                 await UnitOfWork.UserManager.AddToRoleAsync(appUser.Id, "User");
 
@@ -34,9 +35,8 @@ namespace CatalogApp.BLL.Services
 
                 UnitOfWork.ProfileManager.Create(profile);
                 await UnitOfWork.SaveAsync();
-                return new OperationDetails(true, $"User registered succesfully. Id - {appUser.Id}");
             }
-            return new OperationDetails(false, "The emails already exist.");
+            throw new Exception("The emails already exist.");
         }
 
         public async Task<UserDto> FindUser(string userName, string password)

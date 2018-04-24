@@ -6,7 +6,7 @@ namespace CatalogApp.BLL.Interfaces
 {
     public interface IOrderItemService
     {
-        Task<OperationDetails> AddToOrder(OrderItemDto item);
-        Task<OperationDetails> RemoveFromOrder(int orderItemId);
+        Task AddToOrder(OrderItemDto item);
+        Task RemoveFromOrder(int orderItemId);
     }
 }

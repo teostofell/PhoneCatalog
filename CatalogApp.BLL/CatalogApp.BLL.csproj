@@ -84,7 +84,7 @@
     <Compile Include="Interfaces\IFiltersService.cs" />
     <Compile Include="Interfaces\IOrderItemService.cs" />
     <Compile Include="Interfaces\IOrdersService.cs" />
-    <Compile Include="Interfaces\IOSService.cs" />
+    <Compile Include="Interfaces\IOsService.cs" />
     <Compile Include="Interfaces\IPhonesService.cs" />
     <Compile Include="DTO\OsDto.cs" />
     <Compile Include="Interfaces\IRolesService.cs" />

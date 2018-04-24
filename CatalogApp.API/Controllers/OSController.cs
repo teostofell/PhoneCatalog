@@ -1,7 +1,11 @@
-﻿using AutoMapper;
+﻿using System;
+using AutoMapper;
 using CatalogApp.API.Models;
 using CatalogApp.BLL.Interfaces;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Net;
+using System.Net.Http;
 using System.Web.Http;
 
 namespace CatalogApp.API.Controllers
@@ -18,10 +22,22 @@ namespace CatalogApp.API.Controllers
         }
 
         // GET: api/OS
-        public IEnumerable<OsViewModel> Get()
+        public HttpResponseMessage Get()
         {
-            var os = _osService.GetOs();
-            return _mapper.Map<List<OsViewModel>>(os);
+            HttpResponseMessage response;
+            try
+            {
+                var os = _osService.GetOs();
+                var osVm = _mapper.Map<List<OsViewModel>>(os);
+                response = Request.CreateResponse(HttpStatusCode.OK, osVm);
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e);
+                response = Request.CreateResponse(HttpStatusCode.InternalServerError, e.Message);
+            }
+
+            return response;
         }
     }
 }

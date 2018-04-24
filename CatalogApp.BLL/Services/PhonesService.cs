@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Data.Entity;
+using System.Diagnostics;
 using System.Threading.Tasks;
 
 namespace CatalogApp.BLL.Services
@@ -17,7 +18,9 @@ namespace CatalogApp.BLL.Services
         public int TotalPages { get; set; }
         public int TotalItems { get; set; }
 
-        public PhonesService(IUnitOfWork db, IMapper mapper) : base(db, mapper) {}
+        public PhonesService(IUnitOfWork db, IMapper mapper) : base(db, mapper)
+        {
+        }
 
         public IEnumerable<PhoneDto> GetPhones(FilterModel filter, int itemsOnPage, int page)
         {
@@ -31,9 +34,9 @@ namespace CatalogApp.BLL.Services
         {
             var all = UnitOfWork.Phones.GetAll().Include(p => p.Brand).ToList();
             var phones = UnitOfWork.Phones.GetAll().Include(p => p.Brand)
-                .Where(p => 
-                        (p.Model.Contains(searchString) || p.Brand.Name.Contains(searchString))
-                    ).ToList();
+                .Where(p =>
+                    (p.Model.Contains(searchString) || p.Brand.Name.Contains(searchString))
+                ).ToList();
             return Mapper.Map<List<PhoneDto>>(phones);
         }
 
@@ -53,74 +56,57 @@ namespace CatalogApp.BLL.Services
             return Mapper.Map<PhoneDto>(phone);
         }
 
-        public async Task<OperationDetails> CreatePhone(PhoneDto phoneDto)
+        public async Task CreatePhone(PhoneDto phoneDto)
         {
-            Phone phone = Mapper.Map<Phone>(phoneDto);
-
-            UnitOfWork.Phones.Create(phone);
-
-
             try
             {
+                Phone phone = Mapper.Map<Phone>(phoneDto);
+                UnitOfWork.Phones.Create(phone);
                 await UnitOfWork.SaveAsync();
             }
             catch (Exception e)
             {
-                return new OperationDetails(false, "Error on saving changes");
+                Debug.WriteLine(e);
+                throw;
             }
-
-            return new OperationDetails(true, "Phone has been created");
         }
 
-        public async Task<OperationDetails> UpdatePhone(int id, PhoneDto phone)
+        public async Task UpdatePhone(int id, PhoneDto phone)
         {
-            Phone actualPhone = UnitOfWork.Phones.Get(id).FirstOrDefault();
-            Phone newPhone = Mapper.Map<Phone>(phone);            
-
-
             try
             {
+                Phone actualPhone = UnitOfWork.Phones.Get(id).FirstOrDefault();
+                Phone newPhone = Mapper.Map<Phone>(phone);
                 Mapper.Map<Phone, Phone>(newPhone, actualPhone);
-            }            
-            catch(Exception e)
-            {
-                return new OperationDetails(false, "Error on mapping types");
-            }
-            
 
-            UnitOfWork.Phones.Update(actualPhone);
+                UnitOfWork.Phones.Update(actualPhone);
 
-            try
-            {
                 await UnitOfWork.SaveAsync();
             }
-            catch(Exception e)
+            catch (Exception e)
             {
-                return new OperationDetails(false, "Error on saving changes");
+                Debug.WriteLine(e);
+                throw;
             }
-
-
-            return new OperationDetails(true, "Changes have been saved");
         }
 
-        public async Task<OperationDetails> DeletePhone(int id)
+        public async Task DeletePhone(int id)
         {
-            UnitOfWork.Phones.Delete(id);
-
             try
             {
+                UnitOfWork.Phones.Delete(id);
                 await UnitOfWork.SaveAsync();
             }
-            catch(Exception e)
+            catch (Exception e)
             {
-                return new OperationDetails(false, "Error on saving changes");
+                Debug.WriteLine(e);
+                throw;
             }
-
-            return new OperationDetails(true, "Phone has been deleted");
         }
 
 
         #region Service functions
+
         private IEnumerable<Phone> Filter(FilterModel filter)
         {
             if (filter == null)
@@ -132,10 +118,10 @@ namespace CatalogApp.BLL.Services
             if (filter.Brand.Count > 0)
                 phones = phones.Where(p => filter.Brand.Contains(p.Brand.Slug));
 
-            if(filter.Os.Count > 0)
+            if (filter.Os.Count > 0)
                 phones = phones.Where(p => filter.Os.Contains(p.Os.Slug));
 
-            if(filter.Price != null)
+            if (filter.Price != null)
             {
                 if (filter.Price.From > 0)
                     phones = phones.Where(p => p.Price >= filter.Price.From);
@@ -165,11 +151,11 @@ namespace CatalogApp.BLL.Services
             }
 
             TotalItems = phones.Count();
-            TotalPages = Convert.ToInt32(Math.Ceiling(((double)phones.Count() / itemsOnPage)));
+            TotalPages = Convert.ToInt32(Math.Ceiling(((double) phones.Count() / itemsOnPage)));
 
             return phones.Skip((page - 1) * itemsOnPage).Take(itemsOnPage);
         }
-        #endregion
 
+        #endregion
     }
 }

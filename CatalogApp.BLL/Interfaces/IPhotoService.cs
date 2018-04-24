@@ -7,9 +7,9 @@ namespace CatalogApp.BLL.Services
 {
     public interface IPhotoService
     {
-        Task<OperationDetails> SetProfileAvatar(string userId, string avatarPath);
-        Task<OperationDetails> AddPhonePhoto(int phoneId, string path);
+        Task SetProfileAvatar(string userId, string avatarPath);
+        Task AddPhonePhoto(int phoneId, string path);
         IEnumerable<PhotoDto> GetPhonePhotos(int phoneId);
-        Task<OperationDetails> DeletePhonePhoto(int photoId);
+        Task DeletePhonePhoto(int photoId);
     }
 }

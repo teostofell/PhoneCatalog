@@ -1,7 +1,9 @@
-﻿using AutoMapper;
+﻿using System;
+using AutoMapper;
 using CatalogApp.API.Models;
 using CatalogApp.BLL.Interfaces;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -23,11 +25,21 @@ namespace CatalogApp.API.Controllers
         // GET: api/Orders/5
         public HttpResponseMessage Get(string id)
         {
-            var result = _ordersService.GetOrders(id);
+            HttpResponseMessage response;
 
-            var resultVm = _mapper.Map<List<OrderViewModel>>(result);
+            try
+            {
+                var result = _ordersService.GetOrders(id);
 
-            var response = Request.CreateResponse(HttpStatusCode.OK, resultVm);
+                var resultVm = _mapper.Map<List<OrderViewModel>>(result);
+
+                response = Request.CreateResponse(HttpStatusCode.OK, resultVm);
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e);
+                response = Request.CreateResponse(HttpStatusCode.InternalServerError, e.Message);
+            }
 
             return response;
         }
@@ -35,27 +47,55 @@ namespace CatalogApp.API.Controllers
         [HttpGet]
         public async Task<HttpResponseMessage> GetActualOrder(string userId)
         {
-            var result = await _ordersService.GetActualOrder(userId);
-
-            var response = Request.CreateResponse(HttpStatusCode.OK, _mapper.Map<OrderViewModel>(result));
+            HttpResponseMessage response;
+            try
+            {
+                var result = await _ordersService.GetActualOrder(userId);
+                response = Request.CreateResponse(HttpStatusCode.OK, _mapper.Map<OrderViewModel>(result));
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e);
+                response = Request.CreateResponse(HttpStatusCode.InternalServerError, e.Message);
+            }
 
             return response;
         }
 
         // POST: api/Orders
-        public async Task<HttpResponseMessage> Post([FromBody]string userId)
+        public async Task<HttpResponseMessage> Post([FromBody] string userId)
         {
-            var result = await _ordersService.CreateOrder(userId);
-
-            var response = Request.CreateResponse(HttpStatusCode.OK, result.Message);
+            HttpResponseMessage response;
+            try
+            {
+                await _ordersService.CreateOrder(userId);
+                response = Request.CreateResponse(HttpStatusCode.OK);
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e);
+                response = Request.CreateResponse(HttpStatusCode.InternalServerError, e.Message);
+            }
 
             return response;
         }
 
         // DELETE: api/Orders/5
-        public void Delete(int id)
+        public async Task<HttpResponseMessage> Delete(int id)
         {
-            _ordersService.CloseOrder(id);
+            HttpResponseMessage response;
+            try
+            {
+                await _ordersService.CloseOrder(id);
+                response = Request.CreateResponse(HttpStatusCode.OK);
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e);
+                response = Request.CreateResponse(HttpStatusCode.InternalServerError, e.Message);
+            }
+
+            return response;
         }
     }
 }

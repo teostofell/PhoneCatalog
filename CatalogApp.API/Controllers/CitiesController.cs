@@ -1,7 +1,11 @@
-﻿using AutoMapper;
+﻿using System;
+using AutoMapper;
 using CatalogApp.API.Models;
 using CatalogApp.BLL.Interfaces;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Net;
+using System.Net.Http;
 using System.Web.Http;
 
 namespace CatalogApp.API.Controllers
@@ -19,10 +23,22 @@ namespace CatalogApp.API.Controllers
 
 
         // GET: api/Cities
-        public IEnumerable<CityViewModel> Get()
+        public HttpResponseMessage Get()
         {
-            var cities = _citiesService.GetCities();
-            return _mapper.Map<List<CityViewModel>>(cities);
+            HttpResponseMessage response;
+            try
+            {
+                var cities = _citiesService.GetCities();
+                var citiesVm = _mapper.Map<List<CityViewModel>>(cities);
+                response = Request.CreateResponse(HttpStatusCode.OK, citiesVm);
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e);
+                response = Request.CreateResponse(HttpStatusCode.InternalServerError, e.Message);
+            }
+
+            return response;
         }
     }
 }

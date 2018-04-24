@@ -1,7 +1,9 @@
-﻿using AutoMapper;
+﻿using System;
+using AutoMapper;
 using CatalogApp.API.Models;
 using CatalogApp.BLL.Interfaces;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -17,29 +19,44 @@ namespace CatalogApp.API.Controllers
         public RolesController(IRolesService context, IMapper mapper)
         {
             _rolesService = context;
-            _mapper = mapper; 
+            _mapper = mapper;
         }
 
         // GET: api/Roles
-        public IEnumerable<RoleViewModel> Get()
+        public HttpResponseMessage Get()
         {
-            var roles = _rolesService.GetRoles();
-            return _mapper.Map<List<RoleViewModel>>(roles);
+            HttpResponseMessage response;
+            try
+            {
+                var roles = _rolesService.GetRoles();
+                var rolesVm = _mapper.Map<List<RoleViewModel>>(roles);
+                response = Request.CreateResponse(HttpStatusCode.OK, rolesVm);
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e);
+                response = Request.CreateResponse(HttpStatusCode.InternalServerError, e.Message);
+            }
+
+            return response;
         }
 
         // PUT: api/Roles/5
-        public async Task<HttpResponseMessage> Put(string id, [FromUri]string userId)
+        public async Task<HttpResponseMessage> Put(string id, [FromUri] string userId)
         {
-            var result = await _rolesService.ChangeRole(userId, id);
-
-            if(result.IsSucceed)
-            {                
-                return Request.CreateResponse(HttpStatusCode.OK, result.Message);
-            }
-            else
+            HttpResponseMessage response;
+            try
             {
-                return Request.CreateResponse(HttpStatusCode.InternalServerError, result.Message);
+                await _rolesService.ChangeRole(userId, id);
+                response = Request.CreateResponse(HttpStatusCode.OK);
             }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e);
+                response = Request.CreateResponse(HttpStatusCode.InternalServerError, e.Message);
+            }
+
+            return response;
         }
     }
 }

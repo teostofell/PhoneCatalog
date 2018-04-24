@@ -1,7 +1,11 @@
-﻿using AutoMapper;
+﻿using System;
+using AutoMapper;
 using CatalogApp.API.Models;
 using CatalogApp.BLL.Interfaces;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Net;
+using System.Net.Http;
 using System.Web.Http;
 
 namespace CatalogApp.API.Controllers
@@ -18,10 +22,22 @@ namespace CatalogApp.API.Controllers
         }
 
         // GET: api/Brands
-        public IEnumerable<BrandViewModel> Get()
+        public HttpResponseMessage Get()
         {
-            var brands = _brandService.GetBrands();
-            return _mapper.Map<List<BrandViewModel>>(brands);
+            HttpResponseMessage response;
+            try
+            {
+                var brands = _brandService.GetBrands();
+                var brandsVm = _mapper.Map<List<BrandViewModel>>(brands);
+                response = Request.CreateResponse(HttpStatusCode.OK, brandsVm);
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e);
+                response = Request.CreateResponse(HttpStatusCode.InternalServerError, e.Message);
+            }
+
+            return response;
         }
     }
 }

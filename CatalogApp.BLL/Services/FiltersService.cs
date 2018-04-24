@@ -1,4 +1,6 @@
-﻿using AutoMapper;
+﻿using System;
+using System.Diagnostics;
+using AutoMapper;
 using CatalogApp.BLL.BusinessModel;
 using CatalogApp.BLL.Interfaces;
 using CatalogApp.DAL.Interfaces;
@@ -14,8 +16,26 @@ namespace CatalogApp.BLL.Services
         {
             FilterModel filter = new FilterModel();
 
+            try
+            {
             filter.Brand = UnitOfWork.Brands.GetAll().Select(b => b.Slug).ToList();
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e);
+                throw;
+            }
+
+            try
+            {
             filter.Os = UnitOfWork.OperatingSystems.GetAll().Select(o => o.Slug).ToList();
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e);
+                throw;
+            }
+
             filter.Price = new Range<decimal>();
             filter.Storage = new Range<int>();
 

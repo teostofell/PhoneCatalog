@@ -1,8 +1,10 @@
-﻿using AutoMapper;
+﻿using System;
+using AutoMapper;
 using CatalogApp.API.Models;
 using CatalogApp.BLL.DTO;
 using CatalogApp.BLL.Interfaces;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -24,9 +26,17 @@ namespace CatalogApp.API.Controllers
         // POST: api/OrderItems
         public async Task<HttpResponseMessage> Post([FromBody]OrderItemViewModel item)
         {
-            var result = await _orderItemService.AddToOrder(_mapper.Map<OrderItemDto>(item));
-
-            var response = Request.CreateResponse(HttpStatusCode.OK, result.Message);
+            HttpResponseMessage response;
+            try
+            {
+                await _orderItemService.AddToOrder(_mapper.Map<OrderItemDto>(item));
+                response = Request.CreateResponse(HttpStatusCode.OK);
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e);
+                response = Request.CreateResponse(HttpStatusCode.InternalServerError);
+            }
 
             return response;
         }
@@ -34,10 +44,19 @@ namespace CatalogApp.API.Controllers
         // DELETE: api/OrderItems/5
         public async Task<HttpResponseMessage> Delete(int id)
         {
-            var result = await _orderItemService.RemoveFromOrder(id);
+            HttpResponseMessage response;
 
-            var response = Request.CreateResponse(HttpStatusCode.OK, result.Message);
-
+            try
+            {
+                await _orderItemService.RemoveFromOrder(id);
+                response = Request.CreateResponse(HttpStatusCode.OK);
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e);
+                response = Request.CreateResponse(HttpStatusCode.InternalServerError);
+            }
+            
             return response;
         }
     }

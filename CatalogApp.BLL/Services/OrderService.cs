@@ -7,6 +7,7 @@ using CatalogApp.DAL.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -26,19 +27,26 @@ namespace CatalogApp.BLL.Services
 
         public IEnumerable<OrderItemDto> GetOrderItems(int orderId)
         {
-            var items = UnitOfWork.Orders.Get(orderId).Include(o => o.OrderItems).FirstOrDefault().OrderItems.ToList();
+            var items = UnitOfWork.Orders.Get(orderId).Include(o => o.OrderItems).FirstOrDefault()?.OrderItems.ToList();
 
             return Mapper.Map<List<OrderItemDto>>(items);
         }
 
-        public async Task<OperationDetails> CreateOrder(string userId)
+        public async Task CreateOrder(string userId)
         {
             Order order = new Order() { IsActual=true, OrderDate=DateTime.Now, UserId=userId };
 
-            UnitOfWork.Orders.Create(order);     
+            try
+            {
+                UnitOfWork.Orders.Create(order);
 
-            await UnitOfWork.SaveAsync();
-            return new OperationDetails(true, "Order has been created");
+                await UnitOfWork.SaveAsync();
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e);
+                throw;
+            }
         }
 
         public async Task<OrderDto> GetActualOrder(string userId)
@@ -57,17 +65,32 @@ namespace CatalogApp.BLL.Services
             return Mapper.Map<OrderDto>(order);
         }
 
-        public async Task<OperationDetails> CloseOrder(int orderId)
+        public async Task CloseOrder(int orderId)
         {
-            var order = UnitOfWork.Orders.Get(orderId).FirstOrDefault();
+            Order order;
+            try
+            {
+                order = UnitOfWork.Orders.Get(orderId).FirstOrDefault();
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e);
+                throw;
+            }            
 
             order.IsActual = false;
 
-            UnitOfWork.Orders.Update(order);
+            try
+            {
+                UnitOfWork.Orders.Update(order);
 
-            await UnitOfWork.SaveAsync();
-
-            return new OperationDetails(true, "Order has been closed");
+                await UnitOfWork.SaveAsync();
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e);
+                throw;
+            }
         }
     }
 }

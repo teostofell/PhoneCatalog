@@ -1,10 +1,12 @@
-﻿using AutoMapper;
+﻿using System;
+using AutoMapper;
 using CatalogApp.API.Models;
 using CatalogApp.API.Utils;
 using CatalogApp.BLL.BusinessModel;
 using CatalogApp.BLL.DTO;
 using CatalogApp.BLL.Interfaces;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Net;
@@ -25,13 +27,15 @@ namespace CatalogApp.API.Controllers
             _mapper = mapper;
         }
 
-        public async Task<HttpResponseMessage> Get([FromUri]FilterViewModel filter)
+        public async Task<HttpResponseMessage> Get([FromUri] FilterViewModel filter)
         {
             PageViewModel result = new PageViewModel();
 
             var filterModel = _mapper.Map<FilterModel>(filter);
 
-            result.Items = _mapper.Map<List<PhoneSummaryViewModel>>(_phonesService.GetPhones(filterModel, filter.ItemsOnPage, filter.Page));
+            result.Items =
+                _mapper.Map<List<PhoneSummaryViewModel>>(_phonesService.GetPhones(filterModel, filter.ItemsOnPage,
+                    filter.Page));
 
             result.TotalItems = _phonesService.TotalItems;
             result.TotalPages = _phonesService.TotalPages;
@@ -79,52 +83,65 @@ namespace CatalogApp.API.Controllers
 
         // POST: api/Phones
         [Authorize(Roles = Constants.PrivilegedRole)]
-        public async Task<HttpResponseMessage> Post([FromBody]PhoneDto phone)
+        public async Task<HttpResponseMessage> Post([FromBody] PhoneDto phone)
         {
-            HttpResponseMessage response = null;
-
             string fileName = Path.GetRandomFileName() + Constants.PhotoExtension;
             var thumbPath = ImagesProcessor.GetPhoneThumbnail(phone.Photo, fileName, new Size(104, 220));
             phone.Photo = Url.Content(thumbPath);
 
-            var result = await _phonesService.CreatePhone(phone);
-
-            if(result.IsSucceed)
+            HttpResponseMessage response;
+            try
+            {
+                await _phonesService.CreatePhone(phone);
                 response = Request.CreateResponse(HttpStatusCode.OK, phone.Photo);
-            else
-                response = Request.CreateResponse(HttpStatusCode.InternalServerError, "Error");
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e);
+                response = Request.CreateResponse(HttpStatusCode.InternalServerError, e.Message);
+            }
 
             return response;
         }
 
         // PUT: api/Phones/5
         [Authorize(Roles = Constants.PrivilegedRole)]
-        public async Task<HttpResponseMessage> Put(int id, [FromBody]PhoneDto phone)
+        public async Task<HttpResponseMessage> Put(int id, [FromBody] PhoneDto phone)
         {
             string fileName = Path.GetRandomFileName() + Constants.PhotoExtension;
             var thumbPath = ImagesProcessor.GetPhoneThumbnail(phone.Photo, fileName, new Size(104, 220));
             phone.Photo = Url.Content(thumbPath);
 
-            var result = await _phonesService.UpdatePhone(id, phone);
+            HttpResponseMessage response;
+            try
+            {
+                await _phonesService.UpdatePhone(id, phone);
+                response = Request.CreateResponse(HttpStatusCode.OK);
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e);
+                response = Request.CreateResponse(HttpStatusCode.InternalServerError, e.Message);
+            }
 
-            if(result.IsSucceed)
-                return Request.CreateResponse(HttpStatusCode.OK, result.Message);
-            else
-                return Request.CreateResponse(HttpStatusCode.InternalServerError, result.Message);
+            return response;
         }
 
         // DELETE: api/Phones/5
-        [Authorize(Roles=Constants.PrivilegedRole)]
+        [Authorize(Roles = Constants.PrivilegedRole)]
         public async Task<HttpResponseMessage> Delete(int id)
         {
-            HttpResponseMessage response = null;
-
-            var result = await _phonesService.DeletePhone(id);
-
-            if (result.IsSucceed)
-                response = Request.CreateResponse(HttpStatusCode.OK, result.Message);
-            else
-                response = Request.CreateResponse(HttpStatusCode.InternalServerError, result.Message);
+            HttpResponseMessage response;
+            try
+            {
+                await _phonesService.DeletePhone(id);
+                response = Request.CreateResponse(HttpStatusCode.OK);
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e);
+                response = Request.CreateResponse(HttpStatusCode.InternalServerError, e.Message);
+            }                
 
             return response;
         }

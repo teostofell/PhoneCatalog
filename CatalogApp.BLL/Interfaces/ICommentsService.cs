@@ -8,6 +8,6 @@ namespace CatalogApp.BLL.Interfaces
     public interface ICommentsService
     {
         IEnumerable<CommentDto> GetComments(int phoneId);
-        Task<OperationDetails> AddComment(CommentDto comment);
+        Task AddComment(CommentDto comment);
     }
 }

@@ -5,6 +5,7 @@ using CatalogApp.BLL.Interfaces;
 using CatalogApp.DAL.Interfaces;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -21,28 +22,25 @@ namespace CatalogApp.BLL.Services
         }
 
 
-        public async Task<OperationDetails> ChangeRole(string userId, string roleId)
+        public async Task ChangeRole(string userId, string roleId)
         {
-            IList<string> roles;
-           
+            IList<string> roles;           
             try
             {
                 roles = await UnitOfWork.UserManager.GetRolesAsync(userId);
+                await UnitOfWork.UserManager.RemoveFromRolesAsync(userId, roles.ToArray());
+
+                var role = await UnitOfWork.RoleManager.FindByIdAsync(roleId);
+
+                await UnitOfWork.UserManager.AddToRoleAsync(userId, role.Name);
+
+                await UnitOfWork.SaveAsync();
             }
             catch (Exception e)
             {
-                return new OperationDetails(false, $"Error on getting roles. {e.Message}");
+                Debug.WriteLine(e);
+                throw;
             }
-
-            await UnitOfWork.UserManager.RemoveFromRolesAsync(userId, roles.ToArray());
-
-            var role = await UnitOfWork.RoleManager.FindByIdAsync(roleId);
-
-            await UnitOfWork.UserManager.AddToRoleAsync(userId, role.Name);
-
-            await UnitOfWork.SaveAsync();
-
-            return new OperationDetails(true, "Role has been changed");
         }
     }
 }

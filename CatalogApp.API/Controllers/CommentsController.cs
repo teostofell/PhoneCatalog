@@ -1,8 +1,10 @@
-﻿using AutoMapper;
+﻿using System;
+using AutoMapper;
 using CatalogApp.API.Models;
 using CatalogApp.BLL.DTO;
 using CatalogApp.BLL.Interfaces;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -24,23 +26,36 @@ namespace CatalogApp.API.Controllers
         // GET: api/Comments/5
         public HttpResponseMessage Get(int id)
         {
-            var comments = _commentsService.GetComments(id);
-            return Request.CreateResponse(HttpStatusCode.OK, _mapper.Map<List<CommentViewModel>>(comments));
+            HttpResponseMessage response;
+            try
+            {
+                var comments = _commentsService.GetComments(id);
+                response = Request.CreateResponse(HttpStatusCode.OK, _mapper.Map<List<CommentViewModel>>(comments));
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e);
+                response = Request.CreateResponse(HttpStatusCode.InternalServerError, e.Message);
+            }
+
+            return response;
         }
 
         // POST: api/Comments
         public async Task<HttpResponseMessage> Post([FromBody]CommentViewModel comment)
         {
-            var result = await _commentsService.AddComment(_mapper.Map<CommentDto>(comment));
-
-            if(result.IsSucceed)
+            try
             {
-                return Request.CreateResponse(HttpStatusCode.OK, result.Message);
+                await _commentsService.AddComment(_mapper.Map<CommentDto>(comment));
             }
-            else
+            catch (Exception e)
             {
-                return Request.CreateResponse(HttpStatusCode.InternalServerError, result.Message);
-            }            
+                Debug.WriteLine(e);
+
+                return Request.CreateResponse(HttpStatusCode.InternalServerError, e.Message);
+            }
+
+            return Request.CreateResponse(HttpStatusCode.OK);
         }
     }
 }

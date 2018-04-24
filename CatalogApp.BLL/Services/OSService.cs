@@ -1,8 +1,11 @@
-﻿using AutoMapper;
+﻿using System;
+using AutoMapper;
 using CatalogApp.BLL.DTO;
 using CatalogApp.BLL.Interfaces;
 using CatalogApp.DAL.Interfaces;
 using System.Collections.Generic;
+using System.Linq;
+using CatalogApp.DAL.Entities;
 
 namespace CatalogApp.BLL.Services
 {
@@ -12,8 +15,21 @@ namespace CatalogApp.BLL.Services
 
         public IEnumerable<OsDto> GetOs()
         {
-            var os = UnitOfWork.OperatingSystems.GetAll();
-            return Mapper.Map<List<OsDto>>(os);
+            IQueryable<Os> os;
+            List<OsDto> osDto;
+            try
+            {
+                os = UnitOfWork.OperatingSystems.GetAll();
+                osDto = Mapper.Map<List<OsDto>>(os);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
+
+
+            return osDto;
         }
 
     }

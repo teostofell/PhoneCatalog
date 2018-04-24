@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Data.Entity;
+using System.Diagnostics;
 using System.Threading.Tasks;
 
 namespace CatalogApp.BLL.Services
@@ -16,7 +17,7 @@ namespace CatalogApp.BLL.Services
     {
         public CommentsService(IUnitOfWork db, IMapper mapper) : base(db, mapper) {}
 
-        public async Task<OperationDetails> AddComment(CommentDto comment)
+        public async Task AddComment(CommentDto comment)
         {
             try
             {
@@ -24,7 +25,8 @@ namespace CatalogApp.BLL.Services
             }
             catch(Exception e)
             {
-                return new OperationDetails(false, "Error on creating comment");
+                Debug.WriteLine(e);
+                throw;
             }
 
             var phone = await UnitOfWork.Phones.Get(comment.PhoneId).Include(p => p.Comments).FirstOrDefaultAsync();
@@ -39,19 +41,38 @@ namespace CatalogApp.BLL.Services
             }
             catch(Exception e)
             {
-                return new OperationDetails(false, "Error on saving changes");
+                Debug.WriteLine(e);
+                throw;
             }
-
-            return new OperationDetails(true, "Comment has been added");
-
         }
 
         public IEnumerable<CommentDto> GetComments(int phoneId)
         {
-            var comments = UnitOfWork.Comments.GetAll().Where(c => c.PhoneId == phoneId)
-                .Include(c => c.User).ToList();
+            List<Comment> comments;
+            List<CommentDto> commentsDto;
 
-            return Mapper.Map<List<CommentDto>>(comments);
+            try
+            {
+                comments = UnitOfWork.Comments.GetAll().Where(c => c.PhoneId == phoneId)
+                    .Include(c => c.User).ToList();
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e);
+                throw;
+            }
+
+            try
+            {
+                commentsDto = Mapper.Map<List<CommentDto>>(comments);
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e);
+                throw;
+            }
+
+            return commentsDto;
         }
     }
 }

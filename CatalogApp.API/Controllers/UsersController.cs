@@ -1,4 +1,6 @@
-﻿using AutoMapper;
+﻿using System;
+using System.Diagnostics;
+using AutoMapper;
 using CatalogApp.API.Models;
 using CatalogApp.API.Utils;
 using CatalogApp.BLL.DTO;
@@ -61,19 +63,18 @@ namespace CatalogApp.API.Controllers
             string thumbUrl = Url.Content(thumbPath);
 
             userDto.Avatar = thumbUrl;
-            var result = await _userService.Register(userDto);
 
             HttpResponseMessage response;
-
-            if(!result.IsSucceed)
+            try
             {
-                HttpError err = new HttpError(result.Message);
-                response = Request.CreateResponse(HttpStatusCode.BadRequest, err);
+                await _userService.Register(userDto);
+                response = Request.CreateResponse(HttpStatusCode.OK);
             }
-            else
+            catch (Exception e)
             {
-                response = Request.CreateResponse(HttpStatusCode.OK, result.Message);
-            }
+                Debug.WriteLine(e);
+                response = Request.CreateResponse(HttpStatusCode.OK, e.Message);
+            }            
 
             return response;
         }

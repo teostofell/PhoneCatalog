@@ -1,8 +1,10 @@
-﻿using AutoMapper;
+﻿using System;
+using AutoMapper;
 using CatalogApp.API.Models;
 using CatalogApp.API.Utils;
 using CatalogApp.BLL.Services;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Net;
@@ -32,41 +34,65 @@ namespace CatalogApp.API.Controllers
         }
 
         // POST: api/Photos/?userId=*
-        public async Task<HttpResponseMessage> SetUserAvatar(string userId, [FromBody]AvatarViewModel avatar)
+        public async Task<HttpResponseMessage> SetUserAvatar(string userId, [FromBody] AvatarViewModel avatar)
         {
             string fileName = Path.GetRandomFileName() + Constants.PhotoExtension;
             string thumbPath = ImagesProcessor.GetUserAvatar(avatar.Photo, fileName, new Size(200, 200));
             string thumbUrl = Url.Content(thumbPath);
 
-            var result = await _photoService.SetProfileAvatar(userId, thumbUrl);
+            HttpResponseMessage response;
+            try
+            {
+                await _photoService.SetProfileAvatar(userId, thumbUrl);
+                response = Request.CreateResponse(HttpStatusCode.OK);
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e);
+                response = Request.CreateResponse(HttpStatusCode.InternalServerError, e.Message);
+            }
 
-            if (result.IsSucceed)
-            {
-                return Request.CreateResponse(HttpStatusCode.OK, thumbUrl);
-            }
-            else
-            {
-                return Request.CreateResponse(HttpStatusCode.InternalServerError, result.Message);
-            }
+            return response;
         }
 
         // POST: api/Photos/?phoneId=*
-        public async Task<HttpResponseMessage> AddPhonePhoto(int phoneId, [FromBody]AvatarViewModel photo)
+        public async Task<HttpResponseMessage> AddPhonePhoto(int phoneId, [FromBody] AvatarViewModel photo)
         {
             string fileName = Path.GetRandomFileName() + Constants.PhotoExtension;
             string thumbPath = ImagesProcessor.GetPhoneImage(photo.Photo, fileName, new Size(193, 410));
             string thumbUrl = Url.Content(thumbPath);
 
-            var result = await _photoService.AddPhonePhoto(phoneId, thumbUrl);
+            HttpResponseMessage response;
+            try
+            {
+                await _photoService.AddPhonePhoto(phoneId, thumbUrl);
+                response = Request.CreateResponse(HttpStatusCode.OK, thumbUrl);
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e);
+                response = Request.CreateResponse(HttpStatusCode.InternalServerError, e.Message);
+            }
 
-            if (result.IsSucceed)
+            return response;
+        }
+
+        // DELETE: api/Photos/5
+        public async Task<HttpResponseMessage> Delete(int id)
+        {
+            HttpResponseMessage response;
+            try
             {
-                return Request.CreateResponse(HttpStatusCode.OK, thumbUrl);
+                await _photoService.DeletePhonePhoto(id);
+                response = Request.CreateResponse(HttpStatusCode.OK);
             }
-            else
+            catch (Exception e)
             {
-                return Request.CreateResponse(HttpStatusCode.InternalServerError, result.Message);
+                Debug.WriteLine(e);
+                response = Request.CreateResponse(HttpStatusCode.InternalServerError, e.Message);
             }
+
+            return response;
         }
     }
 }
