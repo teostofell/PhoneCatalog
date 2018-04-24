@@ -21,21 +21,15 @@ namespace CatalogApp.API.Controllers
             _mapper = mapper;
         }
 
-        // GET: api/Comments
-        public IEnumerable<string> Get()
-        {
-            return new string[] { "value1", "value2" };
-        }
-
         // GET: api/Comments/5
         public HttpResponseMessage Get(int id)
         {
             var comments = _commentsService.GetComments(id);
-            return Request.CreateResponse(HttpStatusCode.OK, _mapper.Map<List<CommentVm>>(comments));
+            return Request.CreateResponse(HttpStatusCode.OK, _mapper.Map<List<CommentViewModel>>(comments));
         }
 
         // POST: api/Comments
-        public async Task<HttpResponseMessage> Post([FromBody]CommentVm comment)
+        public async Task<HttpResponseMessage> Post([FromBody]CommentViewModel comment)
         {
             var result = await _commentsService.AddComment(_mapper.Map<CommentDto>(comment));
 
@@ -47,16 +41,6 @@ namespace CatalogApp.API.Controllers
             {
                 return Request.CreateResponse(HttpStatusCode.InternalServerError, result.Message);
             }            
-        }
-
-        // PUT: api/Comments/5
-        public void Put(int id, [FromBody]string value)
-        {
-        }
-
-        // DELETE: api/Comments/5
-        public void Delete(int id)
-        {
         }
     }
 }

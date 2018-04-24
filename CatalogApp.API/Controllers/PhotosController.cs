@@ -25,22 +25,16 @@ namespace CatalogApp.API.Controllers
 
         // GET: api/Photos
         [HttpGet]
-        public IEnumerable<PhotoVm> GetPhonePhotos(int phoneId)
+        public IEnumerable<PhotoViewModel> GetPhonePhotos(int phoneId)
         {
             var photos = _photoService.GetPhonePhotos(phoneId);
-            return _mapper.Map<List<PhotoVm>>(photos);
-        }
-
-        // GET: api/Photos/5
-        public string Get(int id)
-        {
-            return "value";
+            return _mapper.Map<List<PhotoViewModel>>(photos);
         }
 
         // POST: api/Photos/?userId=*
-        public async Task<HttpResponseMessage> SetUserAvatar(string userId, [FromBody]AvatarVm avatar)
+        public async Task<HttpResponseMessage> SetUserAvatar(string userId, [FromBody]AvatarViewModel avatar)
         {
-            string fileName = Path.GetRandomFileName() + ".png";
+            string fileName = Path.GetRandomFileName() + Constants.PhotoExtension;
             string thumbPath = ImagesProcessor.GetUserAvatar(avatar.Photo, fileName, new Size(200, 200));
             string thumbUrl = Url.Content(thumbPath);
 
@@ -57,9 +51,9 @@ namespace CatalogApp.API.Controllers
         }
 
         // POST: api/Photos/?phoneId=*
-        public async Task<HttpResponseMessage> AddPhonePhoto(int phoneId, [FromBody]AvatarVm photo)
+        public async Task<HttpResponseMessage> AddPhonePhoto(int phoneId, [FromBody]AvatarViewModel photo)
         {
-            string fileName = Path.GetRandomFileName() + ".png";
+            string fileName = Path.GetRandomFileName() + Constants.PhotoExtension;
             string thumbPath = ImagesProcessor.GetPhoneImage(photo.Photo, fileName, new Size(193, 410));
             string thumbUrl = Url.Content(thumbPath);
 
@@ -73,17 +67,6 @@ namespace CatalogApp.API.Controllers
             {
                 return Request.CreateResponse(HttpStatusCode.InternalServerError, result.Message);
             }
-        }
-
-        // PUT: api/Photos/5
-        public void Put(int id, [FromBody]string value)
-        {
-        }
-
-        // DELETE: api/Photos/5
-        public void Delete(int id)
-        {
-            _photoService.DeletePhonePhoto(id);
         }
     }
 }

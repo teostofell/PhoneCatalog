@@ -1,10 +1,10 @@
 ﻿namespace CatalogApp.API.Models
 {
-    public class ScreenResolutionVm
+    public class BrandViewModel
     {
         public int Id { get; set; }
         public string Name { get; set; }
-        public int Width { get; set; }
-        public int Height { get; set; }
+        public string Slug { get; set; }
+        public string Logo { get; set; }
     }
 }

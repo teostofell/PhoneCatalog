@@ -10,10 +10,10 @@ namespace CatalogApp.BLL.Services
     {
         public OsService(IUnitOfWork db, IMapper mapper) : base(db, mapper) {}
 
-        public IEnumerable<Osdto> GetOs()
+        public IEnumerable<OsDto> GetOs()
         {
             var os = UnitOfWork.OperatingSystems.GetAll();
-            return Mapper.Map<List<Osdto>>(os);
+            return Mapper.Map<List<OsDto>>(os);
         }
 
     }

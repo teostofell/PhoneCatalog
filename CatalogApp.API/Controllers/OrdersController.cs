@@ -20,19 +20,12 @@ namespace CatalogApp.API.Controllers
             _mapper = mapper;
         }
 
-        // GET: api/Orders
-        [HttpGet]
-        public IEnumerable<string> Get()
-        {
-            return new string[] { "value1", "value2" };
-        }
-
         // GET: api/Orders/5
         public HttpResponseMessage Get(string id)
         {
             var result = _ordersService.GetOrders(id);
 
-            var resultVm = _mapper.Map<List<OrderVm>>(result);
+            var resultVm = _mapper.Map<List<OrderViewModel>>(result);
 
             var response = Request.CreateResponse(HttpStatusCode.OK, resultVm);
 
@@ -44,7 +37,7 @@ namespace CatalogApp.API.Controllers
         {
             var result = await _ordersService.GetActualOrder(userId);
 
-            var response = Request.CreateResponse(HttpStatusCode.OK, _mapper.Map<OrderVm>(result));
+            var response = Request.CreateResponse(HttpStatusCode.OK, _mapper.Map<OrderViewModel>(result));
 
             return response;
         }
@@ -57,12 +50,6 @@ namespace CatalogApp.API.Controllers
             var response = Request.CreateResponse(HttpStatusCode.OK, result.Message);
 
             return response;
-        }
-
-        // PUT: api/Orders/5
-        public void Put(int id, [FromBody]OrderVm value)
-        {
-
         }
 
         // DELETE: api/Orders/5

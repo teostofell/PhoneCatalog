@@ -18,31 +18,10 @@ namespace CatalogApp.API.Controllers
         }
 
         // GET: api/OS
-        public IEnumerable<Osvm> Get()
+        public IEnumerable<OsViewModel> Get()
         {
             var os = _osService.GetOs();
-            return _mapper.Map<List<Osvm>>(os);
-        }
-
-        // GET: api/OS/5
-        public string Get(int id)
-        {
-            return "value";
-        }
-
-        // POST: api/OS
-        public void Post([FromBody]string value)
-        {
-        }
-
-        // PUT: api/OS/5
-        public void Put(int id, [FromBody]string value)
-        {
-        }
-
-        // DELETE: api/OS/5
-        public void Delete(int id)
-        {
+            return _mapper.Map<List<OsViewModel>>(os);
         }
     }
 }

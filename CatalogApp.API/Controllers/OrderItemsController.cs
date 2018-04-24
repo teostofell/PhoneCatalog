@@ -21,31 +21,14 @@ namespace CatalogApp.API.Controllers
             _mapper = mapper;
         }
 
-        // GET: api/OrderItems
-        public IEnumerable<string> Get()
-        {
-            return new string[] { "value1", "value2" };
-        }
-
-        // GET: api/OrderItems/5
-        public string Get(int id)
-        {
-            return "value";
-        }
-
         // POST: api/OrderItems
-        public async Task<HttpResponseMessage> Post([FromBody]OrderItemVm item)
+        public async Task<HttpResponseMessage> Post([FromBody]OrderItemViewModel item)
         {
             var result = await _orderItemService.AddToOrder(_mapper.Map<OrderItemDto>(item));
 
             var response = Request.CreateResponse(HttpStatusCode.OK, result.Message);
 
             return response;
-        }
-
-        // PUT: api/OrderItems/5
-        public void Put(int id, [FromBody]string value)
-        {
         }
 
         // DELETE: api/OrderItems/5

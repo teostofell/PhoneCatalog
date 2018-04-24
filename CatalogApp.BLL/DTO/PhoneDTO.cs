@@ -21,7 +21,7 @@ namespace CatalogApp.BLL.DTO
         public BrandDto Brand { get; set; }
 
         public int OsId { get; set; }
-        public Osdto Os { get; set; }
+        public OsDto Os { get; set; }
 
 
         public int ScreenResolutionId { get; set; }

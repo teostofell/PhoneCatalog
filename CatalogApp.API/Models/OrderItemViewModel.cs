@@ -1,10 +1,10 @@
 ﻿namespace CatalogApp.API.Models
 {
-    public class OrderItemVm
+    public class OrderItemViewModel
     {
         public int Id { get; set; }
         public int OrderId { get; set; }
         public int Quantity { get; set; }
-        public PhoneSummaryVm Phone { get; set; }
+        public PhoneSummaryViewModel Phone { get; set; }
     }
 }

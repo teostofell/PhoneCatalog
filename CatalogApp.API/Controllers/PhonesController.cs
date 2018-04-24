@@ -25,13 +25,13 @@ namespace CatalogApp.API.Controllers
             _mapper = mapper;
         }
 
-        public async Task<HttpResponseMessage> Get([FromUri]FilterVm filter)
+        public async Task<HttpResponseMessage> Get([FromUri]FilterViewModel filter)
         {
             PageViewModel result = new PageViewModel();
 
             var filterModel = _mapper.Map<FilterModel>(filter);
 
-            result.Items = _mapper.Map<List<PhoneSummaryVm>>(_phonesService.GetPhones(filterModel, filter.ItemsOnPage, filter.Page));
+            result.Items = _mapper.Map<List<PhoneSummaryViewModel>>(_phonesService.GetPhones(filterModel, filter.ItemsOnPage, filter.Page));
 
             result.TotalItems = _phonesService.TotalItems;
             result.TotalPages = _phonesService.TotalPages;
@@ -77,15 +77,13 @@ namespace CatalogApp.API.Controllers
             return response;
         }
 
-
-
         // POST: api/Phones
-        [Authorize(Roles = "admin")]
+        [Authorize(Roles = Constants.PrivilegedRole)]
         public async Task<HttpResponseMessage> Post([FromBody]PhoneDto phone)
         {
             HttpResponseMessage response = null;
 
-            string fileName = Path.GetRandomFileName() + ".png";
+            string fileName = Path.GetRandomFileName() + Constants.PhotoExtension;
             var thumbPath = ImagesProcessor.GetPhoneThumbnail(phone.Photo, fileName, new Size(104, 220));
             phone.Photo = Url.Content(thumbPath);
 
@@ -100,10 +98,10 @@ namespace CatalogApp.API.Controllers
         }
 
         // PUT: api/Phones/5
-        [Authorize(Roles = "admin")]
+        [Authorize(Roles = Constants.PrivilegedRole)]
         public async Task<HttpResponseMessage> Put(int id, [FromBody]PhoneDto phone)
         {
-            string fileName = Path.GetRandomFileName() + ".png";
+            string fileName = Path.GetRandomFileName() + Constants.PhotoExtension;
             var thumbPath = ImagesProcessor.GetPhoneThumbnail(phone.Photo, fileName, new Size(104, 220));
             phone.Photo = Url.Content(thumbPath);
 
@@ -116,7 +114,7 @@ namespace CatalogApp.API.Controllers
         }
 
         // DELETE: api/Phones/5
-        [Authorize(Roles="admin")]
+        [Authorize(Roles=Constants.PrivilegedRole)]
         public async Task<HttpResponseMessage> Delete(int id)
         {
             HttpResponseMessage response = null;

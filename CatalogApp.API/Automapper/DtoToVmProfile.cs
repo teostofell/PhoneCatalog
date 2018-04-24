@@ -8,16 +8,16 @@ namespace CatalogApp.API.Automapper
     {
         public DtoToVmProfile()
         {
-            CreateMap<BrandDto, BrandVm>();
-            CreateMap<CityDto, CityVm>();
-            CreateMap<CommentDto, CommentVm>();
-            CreateMap<OrderDto, OrderVm>();
-            CreateMap<OrderItemDto, OrderItemVm>();
-            CreateMap<Osdto, Osvm>();
-            CreateMap<PhoneDto, PhoneSummaryVm>();
-            CreateMap<PhotoDto, PhotoVm>();
-            CreateMap<ScreenResolutionDto, ScreenResolutionVm>();
-            CreateMap<UserDto, UserVm>();
+            CreateMap<BrandDto, BrandViewModel>();
+            CreateMap<CityDto, CityViewModel>();
+            CreateMap<CommentDto, CommentViewModel>();
+            CreateMap<OrderDto, OrderViewModel>();
+            CreateMap<OrderItemDto, OrderItemViewModel>();
+            CreateMap<OsDto, OsViewModel>();
+            CreateMap<PhoneDto, PhoneSummaryViewModel>();
+            CreateMap<PhotoDto, PhotoViewModel>();
+            CreateMap<ScreenResolutionDto, ScreenResolutionViewModel>();
+            CreateMap<UserDto, UserViewModel>();
         }
     }
 }

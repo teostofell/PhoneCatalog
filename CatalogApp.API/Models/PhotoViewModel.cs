@@ -1,6 +1,6 @@
 ﻿namespace CatalogApp.API.Models
 {
-    public class PhotoVm
+    public class PhotoViewModel
     {
         public int Id { get; set; }
         public string Path { get; set; }

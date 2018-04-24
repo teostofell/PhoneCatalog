@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace CatalogApp.API.Models
 {
-    public class FilterVm
+    public class FilterViewModel
     {
         public List<string> Brand { get; set; }
         public List<string> Os { get; set; }

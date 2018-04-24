@@ -13,7 +13,7 @@ namespace CatalogApp.BLL.Automapper
             CreateMap<Comment, CommentDto>().ReverseMap();
             CreateMap<Order, OrderDto>();
             CreateMap<OrderItem, OrderItemDto>();
-            CreateMap<Os, Osdto>();
+            CreateMap<Os, OsDto>();
             CreateMap<Phone, PhoneDto>();
             CreateMap<Phone, Phone>();
             CreateMap<Photo, PhotoDto>();

@@ -21,21 +21,10 @@ namespace CatalogApp.API.Controllers
         }
 
         // GET: api/Roles
-        public IEnumerable<RoleVm> Get()
+        public IEnumerable<RoleViewModel> Get()
         {
             var roles = _rolesService.GetRoles();
-            return _mapper.Map<List<RoleVm>>(roles);
-        }
-
-        // GET: api/Roles/5
-        public string Get(int id)
-        {
-            return "value";
-        }
-
-        // POST: api/Roles
-        public void Post([FromBody]string value)
-        {
+            return _mapper.Map<List<RoleViewModel>>(roles);
         }
 
         // PUT: api/Roles/5
@@ -51,11 +40,6 @@ namespace CatalogApp.API.Controllers
             {
                 return Request.CreateResponse(HttpStatusCode.InternalServerError, result.Message);
             }
-        }
-
-        // DELETE: api/Roles/5
-        public void Delete(int id)
-        {
         }
     }
 }

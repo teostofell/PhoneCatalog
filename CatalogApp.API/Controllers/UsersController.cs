@@ -37,9 +37,9 @@ namespace CatalogApp.API.Controllers
         public async Task<HttpResponseMessage> Get(string email)
         {
             var userDto = await _userService.FindUser(email);
-            var userVm = _mapper.Map<UserVm>(userDto);
+            var userVm = _mapper.Map<UserViewModel>(userDto);
 
-            userVm.IsAdmin = await _userService.GetRole(userDto.Id) == "admin";
+            userVm.IsAdmin = await _userService.GetRole(userDto.Id) == Constants.PrivilegedRole;
 
             HttpResponseMessage response = null;
 
@@ -52,11 +52,11 @@ namespace CatalogApp.API.Controllers
         }
 
         // POST: api/Users
-        public async Task<HttpResponseMessage> Post([FromBody]UserVm user)
+        public async Task<HttpResponseMessage> Post([FromBody]UserViewModel user)
         {
             var userDto = _mapper.Map<UserDto>(user);
 
-            string fileName = Path.GetRandomFileName() + ".png";
+            string fileName = Path.GetRandomFileName() + Constants.PhotoExtension;
             string thumbPath = ImagesProcessor.GetUserAvatar(user.Avatar, fileName, new Size(200, 200));
             string thumbUrl = Url.Content(thumbPath);
 
@@ -76,17 +76,6 @@ namespace CatalogApp.API.Controllers
             }
 
             return response;
-        }
-
-        // PUT: api/Users/5
-        public void Put(int id, [FromBody]UserDto user)
-        {
-
-        }
-
-        // DELETE: api/Users/5
-        public void Delete(int id)
-        {
         }
     }
 }

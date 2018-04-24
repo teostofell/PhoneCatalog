@@ -5,6 +5,6 @@ namespace CatalogApp.BLL.Interfaces
 {
     public interface IOsService
     {
-        IEnumerable<Osdto> GetOs();
+        IEnumerable<OsDto> GetOs();
     }
 }

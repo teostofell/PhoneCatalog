@@ -2,7 +2,7 @@
 
 namespace CatalogApp.API.Models
 {
-    public class UserVm
+    public class UserViewModel
     {
         public string Id { get; set; }
         public string Email { get; set; }

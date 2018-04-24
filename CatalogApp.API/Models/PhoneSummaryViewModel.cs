@@ -1,6 +1,6 @@
 ﻿namespace CatalogApp.API.Models
 {
-    public class PhoneSummaryVm
+    public class PhoneSummaryViewModel
     {
         public int Id { get; set; }
         public string Model { get; set; }

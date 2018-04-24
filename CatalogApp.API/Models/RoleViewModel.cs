@@ -1,6 +1,6 @@
 ﻿namespace CatalogApp.API.Models
 {
-    public class RoleVm
+    public class RoleViewModel
     {
         public string Id { get; set; }
         public string Name { get; set; }
